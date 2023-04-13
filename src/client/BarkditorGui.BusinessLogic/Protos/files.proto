@@ -1,0 +1,43 @@
+syntax = "proto3";
+option csharp_namespace = "FilesClient";
+package Files;
+
+import "google/protobuf/empty.proto";
+
+service Files {
+  rpc CreateFileOrDirectory (CreateFileOrDirectoryRequest) returns (google.protobuf.Empty);
+  rpc MoveFileOrDirectory (MoveFileOrDirectoryRequest) returns (google.protobuf.Empty);
+  rpc RemoveFileOrDirectory (RemoveFileOrDirectoryRequest) returns (google.protobuf.Empty);
+  rpc OpenInFileManager (OpenInFileManagerRequest) returns (google.protobuf.Empty);
+  rpc CopyPath (CopyPathRequest) returns (google.protobuf.Empty);
+}
+
+// create file
+message CreateFileOrDirectoryRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// rename file or directory
+message MoveFileOrDirectoryRequest {
+  string oldPath = 1;
+  string newPath = 2;
+  bool isDirectory = 3;
+}
+
+// open in file manager
+message OpenInFileManagerRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// remove file or directory
+message RemoveFileOrDirectoryRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// copy file/directory path
+message CopyPathRequest {
+  string path = 1;
+}

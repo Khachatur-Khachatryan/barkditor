@@ -1,0 +1,33 @@
+.statusBar text{
+    background-color: gray;
+    color: #fff;
+}
+.editor text {
+    background-color: #303030;
+    color: #fff;
+    caret-color: #fff;
+}
+.scrollbar scrollbar {
+    background-color: #e1e1e1;
+}
+.barkditor {
+    font-size: 20px;
+    font-weight: bold;
+}
+.mainWindow {
+    min-width: 800px;
+    min-height: 600px;
+}
+.fileTree {
+    min-width: 100px;
+}
+.notebook {
+    min-width: 600px;
+}
+a {
+    color: blue;
+}
+scrolledwindow undershoot.top,
+scrolledwindow undershoot.right,
+scrolledwindow undershoot.bottom,
+scrolledwindow undershoot.left { background-image: none; }

@@ -1,0 +1,35 @@
+syntax = "proto3";
+option csharp_namespace = "ProjectFilesClient";
+package ProjectFiles;
+
+import "google/protobuf/empty.proto";
+
+service ProjectFiles {
+  rpc OpenFolder (OpenFolderRequest) returns (FileTreeResponse);
+  rpc GetSavedProject (google.protobuf.Empty) returns (FileTreeResponse);
+  rpc GetProjectPath (google.protobuf.Empty) returns (GetProjectPathResponse);
+}
+
+// open folder
+message OpenFolderRequest {
+  string path = 1;
+}
+
+// get project files path
+message GetProjectPathResponse {
+  string path = 1;
+}
+
+// responses
+message FileTreeResponse {
+  FileTree files = 1;
+  string path = 2;
+}
+
+// types
+message FileTree {
+  string name = 1;
+  string path = 2;
+  repeated FileTree files = 3;
+  bool isDirectory = 4;
+}

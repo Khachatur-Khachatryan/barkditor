@@ -1,0 +1,73 @@
+syntax = "proto3";
+option csharp_namespace = "Barkditor.Protobuf";
+package Files;
+
+import "google/protobuf/empty.proto";
+import "Protos/google/api/annotations.proto";
+
+// Service for work with files and directories
+service Files {
+  // Creates file or directory
+  rpc CreateFileOrDirectory (CreateFileOrDirectoryRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/CreateFileOrDirectory"
+    };
+  }
+  // Moves/renames file or directory
+  rpc MoveFileOrDirectory (MoveFileOrDirectoryRequest) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      put: "/MoveFileOrDirectory"
+    };
+  }
+  // Removes file or directory
+  rpc RemoveFileOrDirectory (RemoveFileOrDirectoryRequest) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      delete: "/RemoveFileOrDirectory"
+    };
+  }
+  // Opens file/directory in file manager (in Windows: explorer.exe, Linux-based: xdg-open, OSX: open)
+  rpc OpenInFileManager (OpenInFileManagerRequest) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      get: "/OpenInFileManager"
+    };
+  }
+  /* 
+    Copies file/directory path to clipboard. For Linux-based must to be installed: 
+    xsel(for X11 session), wl-clipboard(for Wayland session)
+  */
+  rpc CopyPath (CopyPathRequest) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      post: "/CopyPath"
+    };
+  }
+}
+
+// create file
+message CreateFileOrDirectoryRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// rename file or directory
+message MoveFileOrDirectoryRequest {
+  string oldPath = 1;
+  string newPath = 2;
+  bool isDirectory = 3;
+}
+
+// open in file manager
+message OpenInFileManagerRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// remove file or directory
+message RemoveFileOrDirectoryRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// copy file/directory path
+message CopyPathRequest {
+  string path = 1;
+}

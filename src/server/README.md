@@ -4,6 +4,8 @@
     <img src="./img/barkditor-logo.svg" width="150" height="150" alt="Barkditor logo">
 </p>
 
+[![.NET build and test](https://github.com/barkditor/barkditor-server/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/barkditor/barkditor-server/actions/workflows/build_and_test.yml)
+
 ## Description
 Barkditor is a open source code editor that implemented using GTK Sharp lib and .NET framework.
 In general, this project created for educational purposes.
@@ -21,11 +23,8 @@ Obligatory required software:
 
 ### Run
 
-- **Build solution:** `dotnet build`
-- **Go to server directory**: `cd ./src/server`
-- **Run server**: `dotnet run --project BarkditorServer.Presentation`
-- **Open new terminal and go to client directory**: `cd ./src/client`
-- **Run client**: `dotnet run --project BarlditorGui.Presentation`
+- **Build project:** `dotnet build`
+- **Run project:** `dotnet run -p BarkditorServer.Presentation`
 
 ### Run unit tests
 
@@ -36,19 +35,16 @@ Obligatory required software:
 ## Technology stack
 
 - **SDK:** `.NET 7`
-- **Frameworks:** `ASP.NET`, `GtkSharp`
-- **Unit testing:** `XUnit`, `FluentAssertions`
+- **Frameworks:** `ASP.NET`
+- **Unit testing:** `XUnit`, `FluentAssertions`\
 - **Programming languages:** `C#`
 - **Tools & IDE:** `Visual Studio`, `Rider`, `VS Code`
 
 ## Versions
 
 - **.NET:** `7.0.200 or later`
-- **GTK:** `3.24`
 
 ## Tasks management
-
-### For server
 
 The opened tasks and issues to be organized an handled as follows:
 
@@ -56,21 +52,12 @@ The opened tasks and issues to be organized an handled as follows:
 - Active tasks are available on the Trello board: https://trello.com/b/97i3UXAf/brakditor-server
 - Each task branch is based on the actual `develop` branch and pull requested there on complete
 
-### For client
-
-The opened tasks and issues to be organized an handled as follows:
-
-- Each task has an assigned number in the format `BARKDITOR-GUI-ID`
-- Active tasks are available on the Trello board: https://trello.com/b/OW3eMcPr/barkditor-gtk-client
-- Each task branch is based on the actual `develop` branch and pull requested there on complete
-
-
 ## Git flow
 
 Version control to be organized as follows:
 
 - Fork this repository
-- Clone this repository using `git clone https://github.com/${{ username }}/barkditor.git`
+- Clone this repository using `git clone https://github.com/${{ username }}/barkditor-server.git`
 - If repository is cloned already then pull last changes from `develop` using
     - `git checkout develop`
     - `git pull`
