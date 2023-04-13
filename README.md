@@ -88,4 +88,4 @@ Version control to be organized as follows:
 
 ## Logo
 
-Logo created by Inkspace program.
+The logo was created in Inkscape.
