@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Net;
 using System.Runtime.InteropServices;
 using Barkditor.Protobuf;
 using Google.Protobuf.WellKnownTypes;
@@ -19,19 +20,37 @@ public class FilesService : Files.FilesBase
         {
             if (isDirectory)
             {
+                if (Directory.Exists(path))
+                {
+                    var status = new Status(StatusCode.AlreadyExists,
+                        "This directory already exists");
+                    throw new RpcException(status);
+                }
+
                 Directory.CreateDirectory(path);
                 return await Task.FromResult(new Empty());
+            }
+
+            if (File.Exists(path))
+            {
+                var status = new Status(StatusCode.AlreadyExists,
+                    "This file already exists");
+                throw new RpcException(status);
             }
             
             await File.WriteAllBytesAsync(path, Array.Empty<byte>());
 
             return await Task.FromResult(new Empty());
         }
-        catch (Exception)
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
-            return await Task.FromResult(new Empty());
+            var errorMessage = isDirectory
+                ? $"Unable to create a folder at path \"{path}\""
+                : $"Unable to create a file at path \"{path}\"";
+            
+            var status = new Status(StatusCode.Unavailable, errorMessage);
+            throw new RpcException(status);
         }
-        
     }
 
     public override async Task<Empty> MoveFileOrDirectory(MoveFileOrDirectoryRequest request, ServerCallContext ctx)
@@ -39,7 +58,8 @@ public class FilesService : Files.FilesBase
         var oldPath = request.OldPath;
         var newPath = request.NewPath;
         var isDirectory = request.IsDirectory;
-
+        var isRenamed = Path.GetDirectoryName(oldPath) == Path.GetDirectoryName(newPath);
+        
         try
         {
             if(isDirectory)
@@ -53,9 +73,25 @@ public class FilesService : Files.FilesBase
             
             return await Task.FromResult(new Empty());
         }
-        catch(Exception)
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
-            return await Task.FromResult(new Empty());
+            string errorMessage;
+
+            if (isDirectory)
+            {
+                errorMessage = isRenamed 
+                    ? "Unable to rename this directory" 
+                    : "Unable to move this directory";
+            }
+            else
+            {
+                errorMessage = isRenamed
+                    ? "Unable to rename this file"
+                    : "Unable to move this file";
+            }
+
+            var status = new Status(StatusCode.Unavailable, errorMessage);
+            throw new RpcException(status);
         }
     }
 
@@ -72,12 +108,22 @@ public class FilesService : Files.FilesBase
                 return await Task.FromResult(new Empty());
             }
 
+            var exists = File.Exists(path);
+            if (!exists)
+            {
+                throw new IOException();
+            }
             File.Delete(path);
             return await Task.FromResult(new Empty());
         }
-        catch (Exception)
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         {
-            return await Task.FromResult(new Empty());
+            var errorMessage = isDirectory
+                ? $"Unable to delete a folder at path \"{path}\""
+                : $"Unable to delete a file at path \"{path}\"";
+            
+            var status = new Status(StatusCode.Unavailable, errorMessage);
+            throw new RpcException(status);
         }
     }
 

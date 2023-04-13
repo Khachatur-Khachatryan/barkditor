@@ -27,9 +27,12 @@ public class GetSavedProjectTests
         await service.OpenFolder(request, contextMoq.Object);
         var expectedFileTree = FileTreeHelper.GetTestFileTree();
         var empty = new Empty();
-        
-        var response = await service.GetSavedProject(empty, contextMoq.Object);
 
+        var action = async () =>
+            await service.GetSavedProject(empty, contextMoq.Object);
+        var response = await action();
+
+        await action.Should().NotThrowAsync();
         response.Files.Should().Be(expectedFileTree);
     }
 }
