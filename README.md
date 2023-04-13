@@ -1,4 +1,4 @@
-# Barkditor server
+# Barkditor
 
 <p align="center">
     <img src="./img/barkditor-logo.svg" width="150" height="150" alt="Barkditor logo">
