@@ -1,8 +1,10 @@
-# Barkditor server
+# Barkditor
 
 <p align="center">
     <img src="./img/barkditor-logo.svg" width="150" height="150" alt="Barkditor logo">
 </p>
+
+[![.NET build and test](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml)
 
 ## Description
 Barkditor is a open source code editor that implemented using GTK Sharp lib and .NET framework.
@@ -86,4 +88,4 @@ Version control to be organized as follows:
 
 ## Logo
 
-Logo created by Inkspace program.
+The logo was created in Inkscape.
