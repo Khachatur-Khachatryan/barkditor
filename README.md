@@ -4,6 +4,8 @@
     <img src="./img/barkditor-logo.svg" width="150" height="150" alt="Barkditor logo">
 </p>
 
+[![.NET build and test](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml)
+
 ## Description
 Barkditor is a open source code editor that implemented using GTK Sharp lib and .NET framework.
 In general, this project created for educational purposes.
