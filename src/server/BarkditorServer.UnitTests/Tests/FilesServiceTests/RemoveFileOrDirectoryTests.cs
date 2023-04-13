@@ -33,8 +33,10 @@ public class RemoveFileOrDirectoryTests
             IsDirectory = false
         };
 
-        await service.RemoveFileOrDirectory(request, contextMoq.Object);
+        var action = async () => 
+            await service.RemoveFileOrDirectory(request, contextMoq.Object);
 
+        await action.Should().NotThrowAsync();
         var fileExists = File.Exists(filePath);
         fileExists.Should().BeFalse();
     }
@@ -58,8 +60,54 @@ public class RemoveFileOrDirectoryTests
             IsDirectory = true
         };
 
-        await service.RemoveFileOrDirectory(request, contextMoq.Object);
+        var action = async () => 
+            await service.RemoveFileOrDirectory(request, contextMoq.Object);
 
+        await action.Should().NotThrowAsync();
+        var directoryExists = Directory.Exists(directoryPath);
+        directoryExists.Should().BeFalse();
+    }
+    
+    [Fact]
+    public async Task RemoveFileTest_Unavailable()
+    {
+        CurrentDirectoryHelper.SetCurrentDirectory();
+        var contextMoq = new Mock<ServerCallContext>();
+        var service = new FilesService();
+        var filePath = Path.Combine(FilePaths.TestFolderPath, "banana.txt");
+        var request = new RemoveFileOrDirectoryRequest
+        {
+            Path = filePath,
+            IsDirectory = false
+        };
+
+        var action = async () => 
+            await service.RemoveFileOrDirectory(request, contextMoq.Object);
+
+        await action.Should().ThrowAsync<RpcException>()
+            .WithMessage($"Status(StatusCode=\"Unavailable\", Detail=\"Unable to delete a file at path \"{filePath}\"\")");
+        var fileExists = File.Exists(filePath);
+        fileExists.Should().BeFalse();
+    }
+    
+    [Fact]
+    public async Task RemoveDirectoryTest_Unavailable()
+    {
+        CurrentDirectoryHelper.SetCurrentDirectory();
+        var contextMoq = new Mock<ServerCallContext>();
+        var service = new FilesService();
+        var directoryPath = Path.Combine(FilePaths.TestFolderPath, "test");
+        var request = new RemoveFileOrDirectoryRequest
+        {
+            Path = directoryPath,
+            IsDirectory = true
+        };
+
+        var action = async () => 
+            await service.RemoveFileOrDirectory(request, contextMoq.Object);
+
+        await action.Should().ThrowAsync<RpcException>()
+            .WithMessage($"Status(StatusCode=\"Unavailable\", Detail=\"Unable to delete a folder at path \"{directoryPath}\"\")");
         var directoryExists = Directory.Exists(directoryPath);
         directoryExists.Should().BeFalse();
     }

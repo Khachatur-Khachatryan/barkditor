@@ -13,6 +13,7 @@ using Xunit;
 
 namespace BarkditorServer.UnitTests.Tests.FilesServiceTests;
 
+[Collection("Sequential")]
 public class CopyPathTests
 {
     [Fact]
@@ -29,8 +30,10 @@ public class CopyPathTests
             };
             var contextMoq = new Mock<ServerCallContext>();
 
-            await service.CopyPath(request, contextMoq.Object);
-            
+            var action = async () => 
+                await service.CopyPath(request, contextMoq.Object);
+
+            await action.Should().NotThrowAsync();
             var clipboard = new Clipboard();
             var clipboardData = await clipboard.GetTextAsync();
             clipboardData.Should().Be(filePath);
