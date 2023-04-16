@@ -8,13 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.Core.Api" Version="2.52.0" />
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Grpc.Core.Api">
-      <HintPath>..\..\..\..\..\.nuget\packages\grpc.core.api\2.52.0\lib\netstandard2.1\Grpc.Core.Api.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
