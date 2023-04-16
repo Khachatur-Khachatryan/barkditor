@@ -92,14 +92,14 @@ public class MainWindow : Window
             _fileTreeView.Selection.GetSelected(out var iter);
             var path = (string) _fileTreeStore.GetValue(iter, 2);
             var isDirectory = Directory.Exists(path);
-            var request = new RemoveFileOrDirectoryRequest
+            var request = new RemoveRequest
             {
                 Path = path,
                 IsDirectory = isDirectory
             };
 
             GrpcRequestSenderService.SendRequest(
-                () => _filesClient.RemoveFileOrDirectory(request));
+                () => _filesClient.Remove(request));
         };
         
         copyFileMenuItem.Activated += (_, _) =>
@@ -174,7 +174,7 @@ public class MainWindow : Window
             var parentDirectoryPath = System.IO.Path.GetDirectoryName(oldPath)!;
             var newPath = System.IO.Path.Combine(parentDirectoryPath, a.NewText);
 
-            var request = new MoveFileOrDirectoryRequest
+            var request = new MoveRequest
             {
                 OldPath = oldPath,
                 NewPath = newPath,
@@ -182,7 +182,7 @@ public class MainWindow : Window
             };
 
             GrpcRequestSenderService.SendRequest(
-                () => _filesClient.MoveFileOrDirectory(request));
+                () => _filesClient.Move(request));
         };
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);

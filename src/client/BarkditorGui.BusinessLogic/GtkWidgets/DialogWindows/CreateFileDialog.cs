@@ -61,7 +61,7 @@ public class CreateFileDialog : Dialog
         var filename = _nameEntry.Text;
         var directoryPath = _pathEntry.Text;
         var filePath = System.IO.Path.Combine(directoryPath, filename);
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = filePath,
             IsDirectory = false
@@ -69,7 +69,7 @@ public class CreateFileDialog : Dialog
 
         try
         {
-            _filesClient.CreateFileOrDirectory(request);        
+            _filesClient.Create(request);        
         }
         catch (RpcException)
         {
