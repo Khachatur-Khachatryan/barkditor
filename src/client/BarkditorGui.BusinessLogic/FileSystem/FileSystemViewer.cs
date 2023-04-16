@@ -2,6 +2,7 @@ using System.Threading.Channels;
 using Barkditor.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Gtk;
+
 namespace BarkditorGui.BusinessLogic.FileSystem;
 
 public class FileSystemViewer
