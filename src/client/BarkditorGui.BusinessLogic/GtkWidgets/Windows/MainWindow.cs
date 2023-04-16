@@ -7,7 +7,6 @@ using Gdk;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 using Window = Gtk.Window;
-using BarkditorGui.BusinessLogic.FileSystem;
 using BarkditorGui.Utilities.FileSystem;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Windows;
