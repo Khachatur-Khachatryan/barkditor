@@ -11,7 +11,7 @@ namespace BarkditorServer.BusinessLogic.Services;
 
 public class FilesService : Files.FilesBase
 {
-    public override async Task<Empty> CreateFileOrDirectory(CreateFileOrDirectoryRequest request, ServerCallContext ctx)
+    public override async Task<Empty> Create(CreateRequest request, ServerCallContext ctx)
     {
         var path = request.Path;
         var isDirectory = request.IsDirectory;
@@ -53,7 +53,7 @@ public class FilesService : Files.FilesBase
         }
     }
 
-    public override async Task<Empty> MoveFileOrDirectory(MoveFileOrDirectoryRequest request, ServerCallContext ctx)
+    public override async Task<Empty> Move(MoveRequest request, ServerCallContext ctx)
     {
         var oldPath = request.OldPath;
         var newPath = request.NewPath;
@@ -95,7 +95,7 @@ public class FilesService : Files.FilesBase
         }
     }
 
-    public override async Task<Empty> RemoveFileOrDirectory(RemoveFileOrDirectoryRequest request, ServerCallContext ctx)
+    public override async Task<Empty> Remove(RemoveRequest request, ServerCallContext ctx)
     {
         var path = request.Path;
         var isDirectory = request.IsDirectory;

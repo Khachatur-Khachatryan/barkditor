@@ -12,7 +12,7 @@ using Xunit;
 namespace BarkditorServer.UnitTests.Tests.FilesServiceTests;
 
 [Collection("Sequential")]
-public class RemoveFileOrDirectoryTests
+public class RemoveTests
 {
     [Fact]
     public async Task RemoveFileTest_Success()
@@ -21,20 +21,20 @@ public class RemoveFileOrDirectoryTests
         var contextMoq = new Mock<ServerCallContext>();
         var service = new FilesService();
         var filePath = Path.Combine(FilePaths.TestFolderPath, "newFile.txt");
-        var fileCreateRequest = new CreateFileOrDirectoryRequest
+        var fileCreateRequest = new CreateRequest
         {
             Path = filePath,
             IsDirectory = false
         };
-        await service.CreateFileOrDirectory(fileCreateRequest, contextMoq.Object);
-        var request = new RemoveFileOrDirectoryRequest
+        await service.Create(fileCreateRequest, contextMoq.Object);
+        var request = new RemoveRequest
         {
             Path = filePath,
             IsDirectory = false
         };
 
         var action = async () => 
-            await service.RemoveFileOrDirectory(request, contextMoq.Object);
+            await service.Remove(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
         var fileExists = File.Exists(filePath);
@@ -48,20 +48,20 @@ public class RemoveFileOrDirectoryTests
         var contextMoq = new Mock<ServerCallContext>();
         var service = new FilesService();
         var directoryPath = Path.Combine(FilePaths.TestFolderPath, "test");
-        var directoryCreateRequest = new CreateFileOrDirectoryRequest
+        var directoryCreateRequest = new CreateRequest
         {
             Path = directoryPath,
             IsDirectory = true
         };
-        await service.CreateFileOrDirectory(directoryCreateRequest, contextMoq.Object);
-        var request = new RemoveFileOrDirectoryRequest
+        await service.Create(directoryCreateRequest, contextMoq.Object);
+        var request = new RemoveRequest
         {
             Path = directoryPath,
             IsDirectory = true
         };
 
         var action = async () => 
-            await service.RemoveFileOrDirectory(request, contextMoq.Object);
+            await service.Remove(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
         var directoryExists = Directory.Exists(directoryPath);
@@ -75,14 +75,14 @@ public class RemoveFileOrDirectoryTests
         var contextMoq = new Mock<ServerCallContext>();
         var service = new FilesService();
         var filePath = Path.Combine(FilePaths.TestFolderPath, "banana.txt");
-        var request = new RemoveFileOrDirectoryRequest
+        var request = new RemoveRequest
         {
             Path = filePath,
             IsDirectory = false
         };
 
         var action = async () => 
-            await service.RemoveFileOrDirectory(request, contextMoq.Object);
+            await service.Remove(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to delete a file at path \"{filePath}\"\")");
@@ -97,14 +97,14 @@ public class RemoveFileOrDirectoryTests
         var contextMoq = new Mock<ServerCallContext>();
         var service = new FilesService();
         var directoryPath = Path.Combine(FilePaths.TestFolderPath, "test");
-        var request = new RemoveFileOrDirectoryRequest
+        var request = new RemoveRequest
         {
             Path = directoryPath,
             IsDirectory = true
         };
 
         var action = async () => 
-            await service.RemoveFileOrDirectory(request, contextMoq.Object);
+            await service.Remove(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to delete a folder at path \"{directoryPath}\"\")");

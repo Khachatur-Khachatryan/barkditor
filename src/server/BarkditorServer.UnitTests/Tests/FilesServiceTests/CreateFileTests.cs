@@ -21,7 +21,7 @@ public class CreateFileTests
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
         var filePath = Path.Combine(FilePaths.TestFolderPath, "testFile.txt");
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = filePath,
             IsDirectory = false
@@ -29,17 +29,17 @@ public class CreateFileTests
         var contextMoq = new Mock<ServerCallContext>();
 
         var action = async () =>
-            await service.CreateFileOrDirectory(request, contextMoq.Object);
+            await service.Create(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
         var exists = File.Exists(filePath);
         exists.Should().BeTrue();
-        var removeFileRequest = new RemoveFileOrDirectoryRequest
+        var removeFileRequest = new RemoveRequest
         {
             Path = filePath,
             IsDirectory = false
         };
-        await service.RemoveFileOrDirectory(removeFileRequest, contextMoq.Object);
+        await service.Remove(removeFileRequest, contextMoq.Object);
     }
     
     [Fact]
@@ -48,7 +48,7 @@ public class CreateFileTests
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
         var directoryPath = Path.Combine(FilePaths.TestFolderPath, "TestDirectory");
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = directoryPath,
             IsDirectory = true
@@ -56,17 +56,17 @@ public class CreateFileTests
         var contextMoq = new Mock<ServerCallContext>();
 
         var action = async () =>
-            await service.CreateFileOrDirectory(request, contextMoq.Object);
+            await service.Create(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
         var exists = Directory.Exists(directoryPath);
         exists.Should().BeTrue();
-        var removeDirectoryRequest = new RemoveFileOrDirectoryRequest
+        var removeDirectoryRequest = new RemoveRequest
         {
             Path = directoryPath,
             IsDirectory = true
         };
-        await service.RemoveFileOrDirectory(removeDirectoryRequest, contextMoq.Object);
+        await service.Remove(removeDirectoryRequest, contextMoq.Object);
     }
     
     [Fact]
@@ -75,7 +75,7 @@ public class CreateFileTests
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
         var filePath = Path.Combine(FilePaths.TestFolderPath, "TestFile1.txt");
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = filePath,
             IsDirectory = false
@@ -83,7 +83,7 @@ public class CreateFileTests
         var contextMoq = new Mock<ServerCallContext>();
 
         var action = async () =>
-            await service.CreateFileOrDirectory(request, contextMoq.Object);
+            await service.Create(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage("Status(StatusCode=\"AlreadyExists\", Detail=\"This file already exists\")");
@@ -97,7 +97,7 @@ public class CreateFileTests
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
         var directoryPath = Path.Combine(FilePaths.TestFolderPath, "TestDirectory1");
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = directoryPath,
             IsDirectory = true
@@ -105,7 +105,7 @@ public class CreateFileTests
         var contextMoq = new Mock<ServerCallContext>();
 
         var action = async () =>
-            await service.CreateFileOrDirectory(request, contextMoq.Object);
+            await service.Create(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage("Status(StatusCode=\"AlreadyExists\", Detail=\"This directory already exists\")");
@@ -128,7 +128,7 @@ public class CreateFileTests
             directoryPath = Path.Combine("/etc", "TestDirectory1");
         }
         
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = directoryPath,
             IsDirectory = true
@@ -136,7 +136,7 @@ public class CreateFileTests
         var contextMoq = new Mock<ServerCallContext>();
 
         var action = async () =>
-            await service.CreateFileOrDirectory(request, contextMoq.Object);
+            await service.Create(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to create a folder at path \"{directoryPath}\"\")");
@@ -159,7 +159,7 @@ public class CreateFileTests
             filePath = Path.Combine("/etc", "testFile.txt");
         }
         
-        var request = new CreateFileOrDirectoryRequest
+        var request = new CreateRequest
         {
             Path = filePath,
             IsDirectory = false
@@ -167,7 +167,7 @@ public class CreateFileTests
         var contextMoq = new Mock<ServerCallContext>();
 
         var action = async () =>
-            await service.CreateFileOrDirectory(request, contextMoq.Object);
+            await service.Create(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to create a file at path \"{filePath}\"\")");

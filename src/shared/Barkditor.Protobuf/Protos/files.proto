@@ -8,21 +8,21 @@ import "Protos/google/api/annotations.proto";
 // Service for work with files and directories
 service Files {
   // Creates file or directory
-  rpc CreateFileOrDirectory (CreateFileOrDirectoryRequest) returns (google.protobuf.Empty) {
+  rpc Create (CreateRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/CreateFileOrDirectory"
+      post: "/Create"
     };
   }
   // Moves/renames file or directory
-  rpc MoveFileOrDirectory (MoveFileOrDirectoryRequest) returns (google.protobuf.Empty){
+  rpc Move (MoveRequest) returns (google.protobuf.Empty){
     option (google.api.http) = {
-      put: "/MoveFileOrDirectory"
+      put: "/Move"
     };
   }
   // Removes file or directory
-  rpc RemoveFileOrDirectory (RemoveFileOrDirectoryRequest) returns (google.protobuf.Empty){
+  rpc Remove (RemoveRequest) returns (google.protobuf.Empty){
     option (google.api.http) = {
-      delete: "/RemoveFileOrDirectory"
+      delete: "/Remove"
     };
   }
   // Opens file/directory in file manager (in Windows: explorer.exe, Linux-based: xdg-open, OSX: open)
@@ -49,13 +49,13 @@ service Files {
 }
 
 // create file
-message CreateFileOrDirectoryRequest {
+message CreateRequest {
   string path = 1;
   bool isDirectory = 2;
 }
 
 // rename file or directory
-message MoveFileOrDirectoryRequest {
+message MoveRequest {
   string oldPath = 1;
   string newPath = 2;
   bool isDirectory = 3;
@@ -68,7 +68,7 @@ message OpenInFileManagerRequest {
 }
 
 // remove file or directory
-message RemoveFileOrDirectoryRequest {
+message RemoveRequest {
   string path = 1;
   bool isDirectory = 2;
 }
