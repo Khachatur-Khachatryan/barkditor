@@ -3,7 +3,7 @@ using Barkditor.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Gtk;
 
-namespace BarkditorGui.BusinessLogic.FileSystem;
+namespace BarkditorGui.Utilities.FileSystem;
 
 public class FileSystemViewer
 {

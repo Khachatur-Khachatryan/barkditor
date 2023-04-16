@@ -1,4 +1,4 @@
-namespace BarkditorGui.BusinessLogic.FileSystem;
+namespace BarkditorGui.Utilities.FileSystem;
 
 public record FileSystemChange
 {
