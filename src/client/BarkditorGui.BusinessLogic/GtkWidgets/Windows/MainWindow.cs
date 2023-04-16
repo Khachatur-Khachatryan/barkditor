@@ -13,7 +13,7 @@ namespace BarkditorGui.BusinessLogic.GtkWidgets.Windows;
 public class MainWindow : Window
 {
 
-#region Fields
+#region FieldsAndProperties
 
     // These fields are initialized by Glade or Protobuf
 #pragma warning disable CS0649, CS8618
@@ -26,8 +26,7 @@ public class MainWindow : Window
 #pragma warning restore CS0649, CS8618
     private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(int));
     private readonly Menu _fileContextMenu = new();
-
-    // private readonly FileSystemWatcher _fileSystemWatcher;
+    
     public FileSystemViewer FileSystemViewer { get; }
     
 #endregion
@@ -70,37 +69,11 @@ public class MainWindow : Window
         var copyFileMenuItem = new MenuItem("_Copy");
         var pasteFileMenuItem = new MenuItem("_Paste");
         var cutFileMenuItem = new MenuItem("_Cut");
-        var copyFilePathMenuItem = new MenuItem("_Copy path");
+        var copyPathMenuItem = new MenuItem("_Copy path");
 
-        openInFileManagerMenuItem.Activated += (_, _) =>
-        {
-            _fileTreeView.Selection.GetSelected(out var iter);
-            var path = (string) _fileTreeStore.GetValue(iter, 2);
-            var isDirectory = Directory.Exists(path);
-            var request = new OpenInFileManagerRequest
-            {
-                Path = path,
-                IsDirectory = isDirectory
-            };
-
-            GrpcRequestSenderService.SendRequest(
-                () =>_filesClient.OpenInFileManager(request));
-        };
+        openInFileManagerMenuItem.Activated += FileContextMenuOpenInFileManager_Activated;
         
-        removeFileMenuItem.Activated += (_, _) =>
-        {
-            _fileTreeView.Selection.GetSelected(out var iter);
-            var path = (string) _fileTreeStore.GetValue(iter, 2);
-            var isDirectory = Directory.Exists(path);
-            var request = new RemoveRequest
-            {
-                Path = path,
-                IsDirectory = isDirectory
-            };
-
-            GrpcRequestSenderService.SendRequest(
-                () => _filesClient.Remove(request));
-        };
+        removeFileMenuItem.Activated += FileContextMenuRemove_Activated;
         
         copyFileMenuItem.Activated += (_, _) =>
         {
@@ -117,18 +90,7 @@ public class MainWindow : Window
             // TODO: BARKDITOR-GUI-46
         };
         
-        copyFilePathMenuItem.Activated += (_, _) =>
-        {
-            _fileTreeView.Selection.GetSelected(out var iter);
-            var path = (string) _fileTreeStore.GetValue(iter, 2);
-            var request = new CopyPathRequest
-            {
-                Path = path
-            };
-
-            GrpcRequestSenderService.SendRequest(
-                () => _filesClient.CopyPath(request));
-        };
+        copyPathMenuItem.Activated += FileContextMenuCopyPath_Activated;
 
         _fileContextMenu.AttachToWidget(_fileTreeView, null);
         _fileContextMenu.Add(openInFileManagerMenuItem);
@@ -136,7 +98,7 @@ public class MainWindow : Window
         _fileContextMenu.Add(copyFileMenuItem);
         _fileContextMenu.Add(pasteFileMenuItem);
         _fileContextMenu.Add(cutFileMenuItem);
-        _fileContextMenu.Add(copyFilePathMenuItem);
+        _fileContextMenu.Add(copyPathMenuItem);
         _fileContextMenu.ShowAll();
     }
 
@@ -163,27 +125,7 @@ public class MainWindow : Window
         
         var filenameRenderer = new CellRendererText();
         filenameRenderer.Editable = true;
-        filenameRenderer.Edited += (_, a) =>
-        {
-            // don't confuse with file path
-            // https://docs.gtk.org/gtk3/struct.TreePath.html
-            var path = new TreePath(a.Path); 
-            _fileTreeStore.GetIter(out var iter, path);
-            var oldPath = (string) _fileTreeStore.GetValue(iter, 2);
-            var isDirectory = (int) _fileTreeStore.GetValue(iter, 3);
-            var parentDirectoryPath = System.IO.Path.GetDirectoryName(oldPath)!;
-            var newPath = System.IO.Path.Combine(parentDirectoryPath, a.NewText);
-
-            var request = new MoveRequest
-            {
-                OldPath = oldPath,
-                NewPath = newPath,
-                IsDirectory = isDirectory == 1
-            };
-
-            GrpcRequestSenderService.SendRequest(
-                () => _filesClient.Move(request));
-        };
+        filenameRenderer.Edited += FileTreeViewRow_DoubleClicked;
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);
 
@@ -273,6 +215,71 @@ public class MainWindow : Window
         var dialog = new CreateFileDialog(this, _filesClient);
         dialog.Run();
         dialog.Destroy();
+    }
+
+    private void FileTreeViewRow_DoubleClicked(object? sender, EditedArgs a)
+    {
+        // don't confuse with file path
+        // https://docs.gtk.org/gtk3/struct.TreePath.html
+        var path = new TreePath(a.Path); 
+        _fileTreeStore.GetIter(out var iter, path);
+        var oldPath = (string) _fileTreeStore.GetValue(iter, 2);
+        var isDirectory = (int) _fileTreeStore.GetValue(iter, 3);
+        var parentDirectoryPath = System.IO.Path.GetDirectoryName(oldPath)!;
+        var newPath = System.IO.Path.Combine(parentDirectoryPath, a.NewText);
+
+        var request = new MoveRequest
+        {
+            OldPath = oldPath,
+            NewPath = newPath,
+            IsDirectory = isDirectory == 1
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () => _filesClient.Move(request));
+    }
+
+    private void FileContextMenuOpenInFileManager_Activated(object? sender, EventArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var path = (string) _fileTreeStore.GetValue(iter, 2);
+        var isDirectory = Directory.Exists(path);
+        var request = new OpenInFileManagerRequest
+        {
+            Path = path,
+            IsDirectory = isDirectory
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () =>_filesClient.OpenInFileManager(request));
+    }
+    
+    private void FileContextMenuRemove_Activated(object? sender, EventArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var path = (string) _fileTreeStore.GetValue(iter, 2);
+        var isDirectory = Directory.Exists(path);
+        var request = new RemoveRequest
+        {
+            Path = path,
+            IsDirectory = isDirectory
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () => _filesClient.Remove(request));
+    }
+    
+    private void FileContextMenuCopyPath_Activated(object? sender, EventArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var path = (string) _fileTreeStore.GetValue(iter, 2);
+        var request = new CopyPathRequest
+        {
+            Path = path
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () => _filesClient.CopyPath(request));
     }
 
     private static void Window_DeleteEvent(object sender, DeleteEventArgs a)
