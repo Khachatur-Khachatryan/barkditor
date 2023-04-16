@@ -143,7 +143,7 @@ public class MoveFileOrDirectoryTests
     }
     
     [Fact]
-    public async Task RenameFileTest_Unavailable()
+    public async Task RenameFileTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
@@ -169,7 +169,7 @@ public class MoveFileOrDirectoryTests
     }
     
     [Fact]
-    public async Task MoveFileTest_Unavailable()
+    public async Task MoveFileTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
@@ -195,7 +195,7 @@ public class MoveFileOrDirectoryTests
     }
 
     [Fact]
-    public async Task RenameDirectoryTest_Unavailable()
+    public async Task RenameDirectoryTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
@@ -221,7 +221,7 @@ public class MoveFileOrDirectoryTests
     }
     
     [Fact]
-    public async Task MoveDirectoryTest_Unavailable()
+    public async Task MoveDirectoryTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();

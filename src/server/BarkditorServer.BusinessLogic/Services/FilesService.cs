@@ -156,4 +156,17 @@ public class FilesService : Files.FilesBase
         
         return await Task.FromResult(new Empty());
     }
+
+    public override async Task<ExistsResponse> Exists(ExistsRequest request, ServerCallContext ctx)
+    {
+        var path = request.Path;
+        var isDirectory = request.IsDirectory;
+
+        var response = new ExistsResponse
+        {
+            Exists = isDirectory ? Directory.Exists(path) : File.Exists(path)
+        };
+
+        return await Task.FromResult(response);
+    }
 }

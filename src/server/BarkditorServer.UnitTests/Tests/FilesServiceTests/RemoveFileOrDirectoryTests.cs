@@ -69,7 +69,7 @@ public class RemoveFileOrDirectoryTests
     }
     
     [Fact]
-    public async Task RemoveFileTest_Unavailable()
+    public async Task RemoveFileTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var contextMoq = new Mock<ServerCallContext>();
@@ -91,7 +91,7 @@ public class RemoveFileOrDirectoryTests
     }
     
     [Fact]
-    public async Task RemoveDirectoryTest_Unavailable()
+    public async Task RemoveDirectoryTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var contextMoq = new Mock<ServerCallContext>();

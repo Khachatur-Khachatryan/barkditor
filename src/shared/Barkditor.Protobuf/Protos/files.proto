@@ -81,6 +81,7 @@ message CopyPathRequest {
 // exists
 message ExistsRequest {
   string path = 1;
+  bool isDirectory = 2;
 }
 
 message ExistsResponse {

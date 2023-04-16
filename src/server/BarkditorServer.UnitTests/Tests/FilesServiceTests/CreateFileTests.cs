@@ -114,7 +114,7 @@ public class CreateFileTests
     }
     
     [Fact]
-    public async Task CreateDirectoryTest_Unavailable()
+    public async Task CreateDirectoryTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
@@ -145,7 +145,7 @@ public class CreateFileTests
     }
     
     [Fact]
-    public async Task CreateFileTest_Unavailable()
+    public async Task CreateFileTest_InvalidArgument()
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new FilesService();
