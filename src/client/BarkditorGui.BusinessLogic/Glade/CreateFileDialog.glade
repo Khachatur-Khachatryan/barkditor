@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkEntryBuffer" id="_nameEntryBuffer"/>
@@ -162,13 +162,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="_pathErrorBox">
-                    <property name="visible">True</property>
+                  <object class="GtkBox" id="_errorBox">
                     <property name="can-focus">False</property>
                     <property name="margin-top">10</property>
                     <property name="margin-bottom">10</property>
                     <child>
-                      <object class="GtkImage" id="_pathErrorImage">
+                      <object class="GtkImage" id="_errorIcon">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="icon-name">dialog-error</property>
@@ -181,11 +180,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="_pathErrorLabel">
+                      <object class="GtkLabel" id="_errorLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Error: invalid data</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

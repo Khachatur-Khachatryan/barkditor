@@ -3,7 +3,6 @@ using BarkditorGui.Utilities.Services;
 using Grpc.Core;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
-using Window = Gtk.Window;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.DialogWindows;
 
@@ -18,7 +17,8 @@ public class CreateFileDialog : Dialog
     [UI] private readonly Entry _nameEntry;
     [UI] private readonly Entry _pathEntry;
     [UI] private readonly EntryBuffer _pathEntryBuffer;
-    [UI] private readonly Box _pathErrorBox;
+    [UI] private readonly Box _errorBox;
+    [UI] private readonly Label _errorLabel;
     [UI] private readonly Button _createButton;
     [UI] private readonly Button _cancelButton;
 #pragma warning restore CS0649
@@ -44,8 +44,8 @@ public class CreateFileDialog : Dialog
         _nameEntry.Changed += ValidateNameAndPath;
         _cancelButton.Clicked += CancelButton_Clicked;
         _createButton.Clicked += CreateButton_Clicked;
-#pragma warning restore CS8602
         DeleteEvent += CloseDialog;
+#pragma warning restore CS8602
     }
 #pragma warning restore CS8618
 
@@ -82,7 +82,7 @@ public class CreateFileDialog : Dialog
         Hide();
     }
 
-    private void CloseDialog(object? sender, EventArgs a)
+    private static void CloseDialog(object? sender, EventArgs a)
     {
         Application.Quit();
     }
@@ -93,19 +93,43 @@ public class CreateFileDialog : Dialog
     {
         var path = _pathEntry.Text;
         var name = _nameEntry.Text;
+        var fileExistsRequest = new ExistsRequest
+        {
+            Path = System.IO.Path.Combine(path, name),
+            IsDirectory = false
+        };
+        var fileExists = _filesClient.Exists(fileExistsRequest).Exists;
+        var directoryExistsRequest = new ExistsRequest
+        {
+            Path = path,
+            IsDirectory = true
+        };
+        var directoryExists = _filesClient.Exists(directoryExistsRequest).Exists;
         
-        // TODO: Add a validation criterion that checks if the file exists (BARKDITOR-GUI-
-        if (!Directory.Exists(path) || 
+        if (string.IsNullOrEmpty(name) &&
+            string.IsNullOrWhiteSpace(name) &&
+            string.IsNullOrEmpty(path) &&
+            string.IsNullOrWhiteSpace(path))
+        {
+            _createButton.Sensitive = false;
+            _directoryChooserButton.UnselectAll();
+            _errorBox.Hide();
+            return;
+        }
+        
+        if (fileExists ||
+            !directoryExists || 
             string.IsNullOrEmpty(name) || 
             string.IsNullOrWhiteSpace(name))
         {
             _createButton.Sensitive = false;
             _directoryChooserButton.UnselectAll();
-            _pathErrorBox.Show();
+            _errorLabel.Text = fileExists ? "File already exists" : "Invalid data";
+            _errorBox.Show();
             return;
         }
         
-        _pathErrorBox.Hide();
+        _errorBox.Hide();
         _directoryChooserButton.SetCurrentFolder(path);
         _createButton.Sensitive = true;
     }
