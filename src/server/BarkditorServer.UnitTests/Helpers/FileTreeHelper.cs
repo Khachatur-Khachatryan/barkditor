@@ -19,21 +19,6 @@ internal static class FileTreeHelper
             {
                 new FileTree
                 {
-                    Path = Path.Combine(testFolderPath, "TestDirectory2"),
-                    IsDirectory = true,
-                    Name = "TestDirectory2",
-                    Files =
-                    {
-                        new FileTree
-                        {
-                            Path = Path.Combine(testFolderPath, "TestDirectory2", "TestFile3.txt"),
-                            IsDirectory = false,
-                            Name = "TestFile3.txt"
-                        }
-                    }
-                },
-                new FileTree
-                {
                     Path = Path.Combine(testFolderPath, "TestDirectory1"),
                     IsDirectory = true,
                     Name = "TestDirectory1",
@@ -49,16 +34,31 @@ internal static class FileTreeHelper
                 },
                 new FileTree
                 {
-                    Path = Path.Combine(testFolderPath, "TestFile2.json"),
-                    IsDirectory = false,
-                    Name = "TestFile2.json"
+                    Path = Path.Combine(testFolderPath, "TestDirectory2"),
+                    IsDirectory = true,
+                    Name = "TestDirectory2",
+                    Files =
+                    {
+                        new FileTree
+                        {
+                            Path = Path.Combine(testFolderPath, "TestDirectory2", "TestFile3.txt"),
+                            IsDirectory = false,
+                            Name = "TestFile3.txt"
+                        }
+                    }
                 },
                 new FileTree
                 {
                     Path = Path.Combine(testFolderPath, "TestFile1.txt"),
                     IsDirectory = false,
                     Name = "TestFile1.txt"
-                }
+                },
+                new FileTree
+                {
+                    Path = Path.Combine(testFolderPath, "TestFile2.json"),
+                    IsDirectory = false,
+                    Name = "TestFile2.json"
+                },
             }
         };
 

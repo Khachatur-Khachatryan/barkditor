@@ -62,7 +62,7 @@ public class ProjectFilesService : ProjectFiles.ProjectFilesBase
 
     private void GetFileTree(FileTree fileTree, DirectoryInfo directoryInfo) 
     {
-        foreach(var projectFolder in directoryInfo.GetDirectories().OrderByDescending(x => x.Name)) 
+        foreach(var projectFolder in directoryInfo.GetDirectories().OrderBy(x => x.Name)) 
         {
             if(DirectoriesToIgnore.IgnoreArray.Contains(projectFolder.Name))
             {
@@ -78,7 +78,7 @@ public class ProjectFilesService : ProjectFiles.ProjectFilesBase
             
             fileTree.Files.Add(projectFolderTree);
 
-            foreach(var projectFile in projectFolder.GetFiles().OrderByDescending(x => x.Name))
+            foreach(var projectFile in projectFolder.GetFiles().OrderBy(x => x.Name))
             {
                 var projectFileTree = new FileTree
                 {
@@ -104,7 +104,7 @@ public class ProjectFilesService : ProjectFiles.ProjectFilesBase
 
         GetFileTree(fileTree, directoryInfo);
         
-        foreach(var projectFile in directoryInfo.GetFiles().OrderByDescending(x => x.Name))
+        foreach(var projectFile in directoryInfo.GetFiles().OrderBy(x => x.Name))
         {
             var projectFileTree = new FileTree
             {
