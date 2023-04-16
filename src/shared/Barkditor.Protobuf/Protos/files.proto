@@ -40,6 +40,12 @@ service Files {
       post: "/CopyPath"
     };
   }
+  // Checks for the existence of a file/directory
+  rpc Exists (ExistsRequest) returns (ExistsResponse){
+    option (google.api.http) = {
+      get: "/Exists"
+    };
+  }
 }
 
 // create file
@@ -70,4 +76,13 @@ message RemoveFileOrDirectoryRequest {
 // copy file/directory path
 message CopyPathRequest {
   string path = 1;
+}
+
+// exists
+message ExistsRequest {
+  string path = 1;
+}
+
+message ExistsResponse {
+  bool exists = 1;
 }

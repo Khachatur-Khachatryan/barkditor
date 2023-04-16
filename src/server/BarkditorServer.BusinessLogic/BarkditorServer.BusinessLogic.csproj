@@ -6,10 +6,6 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DocumentationFile>obj/Debug/net7.0/Server.xml</DocumentationFile>
-  </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="Google.Api.Gax.Grpc" Version="4.3.1" />

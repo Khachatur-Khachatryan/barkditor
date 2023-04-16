@@ -22,7 +22,7 @@ public static class Program
             c.SwaggerDoc("v1",
                 new OpenApiInfo { Title = "Barkditor API", Version = "v1" });
             
-            var filePath = Path.Combine(FilePaths.BusinessLogicPath, FilePaths.ObjDebugPath, "Server.xml");
+            var filePath = Path.Combine(FilePaths.ProtobufProjectPath, FilePaths.ObjDebugPath, "documentation.xml");
             c.IncludeXmlComments(filePath);
             c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
         });
