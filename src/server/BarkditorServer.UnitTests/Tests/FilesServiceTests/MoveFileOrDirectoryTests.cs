@@ -161,17 +161,11 @@ public class MoveFileOrDirectoryTests
             await service.MoveFileOrDirectory(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
-            .WithMessage("Status(StatusCode=\"Unavailable\", Detail=\"Unable to rename this file\")");
+            .WithMessage("Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to rename this file\")");
         var oldFileExists = File.Exists(oldFilePath);
         oldFileExists.Should().BeFalse();
         var newFileExists = File.Exists(newFilePath);
         newFileExists.Should().BeFalse();
-        var rollbackRequest = new MoveFileOrDirectoryRequest
-        {
-            OldPath = newFilePath,
-            NewPath = oldFilePath,
-            IsDirectory = false
-        };
     }
     
     [Fact]
@@ -193,17 +187,11 @@ public class MoveFileOrDirectoryTests
             await service.MoveFileOrDirectory(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
-            .WithMessage("Status(StatusCode=\"Unavailable\", Detail=\"Unable to move this file\")");
+            .WithMessage("Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to move this file\")");
         var oldFileExists = File.Exists(oldFilePath);
         oldFileExists.Should().BeFalse();
         var newFileExists = File.Exists(newFilePath);
         newFileExists.Should().BeFalse();
-        var rollbackRequest = new MoveFileOrDirectoryRequest
-        {
-            OldPath = newFilePath,
-            NewPath = oldFilePath,
-            IsDirectory = false
-        };
     }
 
     [Fact]
@@ -225,7 +213,7 @@ public class MoveFileOrDirectoryTests
             await service.MoveFileOrDirectory(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
-            .WithMessage("Status(StatusCode=\"Unavailable\", Detail=\"Unable to rename this directory\")");
+            .WithMessage("Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to rename this directory\")");
         var oldDirectoryExists = Directory.Exists(oldDirectoryPath);
         oldDirectoryExists.Should().BeFalse();
         var newDirectoryExists = Directory.Exists(newDirectoryPath);
@@ -251,7 +239,7 @@ public class MoveFileOrDirectoryTests
             await service.MoveFileOrDirectory(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
-            .WithMessage("Status(StatusCode=\"Unavailable\", Detail=\"Unable to move this directory\")");
+            .WithMessage("Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to move this directory\")");
         var oldDirectoryExists = Directory.Exists(oldDirectoryPath);
         oldDirectoryExists.Should().BeFalse();
         var newDirectoryExists = Directory.Exists(newDirectoryPath);
