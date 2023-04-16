@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\shared\Barkditor.Protobuf\Barkditor.Protobuf.csproj" />
-    <ProjectReference Include="..\BarkditorGui.Application\BarkditorGui.Application.csproj" />
+    <ProjectReference Include="..\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BarkditorGui.Utilities</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Grpc.Core.Api">
+      <HintPath>..\..\..\..\..\.nuget\packages\grpc.core.api\2.52.0\lib\netstandard2.1\Grpc.Core.Api.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

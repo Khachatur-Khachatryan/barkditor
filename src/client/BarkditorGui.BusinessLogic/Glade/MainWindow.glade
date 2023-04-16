@@ -120,7 +120,7 @@
             <property name="position-set">True</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="width-request">50</property>
+                <property name="width-request">220</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <child>

@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{87F36130-291
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "client", "client", "{25D416EA-F584-4747-B367-FFB70D8AEBE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorGui.Application", "src\client\BarkditorGui.Application\BarkditorGui.Application.csproj", "{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorGui.Utilities", "src\client\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj", "{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorGui.Presentation", "src\client\BarkditorGui.Presentation\BarkditorGui.Presentation.csproj", "{7C34AC91-F414-4517-A0CA-D0A58026521C}"
 EndProject

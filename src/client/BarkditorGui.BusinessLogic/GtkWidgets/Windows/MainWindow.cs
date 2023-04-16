@@ -1,4 +1,5 @@
 using Barkditor.Protobuf;
+using BarkditorGui.Utilities.Services;
 using BarkditorGui.BusinessLogic.GtkWidgets.DialogWindows;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
@@ -71,7 +72,7 @@ public class MainWindow : Window
         var cutFileMenuItem = new MenuItem("_Cut");
         var copyFilePathMenuItem = new MenuItem("_Copy path");
 
-        openInFileManagerMenuItem.Activated += (_, a) =>
+        openInFileManagerMenuItem.Activated += (_, _) =>
         {
             _fileTreeView.Selection.GetSelected(out var iter);
             var path = (string) _fileTreeStore.GetValue(iter, 2);
@@ -82,7 +83,8 @@ public class MainWindow : Window
                 IsDirectory = isDirectory
             };
 
-            _filesClient.OpenInFileManager(request);
+            GrpcRequestSenderService.SendRequest(
+                () =>_filesClient.OpenInFileManager(request));
         };
         
         removeFileMenuItem.Activated += (_, _) =>
@@ -96,7 +98,8 @@ public class MainWindow : Window
                 IsDirectory = isDirectory
             };
 
-            _filesClient.RemoveFileOrDirectory(request);
+            GrpcRequestSenderService.SendRequest(
+                () => _filesClient.RemoveFileOrDirectory(request));
         };
         
         copyFileMenuItem.Activated += (_, _) =>
@@ -123,7 +126,8 @@ public class MainWindow : Window
                 Path = path
             };
 
-            _filesClient.CopyPath(request);
+            GrpcRequestSenderService.SendRequest(
+                () => _filesClient.CopyPath(request));
         };
 
         _fileContextMenu.AttachToWidget(_fileTreeView, null);
@@ -177,7 +181,8 @@ public class MainWindow : Window
                 IsDirectory = isDirectory == 1
             };
 
-            _filesClient.MoveFileOrDirectory(request);
+            GrpcRequestSenderService.SendRequest(
+                () => _filesClient.MoveFileOrDirectory(request));
         };
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);
@@ -196,7 +201,7 @@ public class MainWindow : Window
 
     private void PopupFileContextMenu(object? sender, ButtonReleaseEventArgs a)
     {
-        var s = (EventButton) a.Event;
+        var s = a.Event;
         if(s.Button == 3 && s.Type == EventType.ButtonRelease)
         {
             _fileContextMenu.PopupAtPointer(null);
@@ -231,7 +236,7 @@ public class MainWindow : Window
         aboutDialog.ProgramName = "Barkditor";
         aboutDialog.Copyright = "© 2023 Khachatur Khachatryan";
         aboutDialog.Comments = "Lightweight, cross-platform, and powerful code editor";
-        aboutDialog.License = "Barkditor is free software; you may distribute and modify it under the terms of the third vesion" 
+        aboutDialog.License = "Barkditor is free software; you may distribute and modify it under the terms of the third version" 
             + "of the GNU General Public License published by Free Software Foundation.\n"
             + "\nBarkditor supplied without any warranty. Details in GNU General Public License (third version)\n"
             + "\nYou should receive a copy of the GNU General Public License along with Barkditor."
@@ -282,7 +287,14 @@ public class MainWindow : Window
     private void LoadSavedProject() 
     {
         var empty = new Empty();
-        var response = _projectFilesClient.GetSavedProject(empty);
+        var response = GrpcRequestSenderService.SendRequest(
+            () => _projectFilesClient.GetSavedProject(empty));
+
+        if (response is null)
+        {
+            return;
+        }
+        
         FileSystemViewer.Watcher.Path = response.Path;
         var projectFiles = response.Files;
         if(projectFiles is null)
@@ -298,7 +310,15 @@ public class MainWindow : Window
         {
             Path = path
         };
-        var response = _projectFilesClient.OpenFolder(request);
+        
+        var response = GrpcRequestSenderService.SendRequest(
+            () => _projectFilesClient.OpenFolder(request));
+
+        if (response is null)
+        {
+            return;
+        }
+        
         var projectFiles = response.Files;
         FileSystemViewer.Watcher.Path = response.Path;
         _fileTreeStore.Clear();

@@ -1,4 +1,6 @@
 using Barkditor.Protobuf;
+using BarkditorGui.Utilities.Services;
+using Grpc.Core;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 using Window = Gtk.Window;
@@ -24,7 +26,7 @@ public class CreateFileDialog : Dialog
 
 #endregion
 
-    public CreateFileDialog(Window parent, Files.FilesClient filesClient) 
+    public CreateFileDialog(Widget parent, Files.FilesClient filesClient) 
         : this(new Builder("CreateFileDialog.glade"))
     {
         _filesClient = filesClient;
@@ -69,7 +71,7 @@ public class CreateFileDialog : Dialog
         {
             _filesClient.CreateFileOrDirectory(request);        
         }
-        catch (Exception)
+        catch (RpcException)
         {
             Hide();        
         }
@@ -92,6 +94,7 @@ public class CreateFileDialog : Dialog
         var path = _pathEntry.Text;
         var name = _nameEntry.Text;
         
+        // TODO: Add a validation criterion that checks if the file exists (BARKDITOR-GUI-
         if (!Directory.Exists(path) || 
             string.IsNullOrEmpty(name) || 
             string.IsNullOrWhiteSpace(name))
