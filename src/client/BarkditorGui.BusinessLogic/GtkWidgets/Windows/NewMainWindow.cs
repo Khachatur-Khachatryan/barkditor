@@ -1,0 +1,6 @@
+namespace BarkditorGui.BusinessLogic.GtkWidgets.Windows;
+
+public class NewMainWindow
+{
+    
+}
