@@ -48,7 +48,7 @@ public class FilesService : Files.FilesBase
                 ? $"Unable to create a folder at path \"{path}\""
                 : $"Unable to create a file at path \"{path}\"";
             
-            var status = new Status(StatusCode.Unavailable, errorMessage);
+            var status = new Status(StatusCode.InvalidArgument, errorMessage);
             throw new RpcException(status);
         }
     }
@@ -90,7 +90,7 @@ public class FilesService : Files.FilesBase
                     : "Unable to move this file";
             }
 
-            var status = new Status(StatusCode.Unavailable, errorMessage);
+            var status = new Status(StatusCode.InvalidArgument, errorMessage);
             throw new RpcException(status);
         }
     }
@@ -122,7 +122,7 @@ public class FilesService : Files.FilesBase
                 ? $"Unable to delete a folder at path \"{path}\""
                 : $"Unable to delete a file at path \"{path}\"";
             
-            var status = new Status(StatusCode.Unavailable, errorMessage);
+            var status = new Status(StatusCode.InvalidArgument, errorMessage);
             throw new RpcException(status);
         }
     }

@@ -139,7 +139,7 @@ public class CreateFileTests
             await service.CreateFileOrDirectory(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
-            .WithMessage($"Status(StatusCode=\"Unavailable\", Detail=\"Unable to create a folder at path \"{directoryPath}\"\")");
+            .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to create a folder at path \"{directoryPath}\"\")");
         var exists = Directory.Exists(directoryPath);
         exists.Should().BeFalse();
     }
@@ -170,7 +170,7 @@ public class CreateFileTests
             await service.CreateFileOrDirectory(request, contextMoq.Object);
 
         await action.Should().ThrowAsync<RpcException>()
-            .WithMessage($"Status(StatusCode=\"Unavailable\", Detail=\"Unable to create a file at path \"{filePath}\"\")");
+            .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to create a file at path \"{filePath}\"\")");
         var exists = Directory.Exists(filePath);
         exists.Should().BeFalse();
     }
