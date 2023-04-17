@@ -1,0 +1,19 @@
+using Gtk 4.0;
+
+Gtk.Window MainWindow {
+  width-request: 900;
+  height-request: 600;
+  can-focus: false;
+  title: _("Barkditor");
+
+  [titlebar]
+  HeaderBar {}
+
+  Box layout {
+    can-focus: false;
+    visible: true;
+    orientation: vertical;
+
+    
+  }
+}

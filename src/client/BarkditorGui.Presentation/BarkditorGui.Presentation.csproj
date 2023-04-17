@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GirCore.Gtk-4.0" Version="0.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BarkditorGui.BusinessLogic\BarkditorGui.BusinessLogic.csproj" />
   </ItemGroup>
 

@@ -6,17 +6,31 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\shared\Barkditor.Protobuf\Barkditor.Protobuf.csproj" />
+    <ProjectReference Include="..\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
-    <None Remove="**\*.glade" />
-    <EmbeddedResource Include="**\*.glade">
-      <LogicalName>%(Filename)%(Extension)</LogicalName>
+    <EmbeddedResource Include="./Blueprint/out/helloworld.ui">
+      <LogicalName>helloworld.ui</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\shared\Barkditor.Protobuf\Barkditor.Protobuf.csproj" />
-    <ProjectReference Include="..\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj" />
+    <PackageReference Include="GirCore.Gtk-4.0" Version="0.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Blueprint\out\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <CustomBuild Include="./Blueprint/helloworld.wrap ">
+      <Message>Copying readme...</Message>
+      <Command>copy %(Identity) $(OutDir)%(Identity)</Command>
+      <Outputs>$(OutDir)%(Identity)</Outputs>
+    </CustomBuild>
   </ItemGroup>
 
 </Project>

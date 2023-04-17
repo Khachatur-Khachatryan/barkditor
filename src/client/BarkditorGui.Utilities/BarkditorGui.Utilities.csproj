@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GirCore.Gtk-4.0" Version="0.3.0" />
     <PackageReference Include="Grpc.Core.Api" Version="2.52.0" />
   </ItemGroup>
 
