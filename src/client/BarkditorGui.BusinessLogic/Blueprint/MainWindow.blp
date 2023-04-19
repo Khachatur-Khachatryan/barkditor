@@ -1,0 +1,91 @@
+using Gtk 4.0;
+using Gio 2.0;
+
+Window MainWindow {
+  width-request: 900;
+  height-request: 600;
+  title: "Barkditor";
+  can-focus: false;
+
+  [titlebar]
+  HeaderBar {
+    [start]
+    MenuButton {
+      icon-name: "open-menu-symbolic";
+      menu-model: header-menu;
+      tooltip-text: _("Main Menu");
+      primary: true;
+    }
+  }
+
+  Box {
+    visible: true;
+    can-focus: false;
+    orientation: horizontal;
+
+    Paned {
+      visible: true;
+      can-focus: true;
+      position-set: true;
+
+      ScrolledWindow {
+        width-request: 220;
+        can-focus: true;
+        visible: true;
+
+        Viewport {
+          visible: true;
+          can-focus: false;
+
+          ColumnView _fileColumnView {
+            reorderable: true;
+            can-focus: true;
+            visible: true;
+          }
+        }
+      }
+    }
+  }
+}
+
+TreeListModel _treeStore {
+  autoexpand: true;
+}
+
+menu header-menu {
+  submenu {
+    label: _("File");
+
+    section {
+      item {
+        label: _("Create File");
+      }
+
+      item {
+        label: _("Open File");
+      }
+
+      item {
+        label: _("Open Folder");
+      }
+
+      item {
+        label: _("Save");
+      }
+
+      item {
+        label: _("Save as");
+      }
+    }
+
+    section {
+      item {
+        label: _("Exit");
+      }
+    }
+  }
+
+  item {
+    label: _("About");
+  }
+}

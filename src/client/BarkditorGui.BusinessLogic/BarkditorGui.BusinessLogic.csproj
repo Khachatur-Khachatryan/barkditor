@@ -19,4 +19,8 @@
     <ProjectReference Include="..\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Blueprint\out\" />
+  </ItemGroup>
+
 </Project>

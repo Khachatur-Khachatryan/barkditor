@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="MainWindow">
+    <property name="width-request">900</property>
+    <property name="height-request">600</property>
+    <property name="title">Barkditor</property>
+    <property name="can-focus">false</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
+          <object class="GtkMenuButton">
+            <property name="icon-name">open-menu-symbolic</property>
+            <property name="menu-model">header-menu</property>
+            <property name="tooltip-text" translatable="true">Main Menu</property>
+            <property name="primary">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="can-focus">false</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkPaned">
+            <property name="visible">true</property>
+            <property name="can-focus">true</property>
+            <property name="position-set">true</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="width-request">220</property>
+                <property name="can-focus">true</property>
+                <property name="visible">true</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">true</property>
+                    <property name="can-focus">false</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <menu id="header-menu">
+    <submenu>
+      <attribute name="label" translatable="true">File</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="true">Create File</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="true">Open File</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="true">Open Folder</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="true">Save</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="true">Save as</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="true">Exit</attribute>
+        </item>
+      </section>
+    </submenu>
+    <item>
+      <attribute name="label" translatable="true">About</attribute>
+    </item>
+  </menu>
+</interface>
