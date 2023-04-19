@@ -1,5 +1,4 @@
 using Gtk 4.0;
-using Gio 2.0;
 
 Window MainWindow {
   width-request: 900;
@@ -38,9 +37,19 @@ Window MainWindow {
           can-focus: false;
 
           ColumnView _fileColumnView {
+            model: NoSelection {
+              model: _fileTreeListModel;
+            };
             reorderable: true;
             can-focus: true;
             visible: true;
+            
+            ColumnViewColumn {
+              visible: true;
+              id: "1";
+              title: "Files";
+              expand: true;
+            }
           }
         }
       }
@@ -48,7 +57,7 @@ Window MainWindow {
   }
 }
 
-TreeListModel _treeStore {
+TreeListModel _fileTreeListModel {
   autoexpand: true;
 }
 
