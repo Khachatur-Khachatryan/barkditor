@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GtkSharp" Version="3.24.24.*" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\BarkditorGui.BusinessLogic\BarkditorGui.BusinessLogic.csproj" />
   </ItemGroup>
 

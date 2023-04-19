@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GtkSharp" Version="3.24.24.38" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\shared\Barkditor.Protobuf\Barkditor.Protobuf.csproj" />
     <ProjectReference Include="..\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj" />
   </ItemGroup>
