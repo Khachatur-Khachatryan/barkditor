@@ -1,32 +1,22 @@
-// using System;
-// using System.Threading.Tasks;
-// using BarkditorGui.BusinessLogic.GtkWidgets.Windows;
-// using GLib;
-// using Application = Gtk.Application;
-//
-// namespace BarkditorGui.Presentation;
-//
-// public static class Program
-// {
-//     [STAThread]
-//     public static void Main(string[] args)
-//     {
-//         Application.Init();
-//
-//         var app = new Application("org.BarkditorGui.Presentation", ApplicationFlags.None);
-//         app.Register(Cancellable.Current);
-//
-//         var win = new MainWindow();
-//         app.AddWindow(win);
-//
-//         async void Action()
-//         {
-//             await win.FileSystemViewer.StartWatching();
-//         }
-//
-//         Parallel.Invoke(Action);
-//         
-//         win.Show();
-//         Application.Run();
-//     }
-// }
+using System;
+using BarkditorGui.BusinessLogic.GtkWidgets.Windows;
+using Gtk;
+
+namespace BarkditorGui.Presentation;
+
+public static class Program
+{
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        var application = Application.New("org.Barkditor.core", Gio.ApplicationFlags.FlagsNone);
+        application.OnActivate += (_, _) =>
+        {
+            var window = new MainWindow();
+            window.Application = application;
+            window.Show();
+            window.OnDestroy += (_, _) => application.Quit();
+        };
+        application.Run();
+    }
+}

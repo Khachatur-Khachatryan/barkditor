@@ -7,7 +7,7 @@
 [![.NET build and test](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml)
 
 ## Description
-Barkditor is a open source code editor that implemented using GTK Sharp lib and .NET framework.
+Barkditor is a open source code editor that implemented using Gir.Core library and .NET platform.
 In general, this project created for educational purposes.
 The project is currently in very alpha.
 
@@ -18,6 +18,42 @@ The project is currently in very alpha.
 Obligatory required software:
 
 - **For Linux-based systems:** install xsel utility
+- **Blueprint compiler**: install blueprint-compiler package
+- **Install Blueprint compiler for Windows**:
+  - **Install MSYS2**: https://www.msys2.org/
+  - **Run commands following below:**
+    ```
+    pacman -Suy
+    pacman -S mingw-w64-x86_64-gtk4 mingw-w64-x86_64-python3 mingw-w64-x86_64-python3-gobject mingw-w64-x86_64-ninja
+    ```
+  - **Clone blueprint-compiler source code:**
+    ```
+    git clone https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+    ```
+  - **Build:**
+    ```
+    ninja -C _build install
+    ```
+- **Install Blueprint compiler for MacOS**
+  - **Install Python3:** https://www.python.org/downloads/macos/
+  - **Run commands following below:**
+    ```
+    brew install pygobject3 gtk4
+    python3 -m pip install ninja
+    ```
+  - **Clone blueprint-compiler source code:**
+    ```
+    git clone https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+    ```
+  - **Build:**
+    ```
+    ninja -C _build install
+    ```
+- **Install Blueprint compiler for DebianL**
+  - ```
+    sudo apt install blueprint-compiler
+    ```
+- **GTK library 4:** https://www.gtk.org/
 - **.NET SDK 7.0.200 or later:** https://dotnet.microsoft.com/en-us/download
 - **Code Editor or IDE:** Visual studio, Visual studio code, Rider
 
@@ -46,7 +82,7 @@ Obligatory required software:
 ## Versions
 
 - **.NET:** `7.0.200 or later`
-- **GTK:** `3.24`
+- **GTK:** `4`
 
 ## Tasks management
 

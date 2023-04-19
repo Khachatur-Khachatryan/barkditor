@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="./Blueprint/out/helloworld.ui">
-      <LogicalName>helloworld.ui</LogicalName>
+    <EmbeddedResource Include="./Blueprint/out/MainWindow.ui">
+      <LogicalName>MainWindow.ui</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -23,14 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Blueprint\out\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <CustomBuild Include="./Blueprint/helloworld.wrap ">
-      <Message>Copying readme...</Message>
-      <Command>copy %(Identity) $(OutDir)%(Identity)</Command>
-      <Outputs>$(OutDir)%(Identity)</Outputs>
-    </CustomBuild>
   </ItemGroup>
 
 </Project>

@@ -14,6 +14,9 @@ Gtk.Window MainWindow {
     visible: true;
     orientation: vertical;
 
-    
+    InfoBar {
+      visible: true;
+      can-focus: false;
+    }
   }
 }
