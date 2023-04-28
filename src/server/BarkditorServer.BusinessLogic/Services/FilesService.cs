@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Net;
 using System.Runtime.InteropServices;
 using Barkditor.Protobuf;
 using Google.Protobuf.WellKnownTypes;
@@ -150,6 +149,37 @@ public class FilesService : Files.FilesBase
     public override async Task<Empty> CopyPath(CopyPathRequest request, ServerCallContext ctx)
     {
         var path = request.Path;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var xdgSessionType = Environment.GetEnvironmentVariable("XDG_SESSION_TYPE");
+        
+            if (xdgSessionType == "x11")
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments = $"-c \"echo {path} | xsel --clipboard\"",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true
+                };
+                Process.Start(processStartInfo);
+            }
+            else if (xdgSessionType == "wayland")
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments = $"-c \"echo {path} | wl-copy\"",
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
+                Process.Start(processStartInfo);
+            }
+            return await Task.FromResult(new Empty());
+        }
+
         var clipboard = new Clipboard();
         
         await clipboard.SetTextAsync(path);
