@@ -11,6 +11,7 @@ using Xunit;
 
 namespace BarkditorServer.UnitTests.Tests.FilesServiceTests;
 
+[Collection("Sequential")]
 public class ExistsTests
 {
     [Fact]

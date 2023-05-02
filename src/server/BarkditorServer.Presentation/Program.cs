@@ -1,4 +1,5 @@
 ﻿using BarkditorServer.BusinessLogic.Services;
+using BarkditorServer.BusinessLogic.Wrappers;
 using BarkditorServer.Domain.Constants;
 using Microsoft.OpenApi.Models;
 
@@ -39,5 +40,15 @@ public static class Program
         app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
         app.Run();
+
+        try
+        {
+            DirectoryWrapper.Create(FilePaths.TempFolderPath);
+            DirectoryWrapper.Create(FilePaths.TempCopiedFilesFolderPath);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 }

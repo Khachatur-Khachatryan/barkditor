@@ -14,19 +14,19 @@ service Files {
     };
   }
   // Moves/renames file or directory
-  rpc Move (MoveRequest) returns (google.protobuf.Empty){
+  rpc Move (MoveRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/Move"
     };
   }
   // Removes file or directory
-  rpc Remove (RemoveRequest) returns (google.protobuf.Empty){
+  rpc Remove (RemoveRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/Remove"
     };
   }
   // Opens file/directory in file manager (in Windows: explorer.exe, Linux-based: xdg-open, OSX: open)
-  rpc OpenInFileManager (OpenInFileManagerRequest) returns (google.protobuf.Empty){
+  rpc OpenInFileManager (OpenInFileManagerRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       get: "/OpenInFileManager"
     };
@@ -35,15 +35,21 @@ service Files {
     Copies file/directory path to clipboard. For Linux-based must to be installed: 
     xsel(for X11 session), wl-clipboard(for Wayland session)
   */
-  rpc CopyPath (CopyPathRequest) returns (google.protobuf.Empty){
+  rpc CopyPath (CopyPathRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/CopyPath"
     };
   }
   // Checks for the existence of a file/directory
-  rpc Exists (ExistsRequest) returns (ExistsResponse){
+  rpc Exists (ExistsRequest) returns (ExistsResponse) {
     option (google.api.http) = {
       get: "/Exists"
+    };
+  }
+  // Copies file/directory to temp directory (<temp-folder-path>/Barkditor/Copies)
+  rpc Copy (CopyRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/Copy"
     };
   }
 }
@@ -86,4 +92,10 @@ message ExistsRequest {
 
 message ExistsResponse {
   bool exists = 1;
+}
+
+// copy file
+message CopyRequest {
+  string path = 1;
+  bool isDirectory = 2;
 }
