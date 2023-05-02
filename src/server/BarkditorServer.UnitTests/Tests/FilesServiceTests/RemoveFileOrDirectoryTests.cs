@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Barkditor.Protobuf;
 using BarkditorServer.BusinessLogic.Services;
+using BarkditorServer.BusinessLogic.Wrappers;
 using BarkditorServer.Domain.Constants;
 using BarkditorServer.UnitTests.Helpers;
 using FluentAssertions;
@@ -64,7 +65,7 @@ public class RemoveTests
             await service.Remove(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
-        var directoryExists = Directory.Exists(directoryPath);
+        var directoryExists = DirectoryWrapper.Exists(directoryPath);
         directoryExists.Should().BeFalse();
     }
     
@@ -108,7 +109,7 @@ public class RemoveTests
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to delete a folder at path \"{directoryPath}\"\")");
-        var directoryExists = Directory.Exists(directoryPath);
+        var directoryExists = DirectoryWrapper.Exists(directoryPath);
         directoryExists.Should().BeFalse();
     }
 }

@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Barkditor.Protobuf;
+using BarkditorServer.BusinessLogic.Wrappers;
+using BarkditorServer.Domain.Constants;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using TextCopy;
@@ -19,14 +21,14 @@ public class FilesService : Files.FilesBase
         {
             if (isDirectory)
             {
-                if (Directory.Exists(path))
+                if (DirectoryWrapper.Exists(path))
                 {
                     var status = new Status(StatusCode.AlreadyExists,
                         "This directory already exists");
                     throw new RpcException(status);
                 }
 
-                Directory.CreateDirectory(path);
+                DirectoryWrapper.Create(path);
                 return await Task.FromResult(new Empty());
             }
 
@@ -63,7 +65,7 @@ public class FilesService : Files.FilesBase
         {
             if(isDirectory)
             {
-                Directory.Move(oldPath, newPath);
+                DirectoryWrapper.Move(oldPath, newPath);
             }
             else
             {
@@ -103,7 +105,7 @@ public class FilesService : Files.FilesBase
         {
             if(isDirectory)
             {
-                Directory.Delete(path);
+                DirectoryWrapper.Delete(path);
                 return await Task.FromResult(new Empty());
             }
 
@@ -194,9 +196,33 @@ public class FilesService : Files.FilesBase
 
         var response = new ExistsResponse
         {
-            Exists = isDirectory ? Directory.Exists(path) : File.Exists(path)
+            Exists = isDirectory ? DirectoryWrapper.Exists(path) : File.Exists(path)
         };
 
         return await Task.FromResult(response);
     }
+
+    public override async Task<Empty> Copy(CopyRequest request, ServerCallContext ctx)
+    {
+        DirectoryWrapper.Clear(FilePaths.TempCopiedFilesFolderPath);
+        var isDirectory = request.IsDirectory;
+        var path = request.Path;
+
+        if (isDirectory)
+        {
+            var destDirectoryName = Path.GetFileName(path);
+            var destDirectoryPath = Path.Combine(FilePaths.TempCopiedFilesFolderPath, destDirectoryName!);
+            DirectoryWrapper.Copy(path, destDirectoryPath);
+        }
+        else
+        {
+            var destFileName = Path.GetFileName(path);
+            var destFilePath = Path.Combine(FilePaths.TempCopiedFilesFolderPath, destFileName);
+            File.Copy(path, destFilePath);
+        }
+
+        return await Task.FromResult(new Empty());
+    }
+    
+    
 }

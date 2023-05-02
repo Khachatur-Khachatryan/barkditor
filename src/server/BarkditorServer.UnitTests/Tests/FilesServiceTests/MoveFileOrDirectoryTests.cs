@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Barkditor.Protobuf;
 using BarkditorServer.BusinessLogic.Services;
+using BarkditorServer.BusinessLogic.Wrappers;
 using BarkditorServer.Domain.Constants;
 using BarkditorServer.UnitTests.Helpers;
 using FluentAssertions;
@@ -97,9 +98,9 @@ public class MoveTests
             await service.Move(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
-        var oldDirectoryExists = Directory.Exists(oldDirectoryPath);
+        var oldDirectoryExists = DirectoryWrapper.Exists(oldDirectoryPath);
         oldDirectoryExists.Should().BeFalse();
-        var newDirectoryExists = Directory.Exists(newDirectoryPath);
+        var newDirectoryExists = DirectoryWrapper.Exists(newDirectoryPath);
         newDirectoryExists.Should().BeTrue();
         var rollbackRequest = new MoveRequest
         {
@@ -129,9 +130,9 @@ public class MoveTests
             await service.Move(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
-        var oldDirectoryExists = Directory.Exists(oldDirectoryPath);
+        var oldDirectoryExists = DirectoryWrapper.Exists(oldDirectoryPath);
         oldDirectoryExists.Should().BeFalse();
-        var newDirectoryExists = Directory.Exists(newDirectoryPath);
+        var newDirectoryExists = DirectoryWrapper.Exists(newDirectoryPath);
         newDirectoryExists.Should().BeTrue();
         var rollbackRequest = new MoveRequest
         {
@@ -214,9 +215,9 @@ public class MoveTests
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage("Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to rename this directory\")");
-        var oldDirectoryExists = Directory.Exists(oldDirectoryPath);
+        var oldDirectoryExists = DirectoryWrapper.Exists(oldDirectoryPath);
         oldDirectoryExists.Should().BeFalse();
-        var newDirectoryExists = Directory.Exists(newDirectoryPath);
+        var newDirectoryExists = DirectoryWrapper.Exists(newDirectoryPath);
         newDirectoryExists.Should().BeFalse();
     }
     
@@ -240,9 +241,9 @@ public class MoveTests
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage("Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to move this directory\")");
-        var oldDirectoryExists = Directory.Exists(oldDirectoryPath);
+        var oldDirectoryExists = DirectoryWrapper.Exists(oldDirectoryPath);
         oldDirectoryExists.Should().BeFalse();
-        var newDirectoryExists = Directory.Exists(newDirectoryPath);
+        var newDirectoryExists = DirectoryWrapper.Exists(newDirectoryPath);
         newDirectoryExists.Should().BeFalse();
     }
 }

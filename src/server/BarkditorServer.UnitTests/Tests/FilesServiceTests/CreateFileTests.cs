@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Barkditor.Protobuf;
 using BarkditorServer.BusinessLogic.Services;
+using BarkditorServer.BusinessLogic.Wrappers;
 using BarkditorServer.Domain.Constants;
 using BarkditorServer.UnitTests.Helpers;
 using FluentAssertions;
@@ -59,7 +60,7 @@ public class CreateFileTests
             await service.Create(request, contextMoq.Object);
 
         await action.Should().NotThrowAsync();
-        var exists = Directory.Exists(directoryPath);
+        var exists = DirectoryWrapper.Exists(directoryPath);
         exists.Should().BeTrue();
         var removeDirectoryRequest = new RemoveRequest
         {
@@ -109,7 +110,7 @@ public class CreateFileTests
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage("Status(StatusCode=\"AlreadyExists\", Detail=\"This directory already exists\")");
-        var exists = Directory.Exists(directoryPath);
+        var exists = DirectoryWrapper.Exists(directoryPath);
         exists.Should().BeTrue();
     }
     
@@ -140,7 +141,7 @@ public class CreateFileTests
 
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to create a folder at path \"{directoryPath}\"\")");
-        var exists = Directory.Exists(directoryPath);
+        var exists = DirectoryWrapper.Exists(directoryPath);
         exists.Should().BeFalse();
     }
     
@@ -168,10 +169,10 @@ public class CreateFileTests
 
         var action = async () =>
             await service.Create(request, contextMoq.Object);
-
+        
         await action.Should().ThrowAsync<RpcException>()
             .WithMessage($"Status(StatusCode=\"InvalidArgument\", Detail=\"Unable to create a file at path \"{filePath}\"\")");
-        var exists = Directory.Exists(filePath);
+        var exists = DirectoryWrapper.Exists(filePath);
         exists.Should().BeFalse();
     }
 }
