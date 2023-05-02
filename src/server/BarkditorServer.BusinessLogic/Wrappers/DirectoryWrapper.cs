@@ -24,7 +24,7 @@ public static class DirectoryWrapper
         var directoryPaths = Directory.GetDirectories(sourceFolderPath);
         foreach (var directoryPath in directoryPaths)
         {
-            var directoryName = directoryPath.Split('/').LastOrDefault();
+            var directoryName = Path.GetFileName(directoryPath);
             var destinationDirectoryPath = Path.Combine(destinationFolderPath, directoryName!);
             Create(destinationDirectoryPath);
             Copy(directoryPath, destinationDirectoryPath);

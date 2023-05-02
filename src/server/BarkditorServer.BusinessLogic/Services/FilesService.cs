@@ -210,7 +210,7 @@ public class FilesService : Files.FilesBase
 
         if (isDirectory)
         {
-            var destDirectoryName = path.Split('/').LastOrDefault();
+            var destDirectoryName = Path.GetFileName(path);
             var destDirectoryPath = Path.Combine(FilePaths.TempCopiedFilesFolderPath, destDirectoryName!);
             DirectoryWrapper.Copy(path, destDirectoryPath);
         }
