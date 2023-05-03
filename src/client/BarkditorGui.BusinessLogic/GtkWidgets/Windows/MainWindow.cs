@@ -8,6 +8,10 @@ using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 using Window = Gtk.Window;
 using BarkditorGui.Utilities.FileSystem;
+using GLib;
+using Application = Gtk.Application;
+using Menu = Gtk.Menu;
+using MenuItem = Gtk.MenuItem;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Windows;
 public class MainWindow : Window
@@ -135,6 +139,7 @@ public class MainWindow : Window
         _fileTreeView.AppendColumn(fileColumn);
 
         _fileTreeView.Model = _fileTreeStore;
+        _fileTreeView.EnableSearch = false;
     }
 
 #endregion
