@@ -39,6 +39,7 @@ public class MainWindow : Window
     private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
     {
         GtkWidgetInitService.Initialize(this, builder);
+        
 
         var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
         {
@@ -111,18 +112,21 @@ public class MainWindow : Window
         var fileColumn = new TreeViewColumn();
         
         var sortRenderer = new CellRendererText();
+        sortRenderer.CellBackground = "#333333";
         sortRenderer.Visible = false;
         sortRenderer.Sensitive = false;
         fileColumn.PackStart(sortRenderer, false);
         fileColumn.AddAttribute(sortRenderer, "text", 3);
         
         var pathRenderer = new CellRendererText();
+        pathRenderer.CellBackground = "#333333";
         pathRenderer.Visible = false;
         pathRenderer.Sensitive = false;
         fileColumn.PackStart(pathRenderer, false);
         fileColumn.AddAttribute(pathRenderer, "text", 2);
         
         var iconRenderer = new CellRendererPixbuf();
+        iconRenderer.CellBackground = "#333333";
         fileColumn.PackStart(iconRenderer, false);
         fileColumn.AddAttribute(iconRenderer, "pixbuf", 1);
         iconRenderer.SetPadding(3, 0);
@@ -130,9 +134,10 @@ public class MainWindow : Window
         var filenameRenderer = new CellRendererText();
         filenameRenderer.Editable = true;
         filenameRenderer.Edited += FileTreeViewRow_DoubleClicked;
+        filenameRenderer.CellBackground = "#333333";
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);
-
+        
         _fileTreeStore.SetSortColumnId(3, SortType.Descending);
 
         fileColumn.Title = "Files";
@@ -169,7 +174,7 @@ public class MainWindow : Window
     private void AboutButton_Clicked(object? sender, EventArgs a)
     {
         var logoPath = System.IO.Path.GetFullPath(
-            System.IO.Path.Combine(AppContext.BaseDirectory, "../../../../img/barkditor-logo.svg"));
+            System.IO.Path.Combine(AppContext.BaseDirectory, "../../../../../../img/barkditor-logo.svg"));
         var loader = new PixbufLoader();
         loader.Write(File.ReadAllBytes(logoPath));
         loader.Close();
@@ -189,7 +194,7 @@ public class MainWindow : Window
             + "\nYou should receive a copy of the GNU General Public License along with Barkditor."
             + "Otherwise, write about it to: Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.";
         aboutDialog.WebsiteLabel = "View source code";
-        aboutDialog.Website = "https://github.com/barkditor";
+        aboutDialog.Website = "https://github.com/Khachatur-Khachatryan/barkditor";
         aboutDialog.Authors = new[]
         {
             "Khachatur Khachatryan, main developer"
@@ -226,7 +231,7 @@ public class MainWindow : Window
     {
         // don't confuse with file path
         // https://docs.gtk.org/gtk3/struct.TreePath.html
-        var path = new TreePath(a.Path); 
+        var path = new TreePath(a.Path);
         _fileTreeStore.GetIter(out var iter, path);
         var oldPath = (string) _fileTreeStore.GetValue(iter, 2);
         var isDirectory = (int) _fileTreeStore.GetValue(iter, 3);
