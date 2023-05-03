@@ -89,3 +89,7 @@ Version control to be organized as follows:
 ## Logo
 
 The logo was created in Inkscape.
+
+## GTK theme
+
+**Marwaita-Pop_os:** https://github.com/darkomarko42/Marwaita-Pop_os
