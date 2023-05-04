@@ -40,15 +40,7 @@ public static class Program
         app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
         app.Run();
-
-        try
-        {
-            DirectoryWrapper.Create(FilePaths.TempFolderPath);
-            DirectoryWrapper.Create(FilePaths.TempCopiedFilesFolderPath);
-        }
-        catch (Exception)
-        {
-            // ignored
-        }
+        DirectoryWrapper.Create(FilePaths.TempFolderPath);
+        DirectoryWrapper.Create(FilePaths.TempCopiedFilesFolderPath);
     }
 }
