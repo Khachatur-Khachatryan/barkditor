@@ -80,10 +80,7 @@ public class MainWindow : Window
         
         removeFileMenuItem.Activated += FileContextMenuRemove_Activated;
         
-        copyFileMenuItem.Activated += (_, _) =>
-        {
-            // TODO: BARKDITOR-GUI-44
-        };
+        copyFileMenuItem.Activated += FileContextMenuCopy_Activated;
 
         pasteFileMenuItem.Activated += (_, _) =>
         {
@@ -290,6 +287,21 @@ public class MainWindow : Window
 
         GrpcRequestSenderService.SendRequest(
             () => _filesClient.CopyPath(request));
+    }
+
+    private void FileContextMenuCopy_Activated(object? sender, EventArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var path = (string) _fileTreeStore.GetValue(iter, 2);
+        var isDirectory = (int)_fileTreeStore.GetValue(iter, 3);
+        var request = new CopyRequest
+        {
+            Path = path,
+            IsDirectory = isDirectory == 1 
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () => _filesClient.Copy(request));
     }
 
     private static void Window_DeleteEvent(object sender, DeleteEventArgs a)
