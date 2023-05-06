@@ -39,7 +39,6 @@ public class MainWindow : Window
     private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
     {
         GtkWidgetInitService.Initialize(this, builder);
-        
 
         var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
         {
@@ -109,14 +108,12 @@ public class MainWindow : Window
         var fileColumn = new TreeViewColumn();
         
         var sortRenderer = new CellRendererText();
-        sortRenderer.CellBackground = "#333333";
         sortRenderer.Visible = false;
         sortRenderer.Sensitive = false;
         fileColumn.PackStart(sortRenderer, false);
         fileColumn.AddAttribute(sortRenderer, "text", 3);
         
         var pathRenderer = new CellRendererText();
-        pathRenderer.CellBackground = "#333333";
         pathRenderer.Visible = false;
         pathRenderer.Sensitive = false;
         fileColumn.PackStart(pathRenderer, false);

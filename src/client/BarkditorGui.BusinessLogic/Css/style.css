@@ -20,9 +20,10 @@
 }
 .fileTree {
     min-width: 100px;
+    background-color: #333333;
 }
 .menubar {
-    background-color: #353535;
+    background-color: #4b4b4b;
 }
 .notebook {
     min-width: 600px;
