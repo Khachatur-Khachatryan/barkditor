@@ -120,7 +120,6 @@ public class MainWindow : Window
         fileColumn.AddAttribute(pathRenderer, "text", 2);
         
         var iconRenderer = new CellRendererPixbuf();
-        iconRenderer.CellBackground = "#333333";
         fileColumn.PackStart(iconRenderer, false);
         fileColumn.AddAttribute(iconRenderer, "pixbuf", 1);
         iconRenderer.SetPadding(3, 0);
@@ -128,7 +127,6 @@ public class MainWindow : Window
         var filenameRenderer = new CellRendererText();
         filenameRenderer.Editable = true;
         filenameRenderer.Edited += FileTreeViewRow_DoubleClicked;
-        filenameRenderer.CellBackground = "#333333";
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);
         

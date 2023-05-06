@@ -20,6 +20,8 @@
 }
 .fileTree {
     min-width: 100px;
+}
+.fileTreeView {
     background-color: #333333;
 }
 .menubar {
