@@ -46,10 +46,16 @@ service Files {
       get: "/Exists"
     };
   }
-  // Copies file/directory to temp directory (<temp-folder-path>/Barkditor/Copies)
+  // Copies file/directory to temp directory (<temp-folder-path>/Barkditor/Copied)
   rpc Copy (CopyRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/Copy"
+    };
+  }
+  // Pastes file/directory from <temp-folder-path>/Barkditor/Copied to specified path
+  rpc Paste (PasteRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/Paste"
     };
   }
 }
@@ -94,8 +100,13 @@ message ExistsResponse {
   bool exists = 1;
 }
 
-// copy file
+// copy file/directory
 message CopyRequest {
   string path = 1;
   bool isDirectory = 2;
+}
+
+// paste file/directory
+message PasteRequest {
+  string path = 1;
 }

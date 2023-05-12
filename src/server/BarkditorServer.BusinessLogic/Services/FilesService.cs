@@ -223,6 +223,17 @@ public class FilesService : Files.FilesBase
 
         return await Task.FromResult(new Empty());
     }
-    
-    
+
+    public override async Task<Empty> Paste(PasteRequest request, ServerCallContext ctx)
+    {
+        if (DirectoryWrapper.IsEmpty(FilePaths.TempCopiedFilesFolderPath))
+        {
+            throw new RpcException(new Status(StatusCode.FailedPrecondition, "Nothing to paste"));
+        }
+        var path = request.Path;
+        
+        DirectoryWrapper.Copy(FilePaths.TempCopiedFilesFolderPath, path);
+        
+        return await Task.FromResult(new Empty());
+    }
 }
