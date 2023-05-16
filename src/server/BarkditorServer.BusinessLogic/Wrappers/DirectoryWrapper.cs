@@ -81,10 +81,37 @@ public static class DirectoryWrapper
     /// <summary>
     /// Checks whether the given path refers to an existing directory on disk.
     /// </summary>
-    /// <param name="path">the path to test</param>
-    /// <returns>true if path refers to an existing directory; false if the directory does not exist</returns>
+    /// <param name="path">the path to check</param>
+    /// <returns>
+    /// true if path refers to an existing directory;
+    /// false if the directory does not exist
+    /// </returns>
     public static bool Exists(string path)
     {
         return Directory.Exists(path);
+    }
+
+    /// <summary>
+    /// Checks whether the directory given by path empty
+    /// </summary>
+    /// <param name="path">the path to check</param>
+    /// <returns>
+    /// true if the directory is empty or doesn't exists;
+    /// false if the directory contains files or other folders
+    /// </returns>
+    public static bool IsEmpty(string path)
+    {
+        if (!Exists(path))
+        {
+            return true;
+        }
+
+        if (!Directory.GetFiles(path).Any() &&
+            !Directory.GetDirectories(path).Any())
+        {
+            return true;
+        }
+
+        return false;
     }
 }
