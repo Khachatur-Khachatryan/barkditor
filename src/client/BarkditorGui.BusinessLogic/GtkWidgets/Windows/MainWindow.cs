@@ -30,6 +30,7 @@ public class MainWindow : Window
 #pragma warning restore CS0649, CS8618
     private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(int));
     private readonly Menu _fileContextMenu = new();
+    private readonly MenuItem _pasteFileContextMenuItem = new("_Paste");
     
     public FileSystemViewer FileSystemViewer { get; }
     
@@ -52,8 +53,8 @@ public class MainWindow : Window
             new FileSystemViewer(_fileTreeStore, _projectFilesClient);
         
         FileTreeViewInit();
-        LoadSavedProject();
         FileContextMenuInit();
+        LoadSavedProject();
         
 #pragma warning disable CS8602
         DeleteEvent += Window_DeleteEvent;
@@ -71,7 +72,6 @@ public class MainWindow : Window
         var openInFileManagerMenuItem = new MenuItem("_Open in file manager");
         var removeFileMenuItem = new MenuItem("_Remove");
         var copyFileMenuItem = new MenuItem("_Copy");
-        var pasteFileMenuItem = new MenuItem("_Paste");
         var cutFileMenuItem = new MenuItem("_Cut");
         var copyPathMenuItem = new MenuItem("_Copy path");
 
@@ -81,10 +81,9 @@ public class MainWindow : Window
         
         copyFileMenuItem.Activated += FileContextMenuCopy_Activated;
 
-        pasteFileMenuItem.Activated += (_, _) =>
-        {
-            // TODO: BARKDITOR-GUI-47
-        };
+        _pasteFileContextMenuItem.Sensitive = false;
+        InitializeFileSystemWatcherForTmpCopied();
+        _pasteFileContextMenuItem.Activated += FileContextMenuPaste_Activated;
         
         cutFileMenuItem.Activated += (_, _) =>
         {
@@ -97,7 +96,7 @@ public class MainWindow : Window
         _fileContextMenu.Add(openInFileManagerMenuItem);
         _fileContextMenu.Add(removeFileMenuItem);
         _fileContextMenu.Add(copyFileMenuItem);
-        _fileContextMenu.Add(pasteFileMenuItem);
+        _fileContextMenu.Add(_pasteFileContextMenuItem);
         _fileContextMenu.Add(cutFileMenuItem);
         _fileContextMenu.Add(copyPathMenuItem);
         _fileContextMenu.ShowAll();
@@ -299,6 +298,24 @@ public class MainWindow : Window
             () => _filesClient.Copy(request));
     }
 
+    private void FileContextMenuPaste_Activated(object? sender, EventArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var path = (string) _fileTreeStore.GetValue(iter, 2);
+        var isDirectory = (int)_fileTreeStore.GetValue(iter, 3);
+        if (isDirectory == 0)
+        {
+            path = System.IO.Path.GetDirectoryName(path);
+        }
+        var request = new PasteRequest
+        {
+            Path = path 
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () => _filesClient.Paste(request));
+    }
+
     private static void Window_DeleteEvent(object sender, DeleteEventArgs a)
     {
         Application.Quit();
@@ -390,6 +407,38 @@ public class MainWindow : Window
         }
     }
 
+    private void InitializeFileSystemWatcherForTmpCopied()
+    {
+        var tmpCopiedPath = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(), "Barkditor", "Copied");
+        var fileSystemWatcher = new FileSystemWatcher();
+        fileSystemWatcher.BeginInit();
+
+        fileSystemWatcher.NotifyFilter = NotifyFilters.DirectoryName
+                                         | NotifyFilters.FileName;
+
+        fileSystemWatcher.Created += (_, e) =>
+        {
+            _pasteFileContextMenuItem.Sensitive = true;
+        };
+        fileSystemWatcher.Deleted += (_, e) =>
+        {
+            if (!Directory.GetFiles(tmpCopiedPath).Any() &&
+                !Directory.GetDirectories(tmpCopiedPath).Any())
+            {
+                _pasteFileContextMenuItem.Sensitive = false;
+            }
+        };
+
+        fileSystemWatcher.Path = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(), "Barkditor", "Copied");
+        fileSystemWatcher.InternalBufferSize = 16384;
+        fileSystemWatcher.Filter = "*.*";
+        fileSystemWatcher.IncludeSubdirectories = false;
+        fileSystemWatcher.EnableRaisingEvents = true;
+        
+        fileSystemWatcher.EndInit();
+    }
 #endregion
 
 }
