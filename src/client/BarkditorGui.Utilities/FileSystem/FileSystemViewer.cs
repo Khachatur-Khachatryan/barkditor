@@ -72,6 +72,7 @@ public class FileSystemViewer
                     continue;
             }
         }
+        // ReSharper disable once FunctionNeverReturns
     }
     
     private void File_Created(FileSystemChange fileSystemChange)

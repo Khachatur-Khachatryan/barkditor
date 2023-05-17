@@ -2,16 +2,13 @@ using Barkditor.Protobuf;
 using BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 using BarkditorGui.Utilities.Services;
 using BarkditorGui.BusinessLogic.GtkWidgets.DialogWindows;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Gdk;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 using Window = Gtk.Window;
 using BarkditorGui.Utilities.FileSystem;
-using GLib;
 using Application = Gtk.Application;
-using Menu = Gtk.Menu;
 using MenuItem = Gtk.MenuItem;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Windows;
@@ -27,7 +24,6 @@ public class MainWindow : Window
     [UI] private readonly MenuItem _createFileItem;
     [UI] private readonly Viewport _fileViewport;
     private readonly Files.FilesClient _filesClient;
-    private readonly ProjectFiles.ProjectFilesClient _projectFilesClient;
 #pragma warning restore CS0649, CS8618
     private readonly FileViewer _fileViewer;
 
@@ -45,21 +41,19 @@ public class MainWindow : Window
             MaxReceiveMessageSize = null,
             MaxSendMessageSize = null
         });
-        _projectFilesClient = new ProjectFiles.ProjectFilesClient(channel);
+        var projectFilesClient = new ProjectFiles.ProjectFilesClient(channel);
         _filesClient = new Files.FilesClient(channel);
         
-        
-        
-#pragma warning disable CS8602
-        _fileViewer = new FileViewer(_fileViewport!, _filesClient, _projectFilesClient);
+        _fileViewer = new FileViewer(_filesClient, projectFilesClient);
         FileSystemViewer = _fileViewer.FileSystemViewer;
+        _fileViewport!.Add(_fileViewer);
         _fileViewport.ShowAll();
+
+#pragma warning disable CS8602
         DeleteEvent += Window_DeleteEvent;
         _aboutMenuItem.Activated += AboutButton_Clicked;
         _openFolderItem.Activated += OpenFolder_Clicked;
         _createFileItem.Activated += CreateFile_Clicked;
-        
-        
 #pragma warning restore CS8602
     }
 

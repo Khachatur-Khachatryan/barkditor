@@ -3,7 +3,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Sources;
 using BarkditorGui.BusinessLogic.GtkWidgets.Windows;
 using Gdk;
 using GLib;

@@ -4,7 +4,6 @@ using BarkditorGui.Utilities.Services;
 using Gdk;
 using Google.Protobuf.WellKnownTypes;
 using Gtk;
-using Window = Gdk.Window;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 
@@ -19,11 +18,9 @@ public class FileViewer : Box
 
     public FileSystemViewer FileSystemViewer { get; }
 
-    public FileViewer(Widget viewport, Files.FilesClient filesClient, 
-                      ProjectFiles.ProjectFilesClient projectFilesClient) 
-        : base(Orientation.Vertical, 0)
+    public FileViewer(Files.FilesClient filesClient, 
+                      ProjectFiles.ProjectFilesClient projectFilesClient) : base(Orientation.Vertical, 0)
     {
-        Parent = viewport;
         _filesClient = filesClient;
         _projectFilesClient = projectFilesClient;
         FileSystemViewer = 
@@ -32,7 +29,6 @@ public class FileViewer : Box
         FileTreeViewInit();
         FileContextMenuInit();
         LoadSavedProject();
-        
         ShowAll();
     }
     
@@ -330,11 +326,11 @@ public class FileViewer : Box
         fileSystemWatcher.NotifyFilter = NotifyFilters.DirectoryName
                                          | NotifyFilters.FileName;
 
-        fileSystemWatcher.Created += (_, e) =>
+        fileSystemWatcher.Created += (_, _) =>
         {
             _pasteFileContextMenuItem.Sensitive = true;
         };
-        fileSystemWatcher.Deleted += (_, e) =>
+        fileSystemWatcher.Deleted += (_, _) =>
         {
             if (!Directory.GetFiles(tmpCopiedPath).Any() &&
                 !Directory.GetDirectories(tmpCopiedPath).Any())
