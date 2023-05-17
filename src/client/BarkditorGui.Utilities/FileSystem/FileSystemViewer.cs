@@ -1,5 +1,6 @@
 using System.Threading.Channels;
 using Barkditor.Protobuf;
+using Gdk;
 using Google.Protobuf.WellKnownTypes;
 using Gtk;
 
@@ -10,6 +11,9 @@ public class FileSystemViewer
     private readonly ProjectFiles.ProjectFilesClient _projectFilesClient;
     private readonly TreeStore _fileTreeStore;
     private readonly Channel<FileSystemChange> _channel = Channel.CreateUnbounded<FileSystemChange>();
+    private readonly Pixbuf _folderIcon = IconTheme.Default.LoadIcon("folder", (int)IconSize.Menu, 0);
+    private readonly Pixbuf _fileIcon = IconTheme.Default.LoadIcon("x-office-document", (int)IconSize.Menu, 0);
+
     public FileSystemWatcher Watcher { get; } = new();
     
     public FileSystemViewer(TreeStore fileTreeStore,
@@ -72,14 +76,11 @@ public class FileSystemViewer
     
     private void File_Created(FileSystemChange fileSystemChange)
     {
-        var folderIcon = IconTheme.Default.LoadIcon("folder", (int)IconSize.Menu, 0);
-        var fileIcon = IconTheme.Default.LoadIcon("x-office-document", (int)IconSize.Menu, 0);
-        
         var projectPath = _projectFilesClient.GetProjectPath(new Empty()).Path;
         var directoryPath = Path.GetDirectoryName(fileSystemChange.FullPath);
         var isDirectory = Directory.Exists(fileSystemChange.FullPath);
         var sortType = isDirectory ? 1 : 0;
-        var icon = isDirectory ? folderIcon : fileIcon;
+        var icon = isDirectory ? _folderIcon : _fileIcon;
         
         if (directoryPath == projectPath)
         {
@@ -102,8 +103,38 @@ public class FileSystemViewer
         });
         
         Application.Invoke((_, _) =>
-            _fileTreeStore.AppendValues(result, Path.GetFileName(fileSystemChange.Name), 
-                icon, fileSystemChange.FullPath, sortType));
+        {
+            var createdIter = _fileTreeStore.AppendValues(result, 
+                Path.GetFileName(fileSystemChange.Name), icon, 
+                fileSystemChange.FullPath, sortType);
+
+            if (isDirectory)
+            {
+                ShowFolderContent(createdIter, fileSystemChange.FullPath);
+            }
+        });
+    }
+
+    private void ShowFolderContent(TreeIter folderIter, string folderPath)
+    {
+        var directoryFiles = Directory.GetFiles(folderPath);
+
+        foreach (var file in directoryFiles)
+        {
+            _fileTreeStore.AppendValues(folderIter, 
+                Path.GetFileName(file), _fileIcon, 
+                file, 0);
+        }
+                
+        var directoryFolders = Directory.GetDirectories(folderPath);
+
+        foreach (var folder in directoryFolders)
+        {
+            var subfolderIter = _fileTreeStore.AppendValues(folderIter, 
+                Path.GetFileName(folder), _folderIcon, 
+                folder, 1);
+            ShowFolderContent(subfolderIter, folder);
+        }
     }
 
     private void File_Deleted(FileSystemChange fileSystemChange)
