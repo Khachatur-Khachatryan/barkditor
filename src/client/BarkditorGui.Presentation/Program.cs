@@ -21,8 +21,7 @@ public static class Program
     {
         Application.Init();
         await SetThemeAsync();
-        
-        
+
         var app = new Application("org.BarkditorGui.Presentation", ApplicationFlags.None);
         app.Register(Cancellable.Current);
 
