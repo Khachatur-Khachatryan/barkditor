@@ -15,13 +15,19 @@ namespace BarkditorGui.Presentation;
 
 public static class Program
 {
+    private const string GtkThemePath = "../../../../themes/inspired/gtk-3.0/gtk.css";
+    private const string GtkApplicationId = "org.barkditor.gtk";
+    
     [STAThread]
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
     {
         Application.Init();
-        await SetThemeAsync();
+        
+        var cssProvider = new CssProvider();
+        cssProvider.LoadFromPath(GtkThemePath);
+        StyleContext.AddProviderForScreen(Screen.Default, cssProvider, 800);
 
-        var app = new Application("org.BarkditorGui.Presentation", ApplicationFlags.None);
+        var app = new Application(GtkApplicationId, ApplicationFlags.None);
         app.Register(Cancellable.Current);
 
         var win = new MainWindow();
@@ -36,51 +42,5 @@ public static class Program
         
         win.Show();
         Application.Run();
-    }
-
-    private static async Task SetThemeAsync()
-    {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var appDataPath = Path.GetDirectoryName(Environment.GetEnvironmentVariable("appdata"));
-            var gtkThemesPath = Path.Combine(appDataPath!, @"Local\Gtk\3.24.24\share\themes\");
-            const string gtkThemeZipFilePath = @"..\..\..\..\themes\W9-Dark.zip";
-            var gtkThemePath = $@"{gtkThemesPath}W9-Dark";
-            if (!Directory.Exists(gtkThemePath))
-            {
-                await Task.Run(() =>
-                    {
-                        Directory.CreateDirectory(gtkThemePath);
-                        ZipFile.ExtractToDirectory(gtkThemeZipFilePath, gtkThemePath);
-                    }
-                );
-            }
-            Settings.Default.ThemeName = "W9-Dark";
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var homeDirectory = Environment.GetEnvironmentVariable("HOME");
-            var gtkThemesPath = $"{homeDirectory}/.themes";
-            if (!Directory.Exists(gtkThemesPath))
-            {
-                Directory.CreateDirectory(gtkThemesPath);
-            }
-            var gtkThemePath = $"{gtkThemesPath}/W9-Dark";
-            const string gtkThemeZipFilePath = "../../../../themes/W9-Dark.zip";
-
-            if (!Directory.Exists(gtkThemePath))
-            {
-                await Task.Run(() => 
-                    {
-                        Directory.CreateDirectory(gtkThemePath);
-                        ZipFile.ExtractToDirectory(gtkThemeZipFilePath, gtkThemePath);
-                    }
-                );
-            }
-            
-            var cssProvider = new CssProvider();
-            cssProvider.LoadFromPath($"{gtkThemePath}/gtk-3.20/gtk.css");
-            StyleContext.AddProviderForScreen(Screen.Default, cssProvider, 800);
-        }
     }
 }
