@@ -85,8 +85,16 @@ public class FileSystemViewer
         
         if (directoryPath == projectPath)
         {
-            Application.Invoke((_, _) => 
-                _fileTreeStore.AppendValues(Path.GetFileName(fileSystemChange.Name), icon, fileSystemChange.FullPath, sortType));
+            Application.Invoke((_, _) =>
+            {
+                var createdIter = _fileTreeStore.AppendValues(Path.GetFileName(fileSystemChange.Name), 
+                    icon, fileSystemChange.FullPath, sortType);
+
+                if (isDirectory)
+                {
+                    ShowFolderContent(createdIter, fileSystemChange.FullPath);
+                }
+            });
             return;
         }
 
