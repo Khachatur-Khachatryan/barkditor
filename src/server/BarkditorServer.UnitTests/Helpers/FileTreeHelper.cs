@@ -7,6 +7,11 @@ namespace BarkditorServer.UnitTests.Helpers;
 
 internal static class FileTreeHelper
 {
+    /// <summary>
+    /// Provides file tree by path src/server/BarkditorServer.UnitTests/TestFolder
+    /// using for unit tests
+    /// </summary>
+    /// <returns>file tree for tests</returns>
     internal static FileTree GetTestFileTree()
     {
         var testFolderPath = FilePaths.TestFolderPath;
