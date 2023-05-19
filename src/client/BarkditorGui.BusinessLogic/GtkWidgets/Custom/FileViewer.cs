@@ -19,7 +19,8 @@ public class FileViewer : Box
     public FileSystemViewer FileSystemViewer { get; }
 
     public FileViewer(Files.FilesClient filesClient, 
-                      ProjectFiles.ProjectFilesClient projectFilesClient) : base(Orientation.Vertical, 0)
+                      ProjectFiles.ProjectFilesClient projectFilesClient) 
+        : base(Orientation.Vertical, 0)
     {
         _filesClient = filesClient;
         _projectFilesClient = projectFilesClient;
@@ -91,10 +92,7 @@ public class FileViewer : Box
         InitializeFileSystemWatcherForTmpCopied();
         _pasteFileContextMenuItem.Activated += FileContextMenuPaste_Activated;
         
-        cutFileMenuItem.Activated += (_, _) =>
-        {
-            // TODO: BARKDITOR-GUI-46
-        };
+        cutFileMenuItem.Activated += FileContextMenuCut_Activated;
         
         copyPathMenuItem.Activated += FileContextMenuCopyPath_Activated;
 
@@ -106,6 +104,39 @@ public class FileViewer : Box
         _fileContextMenu.Add(cutFileMenuItem);
         _fileContextMenu.Add(copyPathMenuItem);
         _fileContextMenu.ShowAll();
+    }
+
+    private void InitializeFileSystemWatcherForTmpCopied()
+    {
+        var tmpCopiedPath = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(), "Barkditor", "Copied");
+        var fileSystemWatcher = new FileSystemWatcher();
+        fileSystemWatcher.BeginInit();
+
+        fileSystemWatcher.NotifyFilter = NotifyFilters.DirectoryName
+                                         | NotifyFilters.FileName;
+
+        fileSystemWatcher.Created += (_, _) =>
+        {
+            _pasteFileContextMenuItem.Sensitive = true;
+        };
+        fileSystemWatcher.Deleted += (_, _) =>
+        {
+            if (!Directory.GetFiles(tmpCopiedPath).Any() &&
+                !Directory.GetDirectories(tmpCopiedPath).Any())
+            {
+                _pasteFileContextMenuItem.Sensitive = false;
+            }
+        };
+
+        fileSystemWatcher.Path = System.IO.Path.Combine(
+            System.IO.Path.GetTempPath(), "Barkditor", "Copied");
+        fileSystemWatcher.InternalBufferSize = 16384;
+        fileSystemWatcher.Filter = "*.*";
+        fileSystemWatcher.IncludeSubdirectories = false;
+        fileSystemWatcher.EnableRaisingEvents = true;
+        
+        fileSystemWatcher.EndInit();
     }
 
 #endregion
@@ -230,29 +261,24 @@ public class FileViewer : Box
             () => _filesClient.Paste(request));
     }
 
+    private void FileContextMenuCut_Activated(object? sender, EventArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var path = (string) _fileTreeStore.GetValue(iter, 2);
+        var isDirectory = (int)_fileTreeStore.GetValue(iter, 3);
+        var request = new CutRequest()
+        {
+            Path = path,
+            IsDirectory = isDirectory == 1 
+        };
+
+        GrpcRequestSenderService.SendRequest(
+            () => _filesClient.Cut(request));
+    }
+    
 #endregion
 
-#region FileViewer
-
-    private void LoadSavedProject() 
-    {
-        var empty = new Empty();
-        var response = GrpcRequestSenderService.SendRequest(
-            () => _projectFilesClient.GetSavedProject(empty));
-
-        if (response is null)
-        {
-            return;
-        }
-        
-        FileSystemViewer.Watcher.Path = response.Path;
-        var projectFiles = response.Files;
-        if(projectFiles is null)
-        {
-            return;
-        }    
-        ShowProjectFiles(projectFiles);
-    }
+#region FileTreeOutput
 
     public void OpenFolder(string path)
     {
@@ -273,6 +299,26 @@ public class FileViewer : Box
         FileSystemViewer.Watcher.Path = response.Path;
         _fileTreeStore.Clear();
 
+        ShowProjectFiles(projectFiles);
+    }
+
+    private void LoadSavedProject() 
+    {
+        var empty = new Empty();
+        var response = GrpcRequestSenderService.SendRequest(
+            () => _projectFilesClient.GetSavedProject(empty));
+
+        if (response is null)
+        {
+            return;
+        }
+        
+        FileSystemViewer.Watcher.Path = response.Path;
+        var projectFiles = response.Files;
+        if(projectFiles is null)
+        {
+            return;
+        }    
         ShowProjectFiles(projectFiles);
     }
 
@@ -316,38 +362,6 @@ public class FileViewer : Box
         }
     }
 
-    private void InitializeFileSystemWatcherForTmpCopied()
-    {
-        var tmpCopiedPath = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(), "Barkditor", "Copied");
-        var fileSystemWatcher = new FileSystemWatcher();
-        fileSystemWatcher.BeginInit();
-
-        fileSystemWatcher.NotifyFilter = NotifyFilters.DirectoryName
-                                         | NotifyFilters.FileName;
-
-        fileSystemWatcher.Created += (_, _) =>
-        {
-            _pasteFileContextMenuItem.Sensitive = true;
-        };
-        fileSystemWatcher.Deleted += (_, _) =>
-        {
-            if (!Directory.GetFiles(tmpCopiedPath).Any() &&
-                !Directory.GetDirectories(tmpCopiedPath).Any())
-            {
-                _pasteFileContextMenuItem.Sensitive = false;
-            }
-        };
-
-        fileSystemWatcher.Path = System.IO.Path.Combine(
-            System.IO.Path.GetTempPath(), "Barkditor", "Copied");
-        fileSystemWatcher.InternalBufferSize = 16384;
-        fileSystemWatcher.Filter = "*.*";
-        fileSystemWatcher.IncludeSubdirectories = false;
-        fileSystemWatcher.EnableRaisingEvents = true;
-        
-        fileSystemWatcher.EndInit();
-    }
 #endregion
 
 }
