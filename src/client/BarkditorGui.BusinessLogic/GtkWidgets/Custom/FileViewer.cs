@@ -25,7 +25,8 @@ public class FileViewer : Box
         _projectFilesClient = projectFilesClient;
         
         FileSystemViewer = new FileSystemViewer(_fileTreeStore, _projectFilesClient);
-        _fileContextMenu = new FileContextMenu(_fileTreeView, _fileTreeStore, _filesClient);
+        _fileContextMenu = 
+            new FileContextMenu(_fileTreeView, _fileTreeStore, _filesClient, projectFilesClient);
 
         // file tree view init start
         var fileColumn = new TreeViewColumn();
@@ -70,7 +71,7 @@ public class FileViewer : Box
         ShowAll();
     }
     
-#region GtkEventHandlers
+#region EventHandlers
 
     private void PopupFileContextMenu(object? sender, ButtonReleaseEventArgs a)
     {
@@ -168,8 +169,7 @@ public class FileViewer : Box
             IconTheme.Default.LoadIcon("folder-templates", (int)IconSize.Menu, 0);
         
         // add project root directory
-        var rootProjectTreeIter = _fileTreeStore.AppendValues(fileTree.Name, rootProjectDirectoryIcon, 1);
-        
+        var rootProjectTreeIter = _fileTreeStore.AppendValues(fileTree.Name, rootProjectDirectoryIcon, fileTree.Path, 1);
         
         foreach(var file in fileTree.Files)
         {
