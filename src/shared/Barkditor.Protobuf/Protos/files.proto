@@ -58,6 +58,15 @@ service Files {
       post: "/Paste"
     };
   }
+  /* 
+    Copies file/directory to temp directory (<temp-folder-path>/Barkditor/Copied) 
+    and deletes source file/directory
+  */
+  rpc Cut (CutRequest) returns (google.protobuf.Empty) {
+   option (google.api.http) = {
+      post: "/Cut"
+    };
+  }
 }
 
 // create file
@@ -109,4 +118,10 @@ message CopyRequest {
 // paste file/directory
 message PasteRequest {
   string path = 1;
+}
+
+// cut file/directory
+message CutRequest {
+  string path = 1;
+  bool isDirectory = 2;
 }

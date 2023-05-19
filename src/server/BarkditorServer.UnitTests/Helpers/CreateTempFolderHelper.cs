@@ -6,6 +6,9 @@ namespace BarkditorServer.UnitTests.Helpers;
 
 internal static class CreateTempFolderHelper
 {
+    /// <summary>
+    /// Creates project temporary folders
+    /// </summary>
     internal static void Create()
     {
         try
