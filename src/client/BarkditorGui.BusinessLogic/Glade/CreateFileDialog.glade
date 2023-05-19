@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkEntryBuffer" id="_nameEntryBuffer"/>
@@ -18,6 +18,8 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox">
             <property name="can-focus">False</property>
+            <property name="margin-end">10</property>
+            <property name="margin-bottom">10</property>
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="_createButton">
