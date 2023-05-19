@@ -27,15 +27,7 @@ public class FileViewer : Box
         FileSystemViewer = new FileSystemViewer(_fileTreeStore, _projectFilesClient);
         _fileContextMenu = new FileContextMenu(_fileTreeView, _fileTreeStore, _filesClient);
 
-        FileTreeViewInit();
-        LoadSavedProject();
-        ShowAll();
-    }
-    
-#region ComponentsInitialization
-
-    private void FileTreeViewInit()
-    {
+        // file tree view init start
         var fileColumn = new TreeViewColumn();
         
         var sortRenderer = new CellRendererText();
@@ -71,11 +63,14 @@ public class FileViewer : Box
         _fileTreeView.ButtonReleaseEvent += PopupFileContextMenu;
 
         PackStart(_fileTreeView, true, true, 0);
+        
+        // file tree view init end
+        
+        LoadSavedProject();
+        ShowAll();
     }
     
-#endregion
-    
-#region GtkEvents
+#region GtkEventHandlers
 
     private void PopupFileContextMenu(object? sender, ButtonReleaseEventArgs a)
     {
@@ -164,6 +159,35 @@ public class FileViewer : Box
         }    
         ShowProjectFiles(projectFiles);
     }
+    
+    private void ShowProjectFiles(FileTree fileTree) 
+    {
+        var folderIcon = IconTheme.Default.LoadIcon("folder", (int) IconSize.Menu, 0);
+        var fileIcon = IconTheme.Default.LoadIcon("x-office-document", (int) IconSize.Menu, 0);
+        var rootProjectDirectoryIcon = 
+            IconTheme.Default.LoadIcon("folder-templates", (int)IconSize.Menu, 0);
+        
+        // add project root directory
+        var rootProjectTreeIter = _fileTreeStore.AppendValues(fileTree.Name, rootProjectDirectoryIcon, 1);
+        
+        
+        foreach(var file in fileTree.Files)
+        {
+            var icon = file.IsDirectory ? folderIcon : fileIcon;
+            
+            if(file.IsDirectory is false)
+            {
+                _fileTreeStore.AppendValues(rootProjectTreeIter, file.Name, icon, file.Path, 0);
+                continue;
+            }
+            
+            var treeIter = _fileTreeStore.AppendValues(rootProjectTreeIter, file.Name, icon, file.Path, 1);
+            ShowProjectFiles(file, treeIter);
+        }
+        
+        var rootProjectTreePath = _fileTreeStore.GetPath(rootProjectTreeIter);
+        _fileTreeView.ExpandRow(rootProjectTreePath, false);
+    }
 
     private void ShowProjectFiles(FileTree fileTree, TreeIter parent) 
     {
@@ -181,26 +205,6 @@ public class FileViewer : Box
             }
             
             var treeIter = _fileTreeStore.AppendValues(parent, file.Name, icon, file.Path, 1);
-            ShowProjectFiles(file, treeIter);
-        }
-    }
-
-    private void ShowProjectFiles(FileTree fileTree) 
-    {
-        var folderIcon = IconTheme.Default.LoadIcon("folder", (int) IconSize.Menu, 0);
-        var fileIcon = IconTheme.Default.LoadIcon("x-office-document", (int) IconSize.Menu, 0);
-
-        foreach(var file in fileTree.Files)
-        {
-            var icon = file.IsDirectory ? folderIcon : fileIcon;
-            
-            if(file.IsDirectory is false)
-            {
-                _fileTreeStore.AppendValues(file.Name, icon, file.Path, 0);
-                continue;
-            }
-            
-            var treeIter = _fileTreeStore.AppendValues(file.Name, icon, file.Path, 1);
             ShowProjectFiles(file, treeIter);
         }
     }
