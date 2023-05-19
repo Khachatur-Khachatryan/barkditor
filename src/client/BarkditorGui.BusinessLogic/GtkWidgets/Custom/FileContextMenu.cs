@@ -1,5 +1,6 @@
 using Barkditor.Protobuf;
 using BarkditorGui.Utilities.Services;
+using Google.Protobuf.WellKnownTypes;
 using Gtk;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
@@ -7,25 +8,28 @@ namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 public class FileContextMenu : Menu
 {
     private readonly MenuItem _pasteFileContextMenuItem = new("_Paste");
+    private readonly MenuItem _removeFileContextMenuItem = new("_Remove");
     private readonly Files.FilesClient _filesClient;
+    private readonly ProjectFiles.ProjectFilesClient _projectFilesClient;
     private readonly TreeView _fileTreeView;
     private readonly TreeStore _fileTreeStore;
 
-    public FileContextMenu(TreeView fileTreeView, TreeStore fileTreeStore, Files.FilesClient filesClient)
+    public FileContextMenu(TreeView fileTreeView, TreeStore fileTreeStore, Files.FilesClient filesClient,
+        ProjectFiles.ProjectFilesClient projectFilesClient)
     {
         _filesClient = filesClient;
+        _projectFilesClient = projectFilesClient;
         _fileTreeStore = fileTreeStore;
         _fileTreeView = fileTreeView;
         
         var openInFileManagerMenuItem = new MenuItem("_Open in file manager");
-        var removeFileMenuItem = new MenuItem("_Remove");
         var copyFileMenuItem = new MenuItem("_Copy");
         var cutFileMenuItem = new MenuItem("_Cut");
         var copyPathMenuItem = new MenuItem("_Copy path");
 
         openInFileManagerMenuItem.Activated += FileContextMenuOpenInFileManager_Activated;
         
-        removeFileMenuItem.Activated += FileContextMenuRemove_Activated;
+        _removeFileContextMenuItem.Activated += FileContextMenuRemove_Activated;
         
         copyFileMenuItem.Activated += FileContextMenuCopy_Activated;
 
@@ -39,11 +43,14 @@ public class FileContextMenu : Menu
 
         AttachToWidget(fileTreeView, null);
         Add(openInFileManagerMenuItem);
-        Add(removeFileMenuItem);
+        Add(_removeFileContextMenuItem);
         Add(copyFileMenuItem);
         Add(_pasteFileContextMenuItem);
         Add(cutFileMenuItem);
         Add(copyPathMenuItem);
+
+        PoppedUp += FileContextMenu_PoppedUp;
+        
         ShowAll();
     }
     
@@ -81,6 +88,21 @@ public class FileContextMenu : Menu
     }
     
 #region EventHandlers
+
+    private void FileContextMenu_PoppedUp(object? sender, PoppedUpArgs a)
+    {
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var projectPath = _projectFilesClient.GetProjectPath(new Empty()).Path;
+        var path = (string)_fileTreeStore.GetValue(iter, 2);
+
+        if (path == projectPath)
+        {
+            _removeFileContextMenuItem.Sensitive = false;
+            return;
+        }
+
+        _removeFileContextMenuItem.Sensitive = true;
+    }
     
     private void FileContextMenuOpenInFileManager_Activated(object? sender, EventArgs a)
     {
@@ -172,6 +194,6 @@ public class FileContextMenu : Menu
         GrpcRequestSenderService.SendRequest(
             () => _filesClient.Cut(request));
     }
-    
+
 #endregion
 }
