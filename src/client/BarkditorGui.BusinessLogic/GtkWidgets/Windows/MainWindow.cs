@@ -35,7 +35,7 @@ public class MainWindow : Window
     private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
     {
         GtkWidgetInitService.Initialize(this, builder);
-
+        
         var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
         {
             MaxReceiveMessageSize = null,
@@ -49,17 +49,15 @@ public class MainWindow : Window
         _fileViewport!.Add(_fileViewer);
         _fileViewport.ShowAll();
 
-#pragma warning disable CS8602
         DeleteEvent += Window_DeleteEvent;
-        _aboutMenuItem.Activated += AboutButton_Clicked;
-        _openFolderItem.Activated += OpenFolder_Clicked;
-        _createFileItem.Activated += CreateFile_Clicked;
-#pragma warning restore CS8602
+        _aboutMenuItem!.Activated += AboutButton_Clicked;
+        _openFolderItem!.Activated += OpenFolder_Clicked;
+        _createFileItem!.Activated += CreateFile_Clicked;
     }
 
 #region GtkEvents
 
-    private void AboutButton_Clicked(object? sender, EventArgs a)
+    private static void AboutButton_Clicked(object? sender, EventArgs a)
     {
         var logoPath = System.IO.Path.GetFullPath(
             System.IO.Path.Combine(AppContext.BaseDirectory, "../../../../../../img/barkditor-logo.svg"));
