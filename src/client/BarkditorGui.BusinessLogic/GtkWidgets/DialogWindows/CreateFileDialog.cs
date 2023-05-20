@@ -38,14 +38,12 @@ public class CreateFileDialog : Dialog
     {
         GtkWidgetInitService.Initialize(this, builder);
 
-#pragma warning disable CS8602
-        _directoryChooserButton.SelectionChanged += DirectoryChooser_SelectionChanged;
-        _pathEntry.Changed += ValidateNameAndPath;
-        _nameEntry.Changed += ValidateNameAndPath;
-        _cancelButton.Clicked += CancelButton_Clicked;
-        _createButton.Clicked += CreateButton_Clicked;
+        _directoryChooserButton!.SelectionChanged += DirectoryChooser_SelectionChanged;
+        _pathEntry!.Changed += ValidateNameAndPath;
+        _nameEntry!.Changed += ValidateNameAndPath;
+        _cancelButton!.Clicked += CancelButton_Clicked;
+        _createButton!.Clicked += CreateButton_Clicked;
         DeleteEvent += CloseDialog;
-#pragma warning restore CS8602
     }
 #pragma warning restore CS8618
 
