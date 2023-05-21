@@ -80,15 +80,16 @@ public class FileSystemViewer
         var projectPath = _projectFilesClient.GetProjectPath(new Empty()).Path;
         var directoryPath = Path.GetDirectoryName(fileSystemChange.FullPath);
         var isDirectory = Directory.Exists(fileSystemChange.FullPath);
-        var sortType = isDirectory ? 1 : 0;
         var icon = isDirectory ? _folderIcon : _fileIcon;
         
         if (directoryPath == projectPath)
         {
             Application.Invoke((_, _) =>
             {
-                var createdIter = _fileTreeStore.AppendValues(Path.GetFileName(fileSystemChange.Name), 
-                    icon, fileSystemChange.FullPath, sortType);
+                _fileTreeStore.GetIterFirst(out var projectRootIter);
+                var createdIter = _fileTreeStore.AppendValues(projectRootIter, 
+                    Path.GetFileName(fileSystemChange.Name), icon, 
+                    fileSystemChange.FullPath, isDirectory);
 
                 if (isDirectory)
                 {
@@ -115,7 +116,7 @@ public class FileSystemViewer
         {
             var createdIter = _fileTreeStore.AppendValues(result, 
                 Path.GetFileName(fileSystemChange.Name), icon, 
-                fileSystemChange.FullPath, sortType);
+                fileSystemChange.FullPath, isDirectory);
 
             if (isDirectory)
             {
@@ -132,7 +133,7 @@ public class FileSystemViewer
         {
             _fileTreeStore.AppendValues(folderIter, 
                 Path.GetFileName(file), _fileIcon, 
-                file, 0);
+                file, false);
         }
                 
         var directoryFolders = Directory.GetDirectories(folderPath);
@@ -141,7 +142,7 @@ public class FileSystemViewer
         {
             var subfolderIter = _fileTreeStore.AppendValues(folderIter, 
                 Path.GetFileName(folder), _folderIcon, 
-                folder, 1);
+                folder, true);
             ShowFolderContent(subfolderIter, folder);
         }
     }

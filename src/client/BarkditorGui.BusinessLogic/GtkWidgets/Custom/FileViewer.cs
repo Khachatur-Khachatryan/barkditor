@@ -12,7 +12,7 @@ public class FileViewer : Box
     private readonly Files.FilesClient _filesClient;
     private readonly ProjectFiles.ProjectFilesClient _projectFilesClient;
     private readonly FileContextMenu _fileContextMenu;
-    private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(int));
+    private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(bool));
     private readonly TreeView _fileTreeView = new();
 
     public FileSystemViewer FileSystemViewer { get; }
@@ -54,17 +54,18 @@ public class FileViewer : Box
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);
         
-        _fileTreeStore.SetSortColumnId(3, SortType.Descending);
+        _fileTreeStore.SetSortColumnId(3, SortType.Ascending);
 
         fileColumn.Title = "Files";
         _fileTreeView.AppendColumn(fileColumn);
 
+        _fileTreeStore.SetSortFunc(3, FileTreeStore_SortFunc);
         _fileTreeView.Model = _fileTreeStore;
         _fileTreeView.EnableSearch = false;
         _fileTreeView.ButtonReleaseEvent += PopupFileContextMenu;
 
         PackStart(_fileTreeView, true, true, 0);
-        
+
         // file tree view init end
         
         LoadSavedProject();
@@ -76,13 +77,16 @@ public class FileViewer : Box
     private void PopupFileContextMenu(object? sender, ButtonReleaseEventArgs a)
     {
         var s = a.Event;
-        if(s.Button == 3 && s.Type == EventType.ButtonRelease)
-        {
-            _fileContextMenu.PopupAtPointer(null);
 
-            _fileTreeView.ButtonReleaseEvent -= PopupFileContextMenu;
-            _fileTreeView.ButtonReleaseEvent += HideFileContextMenu;
+        if (s.Button != 3 || s.Type != EventType.ButtonRelease)
+        {
+            return;
         }
+        
+        _fileContextMenu.PopupAtPointer(null);
+
+        _fileTreeView.ButtonReleaseEvent -= PopupFileContextMenu;
+        _fileTreeView.ButtonReleaseEvent += HideFileContextMenu;
     }
 
     private void HideFileContextMenu(object? sender, ButtonReleaseEventArgs a)
@@ -100,7 +104,7 @@ public class FileViewer : Box
         var path = new TreePath(a.Path);
         _fileTreeStore.GetIter(out var iter, path);
         var oldPath = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = (int) _fileTreeStore.GetValue(iter, 3);
+        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
         var parentDirectoryPath = System.IO.Path.GetDirectoryName(oldPath)!;
         var newPath = System.IO.Path.Combine(parentDirectoryPath, a.NewText);
 
@@ -108,7 +112,7 @@ public class FileViewer : Box
         {
             OldPath = oldPath,
             NewPath = newPath,
-            IsDirectory = isDirectory == 1
+            IsDirectory = isDirectory
         };
 
         GrpcRequestSenderService.SendRequest(
@@ -177,11 +181,13 @@ public class FileViewer : Box
             
             if(file.IsDirectory is false)
             {
-                _fileTreeStore.AppendValues(rootProjectTreeIter, file.Name, icon, file.Path, 0);
+                _fileTreeStore.AppendValues(rootProjectTreeIter, 
+                    file.Name, icon, file.Path, false);
                 continue;
             }
             
-            var treeIter = _fileTreeStore.AppendValues(rootProjectTreeIter, file.Name, icon, file.Path, 1);
+            var treeIter = _fileTreeStore.AppendValues(rootProjectTreeIter, 
+                file.Name, icon, file.Path, true);
             ShowProjectFiles(file, treeIter);
         }
         
@@ -200,15 +206,48 @@ public class FileViewer : Box
             
             if(file.IsDirectory is false) 
             {
-                _fileTreeStore.AppendValues(parent, file.Name, icon, file.Path, 0);
+                _fileTreeStore.AppendValues(parent, 
+                    file.Name, icon, file.Path, false);
                 continue;
             }
             
-            var treeIter = _fileTreeStore.AppendValues(parent, file.Name, icon, file.Path, 1);
+            var treeIter = _fileTreeStore.AppendValues(parent, 
+                file.Name, icon, file.Path, true);
             ShowProjectFiles(file, treeIter);
         }
     }
 
+    private static int FileTreeStore_SortFunc(ITreeModel fileTreeStore, TreeIter iter1, TreeIter iter2)
+    {
+        var filename1 = (string)fileTreeStore.GetValue(iter1, 0);
+        var filename2 = (string)fileTreeStore.GetValue(iter2, 0);
+        var isDirectory1 = (bool)fileTreeStore.GetValue(iter1, 3) ? 1 : 0;
+        var isDirectory2 = (bool)fileTreeStore.GetValue(iter2, 3) ? 1 : 0;
+
+        if (isDirectory1 > isDirectory2)
+        {
+            return -1;
+        }
+            
+        if (isDirectory1 < isDirectory2)
+        {
+            return 1;
+        }
+
+        var filenameCompare = string.CompareOrdinal(filename1, filename2);
+
+        if (filenameCompare < 0)
+        {
+            return -1;
+        }
+
+        if (filenameCompare == 0)
+        {
+            return 0;
+        }
+            
+        return 1;
+    }
 #endregion
 
 }

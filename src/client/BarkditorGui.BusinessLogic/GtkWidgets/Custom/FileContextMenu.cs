@@ -108,7 +108,7 @@ public class FileContextMenu : Menu
     {
         _fileTreeView.Selection.GetSelected(out var iter);
         var path = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = Directory.Exists(path);
+        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
         var request = new OpenInFileManagerRequest
         {
             Path = path,
@@ -123,7 +123,7 @@ public class FileContextMenu : Menu
     {
         _fileTreeView.Selection.GetSelected(out var iter);
         var path = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = Directory.Exists(path);
+        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
         var request = new RemoveRequest
         {
             Path = path,
@@ -151,11 +151,11 @@ public class FileContextMenu : Menu
     {
         _fileTreeView.Selection.GetSelected(out var iter);
         var path = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = (int)_fileTreeStore.GetValue(iter, 3);
+        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
         var request = new CopyRequest
         {
             Path = path,
-            IsDirectory = isDirectory == 1 
+            IsDirectory = isDirectory
         };
 
         GrpcRequestSenderService.SendRequest(
@@ -166,8 +166,8 @@ public class FileContextMenu : Menu
     {
         _fileTreeView.Selection.GetSelected(out var iter);
         var path = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = (int)_fileTreeStore.GetValue(iter, 3);
-        if (isDirectory == 0)
+        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
+        if (!isDirectory)
         {
             path = System.IO.Path.GetDirectoryName(path);
         }
@@ -184,11 +184,11 @@ public class FileContextMenu : Menu
     {
         _fileTreeView.Selection.GetSelected(out var iter);
         var path = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = (int)_fileTreeStore.GetValue(iter, 3);
-        var request = new CutRequest()
+        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
+        var request = new CutRequest
         {
             Path = path,
-            IsDirectory = isDirectory == 1 
+            IsDirectory = isDirectory
         };
 
         GrpcRequestSenderService.SendRequest(
