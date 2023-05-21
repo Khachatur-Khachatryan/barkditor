@@ -24,7 +24,8 @@ public class FileContextMenu : Menu
         _fileTreeView = fileTreeView;
 
         InitializeFileSystemWatcherForTmpCopied();
-        
+
+        var createFileMenuItem = new MenuItem("_Create file");
         var createDirectoryMenuItem = new MenuItem("_Create directory");
         var openInFileManagerMenuItem = new MenuItem("_Open in file manager");
         var copyFileMenuItem = new MenuItem("_Copy");
@@ -32,6 +33,7 @@ public class FileContextMenu : Menu
         var copyPathMenuItem = new MenuItem("_Copy path");
         _pasteFileContextMenuItem.Sensitive = false;
 
+        createFileMenuItem.Activated += FileContextMenuCreateFile_Activated;
         createDirectoryMenuItem.Activated += FileContextMenuCreateDirectory_Activated;
         openInFileManagerMenuItem.Activated += FileContextMenuOpenInFileManager_Activated;
         _removeFileContextMenuItem.Activated += FileContextMenuRemove_Activated;
@@ -41,6 +43,7 @@ public class FileContextMenu : Menu
         copyPathMenuItem.Activated += FileContextMenuCopyPath_Activated;
 
         AttachToWidget(fileTreeView, null);
+        Add(createFileMenuItem);
         Add(createDirectoryMenuItem);
         Add(openInFileManagerMenuItem);
         Add(_removeFileContextMenuItem);
@@ -117,6 +120,20 @@ public class FileContextMenu : Menu
 
         GrpcRequestSenderService.SendRequest(
             () =>_filesClient.OpenInFileManager(request));
+    }
+
+    private void FileContextMenuCreateFile_Activated(object? sender, EventArgs a)
+    {
+        var dialog = new CreateFileDialog(this, _filesClient, _fileTreeStore, _fileTreeView);
+        dialog.Run();
+        dialog.Destroy();
+    }
+    
+    private void FileContextMenuCreateDirectory_Activated(object? sender, EventArgs a)
+    {
+        var dialog = new CreateDirectoryDialog(this, _fileTreeView, _fileTreeStore, _filesClient);
+        dialog.Run();
+        dialog.Destroy();
     }
     
     private void FileContextMenuRemove_Activated(object? sender, EventArgs a)
@@ -195,12 +212,6 @@ public class FileContextMenu : Menu
             () => _filesClient.Cut(request));
     }
 
-    private void FileContextMenuCreateDirectory_Activated(object? sender, EventArgs a)
-    {
-        var dialog = new CreateDirectoryDialog(this, _fileTreeView, _fileTreeStore, _filesClient);
-        dialog.Run();
-        dialog.Destroy();
-    }
     
 #endregion
 }

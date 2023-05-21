@@ -21,9 +21,7 @@ public class MainWindow : Window
 #pragma warning disable CS0649, CS8618
     [UI] private readonly MenuItem _aboutMenuItem;
     [UI] private readonly MenuItem _openFolderItem;
-    [UI] private readonly MenuItem _createFileItem;
     [UI] private readonly Viewport _fileViewport;
-    private readonly Files.FilesClient _filesClient;
 #pragma warning restore CS0649, CS8618
     private readonly FileViewer _fileViewer;
 
@@ -42,9 +40,9 @@ public class MainWindow : Window
             MaxSendMessageSize = null
         });
         var projectFilesClient = new ProjectFiles.ProjectFilesClient(channel);
-        _filesClient = new Files.FilesClient(channel);
+        var filesClient = new Files.FilesClient(channel);
         
-        _fileViewer = new FileViewer(_filesClient, projectFilesClient);
+        _fileViewer = new FileViewer(filesClient, projectFilesClient);
         FileSystemViewer = _fileViewer.FileSystemViewer;
         _fileViewport!.Add(_fileViewer);
         _fileViewport.ShowAll();
@@ -52,7 +50,6 @@ public class MainWindow : Window
         DeleteEvent += Window_DeleteEvent;
         _aboutMenuItem!.Activated += AboutButton_Clicked;
         _openFolderItem!.Activated += OpenFolder_Clicked;
-        _createFileItem!.Activated += CreateFile_Clicked;
     }
 
 #region GtkEvents
@@ -104,13 +101,6 @@ public class MainWindow : Window
             _fileViewer.OpenFolder(path);
         }
         directoryChooser.Destroy();
-    }
-
-    private void CreateFile_Clicked(object? sender, EventArgs a)
-    {
-        var dialog = new CreateFileDialog(this, _filesClient);
-        dialog.Run();
-        dialog.Destroy();
     }
 
     private static void Window_DeleteEvent(object sender, DeleteEventArgs a)

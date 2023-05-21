@@ -15,8 +15,6 @@ public class CreateDirectoryDialog : Dialog
     [UI] private readonly Box _errorBox;
     [UI] private readonly Label _errorLabel;
 #pragma warning restore CS0649
-    private readonly TreeView _fileTreeView;
-    private readonly TreeStore _fileTreeStore;
     private readonly Files.FilesClient _filesClient;
     private readonly string _directoryPath;
     
@@ -30,15 +28,23 @@ public class CreateDirectoryDialog : Dialog
     
 #pragma warning disable CS8618
     private CreateDirectoryDialog(Builder builder, TreeView fileTreeView, 
-        TreeStore fileTreeStore, Files.FilesClient filesClient) 
+        ITreeModel fileTreeStore, Files.FilesClient filesClient) 
         : base(builder.GetRawOwnedObject("CreateDirectoryDialog"))
     {
         GtkWidgetInitService.Initialize(this, builder);
-        _fileTreeView = fileTreeView;
-        _fileTreeStore = fileTreeStore;
         _filesClient = filesClient;
-        _fileTreeView.Selection.GetSelected(out var iter);
-        _directoryPath = (string) _fileTreeStore.GetValue(iter, 2);
+        fileTreeView.Selection.GetSelected(out var iter);
+        
+        var isDirectory = (bool)fileTreeStore.GetValue(iter, 3);
+        if (isDirectory)
+        {
+            _directoryPath = (string)fileTreeStore.GetValue(iter, 2);
+        }
+        else
+        {
+            fileTreeStore.IterParent(out var parent, iter);
+            _directoryPath = (string)fileTreeStore.GetValue(parent, 2);
+        }
         
         _nameEntry!.KeyReleaseEvent += NameEntry_KeyRelease;
         DeleteEvent += CloseDialog;
@@ -59,10 +65,24 @@ public class CreateDirectoryDialog : Dialog
         {
             return;
         }
-        
-        if (string.IsNullOrEmpty(_nameEntry.Text))
+
+        var directoryName = _nameEntry.Text;
+
+        if (string.IsNullOrEmpty(directoryName))
         {
             Hide();
+            return;
+        }
+        
+        var directoryExistsRequest = new ExistsRequest
+        {
+            Path = System.IO.Path.Combine(_directoryPath, directoryName),
+            IsDirectory = true
+        };
+        var directoryExists = _filesClient.Exists(directoryExistsRequest).Exists;
+
+        if (directoryExists || string.IsNullOrWhiteSpace(_nameEntry.Text))
+        {
             return;
         }
         
@@ -98,7 +118,6 @@ public class CreateDirectoryDialog : Dialog
         {
             _errorLabel.Text = directoryExists ? "Directory already exists" : "Invalid data";
             _errorBox.Show();
-            KeyReleaseEvent -= NameEntry_KeyRelease;
             return;
         }
         

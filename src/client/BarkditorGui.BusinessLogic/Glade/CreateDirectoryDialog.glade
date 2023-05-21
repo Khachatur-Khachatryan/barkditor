@@ -60,7 +60,6 @@
               <object class="GtkEntry" id="_nameEntry">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="text" translatable="yes">TestDirectory3</property>
               </object>
               <packing>
                 <property name="expand">True</property>
