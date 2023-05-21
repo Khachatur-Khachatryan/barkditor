@@ -29,7 +29,6 @@ public class FileContextMenu : Menu
         var createDirectoryMenuItem = new MenuItem("_Create directory");
         var openInFileManagerMenuItem = new MenuItem("_Open in file manager");
         var copyFileMenuItem = new MenuItem("_Copy");
-        var cutFileMenuItem = new MenuItem("_Cut");
         var copyPathMenuItem = new MenuItem("_Copy path");
         _pasteFileContextMenuItem.Sensitive = false;
 
@@ -39,7 +38,6 @@ public class FileContextMenu : Menu
         _removeFileContextMenuItem.Activated += FileContextMenuRemove_Activated;
         copyFileMenuItem.Activated += FileContextMenuCopy_Activated;
         _pasteFileContextMenuItem.Activated += FileContextMenuPaste_Activated;
-        cutFileMenuItem.Activated += FileContextMenuCut_Activated;
         copyPathMenuItem.Activated += FileContextMenuCopyPath_Activated;
 
         AttachToWidget(fileTreeView, null);
@@ -49,7 +47,6 @@ public class FileContextMenu : Menu
         Add(_removeFileContextMenuItem);
         Add(copyFileMenuItem);
         Add(_pasteFileContextMenuItem);
-        Add(cutFileMenuItem);
         Add(copyPathMenuItem);
 
         PoppedUp += FileContextMenu_PoppedUp;
@@ -195,21 +192,6 @@ public class FileContextMenu : Menu
 
         GrpcRequestSenderService.SendRequest(
             () => _filesClient.Paste(request));
-    }
-
-    private void FileContextMenuCut_Activated(object? sender, EventArgs a)
-    {
-        _fileTreeView.Selection.GetSelected(out var iter);
-        var path = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
-        var request = new CutRequest
-        {
-            Path = path,
-            IsDirectory = isDirectory
-        };
-
-        GrpcRequestSenderService.SendRequest(
-            () => _filesClient.Cut(request));
     }
 
     

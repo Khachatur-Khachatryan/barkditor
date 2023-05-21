@@ -237,27 +237,4 @@ public class FilesService : Files.FilesBase
         return await Task.FromResult(new Empty());
     }
 
-    public override async Task<Empty> Cut(CutRequest request, ServerCallContext ctx)
-    {
-        DirectoryWrapper.Clear(FilePaths.TempCopiedFilesFolderPath);
-        var isDirectory = request.IsDirectory;
-        var path = request.Path;
-
-        if (isDirectory)
-        {
-            var destDirectoryName = Path.GetFileName(path);
-            var destDirectoryPath = Path.Combine(FilePaths.TempCopiedFilesFolderPath, destDirectoryName);
-            DirectoryWrapper.Copy(path, destDirectoryPath);
-            DirectoryWrapper.Delete(path);
-        }
-        else
-        {
-            var destFileName = Path.GetFileName(path);
-            var destFilePath = Path.Combine(FilePaths.TempCopiedFilesFolderPath, destFileName);
-            File.Copy(path, destFilePath);
-            File.Delete(path);
-        }
-        
-        return await Task.FromResult(new Empty());
-    }
 }
