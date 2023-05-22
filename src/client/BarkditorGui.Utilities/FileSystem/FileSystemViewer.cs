@@ -176,16 +176,45 @@ public class FileSystemViewer
             return false;
         });
 
-        var renamedIter = iterList.FirstOrDefault(x =>
+        var oldPathFileTreeIter = iterList.FirstOrDefault(x =>
         {
             var iterPath = (string)_fileTreeStore.GetValue(x, 2);
             return iterPath == fileSystemChange.OldFullPath;
         });
-        
+
+        var oldDirectoryPath = Path.GetDirectoryName(fileSystemChange.OldFullPath);
+        var newDirectoryPath = Path.GetDirectoryName(fileSystemChange.FullPath);
+
+        if (oldDirectoryPath != newDirectoryPath)
+        {
+            var newPathDirectoryTreeIter = iterList.FirstOrDefault(x =>
+            {
+                var iterPath = (string)_fileTreeStore.GetValue(x, 2);
+                return iterPath == newDirectoryPath;
+            });
+            var icon = isDirectory ? _folderIcon : _fileIcon;
+
+            Application.Invoke((_, _) =>
+            {
+                var createdIter = _fileTreeStore.AppendValues(newPathDirectoryTreeIter, 
+                    Path.GetFileName(fileSystemChange.Name), icon,
+                    fileSystemChange.FullPath, isDirectory);
+
+                if (isDirectory)
+                {
+                    ShowFolderContent(createdIter, fileSystemChange.FullPath);
+                }
+                
+                _fileTreeStore.Remove(ref oldPathFileTreeIter);
+            });
+            
+            return;
+        }
+
         Application.Invoke((_, _) =>
         {
-            _fileTreeStore.SetValue(renamedIter, 2, fileSystemChange.FullPath);
-            _fileTreeStore.SetValue(renamedIter, 0, filename);
+            _fileTreeStore.SetValue(oldPathFileTreeIter, 2, fileSystemChange.FullPath);
+            _fileTreeStore.SetValue(oldPathFileTreeIter, 0, filename);
         });
         
         if (isDirectory)
