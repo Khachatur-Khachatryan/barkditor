@@ -9,6 +9,7 @@ namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 
 public class FileViewer : Box
 {
+    private readonly Files.FilesClient _filesClient;
     private readonly ProjectFiles.ProjectFilesClient _projectFilesClient;
     private readonly FileContextMenu _fileContextMenu;
     private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(bool));
@@ -20,11 +21,12 @@ public class FileViewer : Box
                       ProjectFiles.ProjectFilesClient projectFilesClient) 
         : base(Orientation.Vertical, 0)
     {
+        _filesClient = filesClient;
         _projectFilesClient = projectFilesClient;
         
         FileSystemViewer = new FileSystemViewer(_fileTreeStore, _projectFilesClient);
         _fileContextMenu = 
-            new FileContextMenu(_fileTreeView, _fileTreeStore, filesClient, projectFilesClient);
+            new FileContextMenu(_fileTreeView, _fileTreeStore, _filesClient, projectFilesClient);
 
         // file tree view init start
         var fileColumn = new TreeViewColumn();
@@ -147,7 +149,7 @@ public class FileViewer : Box
             IconTheme.Default.LoadIcon("folder-templates", (int)IconSize.Menu, 0);
         
         // add project root directory
-        var rootProjectTreeIter = _fileTreeStore.AppendValues(fileTree.Name, rootProjectDirectoryIcon, fileTree.Path, true);
+        var rootProjectTreeIter = _fileTreeStore.AppendValues(fileTree.Name, rootProjectDirectoryIcon, fileTree.Path, 1);
         
         foreach(var file in fileTree.Files)
         {

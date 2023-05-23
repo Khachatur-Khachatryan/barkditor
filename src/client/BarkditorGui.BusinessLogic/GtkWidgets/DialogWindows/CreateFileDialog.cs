@@ -1,5 +1,6 @@
 using Barkditor.Protobuf;
 using BarkditorGui.Utilities.Services;
+using Grpc.Core;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 
@@ -7,6 +8,9 @@ namespace BarkditorGui.BusinessLogic.GtkWidgets.DialogWindows;
 
 public class CreateFileDialog : Dialog
 {
+
+#region Fields
+
     // These fields are initialized by Glade
 #pragma warning disable CS0649
     [UI] private readonly Entry _nameEntry;
@@ -16,7 +20,9 @@ public class CreateFileDialog : Dialog
     private readonly Files.FilesClient _filesClient;
     private readonly string _directoryPath;
 
-    public CreateFileDialog(Widget parent, Files.FilesClient filesClient, ITreeModel fileTreeStore, 
+#endregion
+
+    public CreateFileDialog(Widget parent, Files.FilesClient filesClient, TreeStore fileTreeStore, 
         TreeView fileTreeView) 
         : this(new Builder("CreateFileDialog.glade"), filesClient, fileTreeStore, 
             fileTreeView)
@@ -68,15 +74,13 @@ public class CreateFileDialog : Dialog
             return;
         }
         
-        var fileExistsRequest = new ExistsRequest
+        var fileExistRequest = new ExistsRequest
         {
             Path = System.IO.Path.Combine(_directoryPath, fileName),
             IsDirectory = false
         };
-        var fileExists = GrpcRequestSenderService.SendRequest(
-                () => _filesClient.Exists(fileExistsRequest))!
-                .Exists;
-        
+        var fileExists = _filesClient.Exists(fileExistRequest).Exists;
+
         if (fileExists || string.IsNullOrWhiteSpace(fileName))
         {
             return;
@@ -87,23 +91,19 @@ public class CreateFileDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, _nameEntry.Text),
             IsDirectory = false
         };
-
-        GrpcRequestSenderService.SendRequest(() => 
-                _filesClient.Create(request));
+        _filesClient.Create(request);
         Hide();
     }
     
     private void ValidateName(object? sender, EventArgs a)
     {
         var fileName = _nameEntry.Text;
-        var fileExistsRequest = new ExistsRequest
+        var fileExistRequest = new ExistsRequest
         {
             Path = System.IO.Path.Combine(_directoryPath, fileName),
             IsDirectory = false
         };
-        var fileExists = GrpcRequestSenderService.SendRequest(
-                () => _filesClient.Exists(fileExistsRequest))!
-                .Exists;
+        var fileExists = _filesClient.Exists(fileExistRequest).Exists;
         
         if (string.IsNullOrEmpty(fileName) &&
             string.IsNullOrWhiteSpace(fileName))
