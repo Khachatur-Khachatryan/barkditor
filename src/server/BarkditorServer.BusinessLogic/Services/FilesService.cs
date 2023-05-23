@@ -237,4 +237,39 @@ public class FilesService : Files.FilesBase
         return await Task.FromResult(new Empty());
     }
 
+    public override async Task<GetFileContentResponse> GetFileContent(GetFileContentRequest request,
+        ServerCallContext ctx)
+    {
+        var path = request.Path;
+        string content; 
+        
+        try
+        {
+            content = await File.ReadAllTextAsync(path);
+        }
+        catch (Exception e) when (e is FileNotFoundException or UnauthorizedAccessException)
+        {
+            throw new RpcException(
+                new Status(StatusCode.InvalidArgument, "File does not exists in system"));
+        }
+
+        var fileExtension = Path.GetExtension(path);
+
+        var contentType = fileExtension switch
+        {
+            ".txt" or ".TXT" => FileContentTypes.PlainText,
+            ".cs" => FileContentTypes.Csharp,
+            ".json" => FileContentTypes.Json,
+            ".html" => FileContentTypes.Html,
+            _ => FileContentTypes.PlainText
+        };
+
+        var response = new GetFileContentResponse
+        {
+            Content = content,
+            ContentType = contentType
+        };
+
+        return response;
+    }
 }
