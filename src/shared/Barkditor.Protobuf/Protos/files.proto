@@ -58,6 +58,21 @@ service Files {
       post: "/Paste"
     };
   }
+  // Returns file content and content type by particular path
+  rpc GetFileContent (GetFileContentRequest) returns (GetFileContentResponse) {
+    option (google.api.http) = {
+      get: "/GetFileContent"
+    };
+  }
+}
+
+// enums
+
+enum FileContentTypes {
+  PlainText = 0;
+  Csharp = 1;
+  Json = 2;
+  Html = 3;
 }
 
 // create file
@@ -109,4 +124,14 @@ message CopyRequest {
 // paste file/directory
 message PasteRequest {
   string path = 1;
+}
+
+// open file
+message GetFileContentRequest {
+  string path = 1;
+}
+
+message GetFileContentResponse {
+  string content = 1;
+  FileContentTypes contentType = 2;
 }

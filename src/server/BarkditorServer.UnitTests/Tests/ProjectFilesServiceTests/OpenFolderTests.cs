@@ -25,11 +25,8 @@ public class OpenFolderTests
         var expectedFileTree = FileTreeHelper.GetTestFileTree();
         var contextMoq = new Mock<ServerCallContext>();
 
-        var action = async () =>
-            await service.OpenFolder(request, contextMoq.Object);
-        var response = await action();
+        var response = await service.OpenFolder(request, contextMoq.Object);
 
-        await action.Should().NotThrowAsync();
         response.Files.Should().Be(expectedFileTree);
     }
 }

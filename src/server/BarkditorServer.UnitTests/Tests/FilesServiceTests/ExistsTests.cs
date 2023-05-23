@@ -27,11 +27,8 @@ public class ExistsTests
         };
         var contextMoq = new Mock<ServerCallContext>();
 
-        var action = async () =>
-            await service.Exists(request, contextMoq.Object);
-        var response = await action.Invoke();
+        var response = await service.Exists(request, contextMoq.Object);
         
-        await action.Should().NotThrowAsync();
         response.Exists.Should().BeTrue();
     }
     
@@ -48,11 +45,8 @@ public class ExistsTests
         };
         var contextMoq = new Mock<ServerCallContext>();
 
-        var action = async () =>
-            await service.Exists(request, contextMoq.Object);
-        var response = await action.Invoke();
+        var response = await service.Exists(request, contextMoq.Object);
         
-        await action.Should().NotThrowAsync();
         response.Exists.Should().BeFalse();
     }
     
@@ -69,11 +63,8 @@ public class ExistsTests
         };
         var contextMoq = new Mock<ServerCallContext>();
 
-        var action = async () =>
-            await service.Exists(request, contextMoq.Object);
-        var response = await action.Invoke();
-        
-        await action.Should().NotThrowAsync();
+        var response = await service.Exists(request, contextMoq.Object);
+
         response.Exists.Should().BeTrue();
     }
     
@@ -90,11 +81,8 @@ public class ExistsTests
         };
         var contextMoq = new Mock<ServerCallContext>();
 
-        var action = async () =>
-            await service.Exists(request, contextMoq.Object);
-        var response = await action.Invoke();
+        var response = await service.Exists(request, contextMoq.Object);
         
-        await action.Should().NotThrowAsync();
         response.Exists.Should().BeFalse();
     }
 }

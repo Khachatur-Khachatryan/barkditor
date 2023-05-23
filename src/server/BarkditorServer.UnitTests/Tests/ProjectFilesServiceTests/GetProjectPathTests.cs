@@ -28,11 +28,8 @@ public class GetProjectPathTests
         var expected = FilePaths.TestFolderPath;
         var empty = new Empty();
 
-        var action = async () =>
-            await service.GetProjectPath(empty, contextMoq.Object);
-        var response = await action();
+        var response = await service.GetProjectPath(empty, contextMoq.Object);
 
-        await action.Should().NotThrowAsync();
         response.Path.Should().Be(expected);
     }
 }
