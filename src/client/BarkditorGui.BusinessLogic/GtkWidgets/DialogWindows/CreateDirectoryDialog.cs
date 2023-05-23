@@ -19,7 +19,7 @@ public class CreateDirectoryDialog : Dialog
     private readonly string _directoryPath;
     
     public CreateDirectoryDialog(Widget parent, TreeView fileTreeView, 
-        TreeStore fileTreeStore, Files.FilesClient filesClient) 
+        ITreeModel fileTreeStore, Files.FilesClient filesClient) 
         : this(new Builder("CreateDirectoryDialog.glade"), 
             fileTreeView, fileTreeStore, filesClient)
     {
@@ -79,7 +79,9 @@ public class CreateDirectoryDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, directoryName),
             IsDirectory = true
         };
-        var directoryExists = _filesClient.Exists(directoryExistsRequest).Exists;
+        var directoryExists = GrpcRequestSenderService.SendRequest(
+                () => _filesClient.Exists(directoryExistsRequest))!
+                .Exists;
 
         if (directoryExists || string.IsNullOrWhiteSpace(_nameEntry.Text))
         {
@@ -91,7 +93,9 @@ public class CreateDirectoryDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, _nameEntry.Text),
             IsDirectory = true
         };
-        _filesClient.Create(request);
+        
+        GrpcRequestSenderService.SendRequest(() => 
+            _filesClient.Create(request));
         Hide();
     }
     
@@ -103,7 +107,9 @@ public class CreateDirectoryDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, directoryName),
             IsDirectory = true
         };
-        var directoryExists = _filesClient.Exists(directoryExistsRequest).Exists;
+        var directoryExists = GrpcRequestSenderService.SendRequest(
+                () => _filesClient.Exists(directoryExistsRequest))!
+                .Exists;
         
         if (string.IsNullOrEmpty(directoryName) &&
             string.IsNullOrWhiteSpace(directoryName))
