@@ -49,8 +49,6 @@ public class FileViewer : Box
         iconRenderer.SetPadding(3, 0);
         
         var filenameRenderer = new CellRendererText();
-        filenameRenderer.Editable = true;
-        filenameRenderer.Edited += FileTreeViewRow_DoubleClicked;
         fileColumn.PackStart(filenameRenderer, true);
         fileColumn.AddAttribute(filenameRenderer, "text", 0);
         
@@ -95,28 +93,6 @@ public class FileViewer : Box
         _fileTreeView.ButtonReleaseEvent -= HideFileContextMenu;
         
         _fileContextMenu.Hide();
-    }
-
-    private void FileTreeViewRow_DoubleClicked(object? sender, EditedArgs a)
-    {
-        // don't confuse with file path
-        // https://docs.gtk.org/gtk3/struct.TreePath.html
-        var path = new TreePath(a.Path);
-        _fileTreeStore.GetIter(out var iter, path);
-        var oldPath = (string) _fileTreeStore.GetValue(iter, 2);
-        var isDirectory = (bool) _fileTreeStore.GetValue(iter, 3);
-        var parentDirectoryPath = System.IO.Path.GetDirectoryName(oldPath)!;
-        var newPath = System.IO.Path.Combine(parentDirectoryPath, a.NewText);
-
-        var request = new MoveRequest
-        {
-            OldPath = oldPath,
-            NewPath = newPath,
-            IsDirectory = isDirectory
-        };
-
-        GrpcRequestSenderService.SendRequest(
-            () => _filesClient.Move(request));
     }
 
 #endregion
