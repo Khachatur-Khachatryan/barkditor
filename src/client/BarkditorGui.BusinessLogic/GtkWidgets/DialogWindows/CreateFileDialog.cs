@@ -8,9 +8,6 @@ namespace BarkditorGui.BusinessLogic.GtkWidgets.DialogWindows;
 
 public class CreateFileDialog : Dialog
 {
-
-#region Fields
-
     // These fields are initialized by Glade
 #pragma warning disable CS0649
     [UI] private readonly Entry _nameEntry;
@@ -19,13 +16,11 @@ public class CreateFileDialog : Dialog
 #pragma warning restore CS0649
     private readonly Files.FilesClient _filesClient;
     private readonly string _directoryPath;
+    private bool _exists;
 
-#endregion
-
-    public CreateFileDialog(Widget parent, Files.FilesClient filesClient, TreeStore fileTreeStore, 
+    public CreateFileDialog(Widget parent, Files.FilesClient filesClient, ITreeModel fileTreeStore, 
         TreeView fileTreeView) 
-        : this(new Builder("CreateFileDialog.glade"), filesClient, fileTreeStore, 
-            fileTreeView)
+        : this(new Builder("CreateFileDialog.glade"), filesClient, fileTreeStore, fileTreeView)
     {
         Parent = parent;
     }
@@ -49,6 +44,8 @@ public class CreateFileDialog : Dialog
             fileTreeStore.IterParent(out var parent, iter);
             _directoryPath = (string)fileTreeStore.GetValue(parent, 2);
         }
+
+        _exists = true;
         
         _nameEntry!.KeyReleaseEvent += NameEntry_KeyRelease;
         _nameEntry.Changed += ValidateName;
@@ -74,14 +71,7 @@ public class CreateFileDialog : Dialog
             return;
         }
         
-        var fileExistRequest = new ExistsRequest
-        {
-            Path = System.IO.Path.Combine(_directoryPath, fileName),
-            IsDirectory = false
-        };
-        var fileExists = _filesClient.Exists(fileExistRequest).Exists;
-
-        if (fileExists || string.IsNullOrWhiteSpace(fileName))
+        if (_exists || string.IsNullOrWhiteSpace(fileName))
         {
             return;
         }
@@ -91,19 +81,23 @@ public class CreateFileDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, _nameEntry.Text),
             IsDirectory = false
         };
-        _filesClient.Create(request);
+        
+        GrpcRequestSenderService.SendRequest(() => 
+            _filesClient.Create(request));
         Hide();
     }
     
     private void ValidateName(object? sender, EventArgs a)
     {
         var fileName = _nameEntry.Text;
-        var fileExistRequest = new ExistsRequest
+        var fileExistsRequest = new ExistsRequest
         {
             Path = System.IO.Path.Combine(_directoryPath, fileName),
             IsDirectory = false
         };
-        var fileExists = _filesClient.Exists(fileExistRequest).Exists;
+        var fileExists = GrpcRequestSenderService
+            .SendRequest(() => _filesClient.Exists(fileExistsRequest))!
+            .Exists;
         
         if (string.IsNullOrEmpty(fileName) &&
             string.IsNullOrWhiteSpace(fileName))
@@ -116,11 +110,13 @@ public class CreateFileDialog : Dialog
             string.IsNullOrEmpty(fileName) || 
             string.IsNullOrWhiteSpace(fileName))
         {
+            _exists = true;
             _errorLabel.Text = fileExists ? "File already exists" : "Invalid data";
             _errorBox.Show();
             return;
         }
-        
+
+        _exists = false;
         _errorBox.Hide();
         HeightRequest = 100;
     }

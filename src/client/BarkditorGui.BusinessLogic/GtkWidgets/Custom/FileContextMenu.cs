@@ -28,6 +28,7 @@ public class FileContextMenu : Menu
         var createFileMenuItem = new MenuItem("_Create file");
         var createDirectoryMenuItem = new MenuItem("_Create directory");
         var openInFileManagerMenuItem = new MenuItem("_Open in file manager");
+        var renameFileMenuItem = new MenuItem("_Rename");
         var copyFileMenuItem = new MenuItem("_Copy");
         var copyPathMenuItem = new MenuItem("_Copy path");
         _pasteFileContextMenuItem.Sensitive = false;
@@ -35,6 +36,7 @@ public class FileContextMenu : Menu
         createFileMenuItem.Activated += FileContextMenuCreateFile_Activated;
         createDirectoryMenuItem.Activated += FileContextMenuCreateDirectory_Activated;
         openInFileManagerMenuItem.Activated += FileContextMenuOpenInFileManager_Activated;
+        renameFileMenuItem.Activated += FileContextMenuRename_Activated;
         _removeFileContextMenuItem.Activated += FileContextMenuRemove_Activated;
         copyFileMenuItem.Activated += FileContextMenuCopy_Activated;
         _pasteFileContextMenuItem.Activated += FileContextMenuPaste_Activated;
@@ -44,6 +46,7 @@ public class FileContextMenu : Menu
         Add(createFileMenuItem);
         Add(createDirectoryMenuItem);
         Add(openInFileManagerMenuItem);
+        Add(renameFileMenuItem);
         Add(_removeFileContextMenuItem);
         Add(copyFileMenuItem);
         Add(_pasteFileContextMenuItem);
@@ -119,6 +122,13 @@ public class FileContextMenu : Menu
             () =>_filesClient.OpenInFileManager(request));
     }
 
+    private void FileContextMenuRename_Activated(object? sender, EventArgs a)
+    {
+        var dialog = new RenameFileDialog(this, _filesClient, _fileTreeStore, _fileTreeView);
+        dialog.Run();
+        dialog.Destroy();
+    }
+    
     private void FileContextMenuCreateFile_Activated(object? sender, EventArgs a)
     {
         var dialog = new CreateFileDialog(this, _filesClient, _fileTreeStore, _fileTreeView);

@@ -1,6 +1,5 @@
 using Barkditor.Protobuf;
 using BarkditorGui.Utilities.Services;
-using Gdk;
 using Gtk;
 using Key = Gdk.Key;
 using UI = Gtk.Builder.ObjectAttribute;
@@ -17,9 +16,10 @@ public class CreateDirectoryDialog : Dialog
 #pragma warning restore CS0649
     private readonly Files.FilesClient _filesClient;
     private readonly string _directoryPath;
+    private bool _exists;
     
     public CreateDirectoryDialog(Widget parent, TreeView fileTreeView, 
-        TreeStore fileTreeStore, Files.FilesClient filesClient) 
+        ITreeModel fileTreeStore, Files.FilesClient filesClient) 
         : this(new Builder("CreateDirectoryDialog.glade"), 
             fileTreeView, fileTreeStore, filesClient)
     {
@@ -45,7 +45,8 @@ public class CreateDirectoryDialog : Dialog
             fileTreeStore.IterParent(out var parent, iter);
             _directoryPath = (string)fileTreeStore.GetValue(parent, 2);
         }
-        
+
+        _exists = true;
         _nameEntry!.KeyReleaseEvent += NameEntry_KeyRelease;
         DeleteEvent += CloseDialog;
         FocusOutEvent += (_, _) => Hide();
@@ -73,15 +74,8 @@ public class CreateDirectoryDialog : Dialog
             Hide();
             return;
         }
-        
-        var directoryExistsRequest = new ExistsRequest
-        {
-            Path = System.IO.Path.Combine(_directoryPath, directoryName),
-            IsDirectory = true
-        };
-        var directoryExists = _filesClient.Exists(directoryExistsRequest).Exists;
 
-        if (directoryExists || string.IsNullOrWhiteSpace(_nameEntry.Text))
+        if (_exists || string.IsNullOrWhiteSpace(_nameEntry.Text))
         {
             return;
         }
@@ -91,7 +85,9 @@ public class CreateDirectoryDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, _nameEntry.Text),
             IsDirectory = true
         };
-        _filesClient.Create(request);
+        GrpcRequestSenderService.SendRequest(() => 
+            _filesClient.Create(request));
+        
         Hide();
     }
     
@@ -103,7 +99,9 @@ public class CreateDirectoryDialog : Dialog
             Path = System.IO.Path.Combine(_directoryPath, directoryName),
             IsDirectory = true
         };
-        var directoryExists = _filesClient.Exists(directoryExistsRequest).Exists;
+        var directoryExists = GrpcRequestSenderService
+            .SendRequest(() => _filesClient.Exists(directoryExistsRequest))
+            !.Exists;
         
         if (string.IsNullOrEmpty(directoryName) &&
             string.IsNullOrWhiteSpace(directoryName))
@@ -116,11 +114,13 @@ public class CreateDirectoryDialog : Dialog
             string.IsNullOrEmpty(directoryName) || 
             string.IsNullOrWhiteSpace(directoryName))
         {
+            _exists = true;
             _errorLabel.Text = directoryExists ? "Directory already exists" : "Invalid data";
             _errorBox.Show();
             return;
         }
-        
+
+        _exists = false;
         _errorBox.Hide();
         HeightRequest = 100;
     }
