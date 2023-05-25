@@ -8,6 +8,7 @@ using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 using Window = Gtk.Window;
 using BarkditorGui.Utilities.FileSystem;
+using Cairo;
 using Application = Gtk.Application;
 using MenuItem = Gtk.MenuItem;
 
@@ -21,9 +22,12 @@ public class MainWindow : Window
 #pragma warning disable CS0649, CS8618
     [UI] private readonly MenuItem _aboutMenuItem;
     [UI] private readonly MenuItem _openFolderItem;
+    [UI] private readonly MenuItem _openFileItem;
     [UI] private readonly Viewport _fileViewport;
+    [UI] private readonly TextView _codeTextView;
 #pragma warning restore CS0649, CS8618
     private readonly FileViewer _fileViewer;
+    private readonly Files.FilesClient _filesClient;
 
     public FileSystemViewer FileSystemViewer { get; }
     
@@ -40,15 +44,16 @@ public class MainWindow : Window
             MaxSendMessageSize = null
         });
         var projectFilesClient = new ProjectFiles.ProjectFilesClient(channel);
-        var filesClient = new Files.FilesClient(channel);
+        _filesClient = new Files.FilesClient(channel);
         
-        _fileViewer = new FileViewer(filesClient, projectFilesClient);
+        _fileViewer = new FileViewer(_filesClient, projectFilesClient, _codeTextView);
         FileSystemViewer = _fileViewer.FileSystemViewer;
         _fileViewport!.Add(_fileViewer);
         _fileViewport.ShowAll();
 
         DeleteEvent += Window_DeleteEvent;
         _aboutMenuItem!.Activated += AboutButton_Clicked;
+        _openFileItem!.Activated += OpenFile_Clicked;
         _openFolderItem!.Activated += OpenFolder_Clicked;
     }
 
@@ -86,6 +91,27 @@ public class MainWindow : Window
         aboutDialog.Destroy();
     }
 
+    private void OpenFile_Clicked(object? sender, EventArgs a)
+    {
+        var dialog = new FileChooserNative("Open File", 
+            this, FileChooserAction.Open, 
+            "Open", "Cancel");
+        dialog.SetCurrentFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+        var responseCode = dialog.Run();
+        if (responseCode == (int) ResponseType.Accept)
+        {
+            var request = new GetFileContentRequest
+            {
+                Path = dialog.Filename
+            };
+
+            var response = _filesClient.GetFileContent(request);
+
+            _codeTextView.Buffer.Text = response.Content;
+        }
+        dialog.Destroy();
+    }
+    
     private void OpenFolder_Clicked(object? sender, EventArgs a) 
     {
         var directoryChooser = 

@@ -10,18 +10,23 @@ namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 public class FileViewer : Box
 {
     private readonly ProjectFiles.ProjectFilesClient _projectFilesClient;
+    private readonly Files.FilesClient _filesClient;
     private readonly FileContextMenu _fileContextMenu;
     private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(bool));
     private readonly TreeView _fileTreeView = new();
+    private readonly TextView _codeTextView;
 
     public FileSystemViewer FileSystemViewer { get; }
 
     public FileViewer(Files.FilesClient filesClient, 
-                      ProjectFiles.ProjectFilesClient projectFilesClient) 
+                      ProjectFiles.ProjectFilesClient projectFilesClient,
+                      TextView codeTextView) 
         : base(Orientation.Vertical, 0)
     {
+        _filesClient = filesClient;
         _projectFilesClient = projectFilesClient;
-        
+        _codeTextView = codeTextView;
+
         FileSystemViewer = new FileSystemViewer(_fileTreeStore, _projectFilesClient);
         _fileContextMenu = 
             new FileContextMenu(_fileTreeView, _fileTreeStore, filesClient, projectFilesClient);
@@ -59,6 +64,7 @@ public class FileViewer : Box
         _fileTreeView.Model = _fileTreeStore;
         _fileTreeView.EnableSearch = false;
         _fileTreeView.ButtonReleaseEvent += PopupFileContextMenu;
+        _fileTreeView.ButtonPressEvent += OpenFile;
 
         PackStart(_fileTreeView, true, true, 0);
 
@@ -69,6 +75,32 @@ public class FileViewer : Box
     }
     
 #region EventHandlers
+
+    private void OpenFile(object? sender, ButtonPressEventArgs a)
+    {
+        if (a.Event.Type != EventType.DoubleButtonPress)
+        {
+            return;
+        }
+
+        _fileTreeView.Selection.GetSelected(out var iter);
+        var isDirectory = (bool)_fileTreeStore.GetValue(iter, 3);
+        if (isDirectory)
+        {
+            return;
+        }
+
+        var path = (string)_fileTreeStore.GetValue(iter, 2);
+            
+        var request = new GetFileContentRequest
+        {
+            Path = path
+        };
+
+        var response = _filesClient.GetFileContent(request);
+
+        _codeTextView.Buffer.Text = response.Content;
+    }
 
     private void PopupFileContextMenu(object? sender, ButtonReleaseEventArgs a)
     {
