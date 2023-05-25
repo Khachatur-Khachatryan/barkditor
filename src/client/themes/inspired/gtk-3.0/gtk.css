@@ -3,7 +3,11 @@
     background-color: gray;
     color: #fff;
 }
+.editor {
+    font-size: 20px;
+}
 .editor text {
+    /*font: Monospace 10;*/
     background-color: #2a2a2a;
     color: #fff;
     caret-color: #fff;
