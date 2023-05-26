@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright 2023 Khachatur Khachatryan
+
+  GtkSourceView is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  GtkSourceView is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library; if not, see <http://www.gnu.org/licenses/>.
+
+-->
+<style-scheme id="darcula" _name="Darcula" version="1.0">
+  <author>Khachatur Khachatryan</author>
+  <_description>JetBrains Darcula theme for GTK Source View</_description>
+
+  <metadata>
+    <property name="variant">light</property>
+  </metadata>
+
+  <!-- Named Colors -->
+
+  <!-- Global Styles -->
+  <style name="bracket-match"           background="#3B514D" foreground="#FFEF28" bold="true"/>
+  <style name="current-line"            background="#323232"/>
+  <style name="current-line-number"     background="#323232" foreground="#A4A3A3" bold="true"/>
+  <style name="cursor"                  foreground="#FFFFFF"/>
+  <style name="line-numbers"            background="#313335" foreground="#606366"/>
+  <style name="map-overlay"             background="#A9B7C6"/>
+  <style name="right-margin"            background="#313335" foreground="#FFFFFF"/>
+  <style name="search-match"            background="#2EC27E"/>
+  <style name="selection"               background="#214283"/>
+  <style name="selection-unfocused"     background="#214283"/>
+  <style name="snippet-focus"           background="#FF7800"/>
+  <style name="text"                    background="#2B2B2B" foreground="#A9B7C6"/>
+
+  <!-- Defaults -->
+  <style name="def:base-n-integer"      foreground="#6897BB" bold="false"/>
+  <style name="def:boolean"             foreground="#CC7832"/>
+  <style name="def:character"           foreground="#6A8759"/>
+  <style name="def:comment"             foreground="#7E7B77"/>
+  <style name="def:complex"             foreground="#57E389"/>
+  <style name="def:constant"            foreground="#6897BB"/>
+  <style name="def:decimal"             foreground="#6897BB"/>
+  <style name="def:doc-comment"         foreground="#6A8759"/>
+  <style name="def:doc-comment-element" foreground="#6A8759"/>
+  <style name="def:error"               foreground="#B03D39"/>
+  <style name="def:floating-point"      foreground="#6897BB"/>
+  <style name="def:function"            foreground="#FFC25C" italic="true" scale="1"/>
+  <style name="def:heading"             foreground="#E5A74E"/>
+  <style name="def:heading0"            foreground="#E5A74E"/>
+  <style name="def:heading1"            foreground="#E5A74E"/>
+  <style name="def:heading2"            foreground="#E5A74E"/>
+  <style name="def:heading3"            foreground="#E5A74E"/>
+  <style name="def:heading4"            foreground="#E5A74E"/>
+  <style name="def:heading5"            foreground="#E5A74E"/>
+  <style name="def:heading6"            foreground="#E5A74E"/>
+  <style name="def:identifier"          foreground="#9876AA" italic="true"/>
+  <style name="def:inline-code"         background="#364135"/>
+  <style name="def:keyword"             foreground="#CC7832"/>
+  <style name="def:net-address"         foreground="#6A8759" underline="single"/>
+
+</style-scheme>
