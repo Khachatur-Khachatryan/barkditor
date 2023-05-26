@@ -1,6 +1,5 @@
 using Barkditor.Protobuf;
 using BarkditorGui.Utilities.Services;
-using Grpc.Core;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 

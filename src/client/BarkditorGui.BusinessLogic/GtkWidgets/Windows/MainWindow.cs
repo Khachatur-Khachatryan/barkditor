@@ -1,15 +1,15 @@
 using Barkditor.Protobuf;
 using BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 using BarkditorGui.Utilities.Services;
-using BarkditorGui.BusinessLogic.GtkWidgets.DialogWindows;
 using Grpc.Net.Client;
 using Gdk;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
 using Window = Gtk.Window;
 using BarkditorGui.Utilities.FileSystem;
-using Cairo;
+using GtkSource;
 using Application = Gtk.Application;
+using File = System.IO.File;
 using MenuItem = Gtk.MenuItem;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Windows;
@@ -24,8 +24,9 @@ public class MainWindow : Window
     [UI] private readonly MenuItem _openFolderItem;
     [UI] private readonly MenuItem _openFileItem;
     [UI] private readonly Viewport _fileViewport;
-    [UI] private readonly TextView _codeTextView;
+    [UI] private readonly Notebook _codeNotebook;
 #pragma warning restore CS0649, CS8618
+    private readonly SourceView _codeSourceView;
     private readonly FileViewer _fileViewer;
     private readonly Files.FilesClient _filesClient;
 
@@ -37,7 +38,6 @@ public class MainWindow : Window
     private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
     {
         GtkWidgetInitService.Initialize(this, builder);
-        
         var channel = GrpcChannel.ForAddress("https://localhost:5001", new GrpcChannelOptions
         {
             MaxReceiveMessageSize = null,
@@ -45,8 +45,25 @@ public class MainWindow : Window
         });
         var projectFilesClient = new ProjectFiles.ProjectFilesClient(channel);
         _filesClient = new Files.FilesClient(channel);
+
+        _codeSourceView = new SourceView();
+        _codeSourceView.AutoIndent = true;
+        _codeSourceView.TabWidth = 4;
+        _codeSourceView.InsertSpacesInsteadOfTabs = true;
+        _codeSourceView.Buffer = new GtkSource.Buffer();
+        _codeSourceView.Editable = true;
+        _codeSourceView.StyleContext.AddClass("editor");
+        _codeSourceView.ShowLineNumbers = true;
+        _codeSourceView.ShowRightMargin = true;
+        const int s = 2;
+        Console.Write(s);
+        _codeSourceView.ShowAll();
+        var scrolledWindow = new ScrolledWindow();
+        scrolledWindow.Add(_codeSourceView);
+        scrolledWindow.ShowAll();
+        _codeNotebook!.Add(scrolledWindow);
         
-        _fileViewer = new FileViewer(_filesClient, projectFilesClient, _codeTextView);
+        _fileViewer = new FileViewer(_filesClient, projectFilesClient, _codeSourceView);
         FileSystemViewer = _fileViewer.FileSystemViewer;
         _fileViewport!.Add(_fileViewer);
         _fileViewport.ShowAll();
@@ -107,7 +124,7 @@ public class MainWindow : Window
 
             var response = _filesClient.GetFileContent(request);
 
-            _codeTextView.Buffer.Text = response.Content;
+            _codeSourceView.Buffer.Text = response.Content;
         }
         dialog.Destroy();
     }
