@@ -55,8 +55,8 @@ public class MainWindow : Window
         _codeSourceView.StyleContext.AddClass("editor");
         _codeSourceView.ShowLineNumbers = true;
         _codeSourceView.ShowRightMargin = true;
-        const int s = 2;
-        Console.Write(s);
+        var a = new StyleSchemeManager();
+        _codeSourceView.Buffer.StyleScheme = a.GetScheme("darcula");
         _codeSourceView.ShowAll();
         var scrolledWindow = new ScrolledWindow();
         scrolledWindow.Add(_codeSourceView);

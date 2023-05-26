@@ -21,10 +21,6 @@
   <author>Khachatur Khachatryan</author>
   <_description>JetBrains Darcula theme for GTK Source View</_description>
 
-  <metadata>
-    <property name="variant">light</property>
-  </metadata>
-
   <!-- Named Colors -->
 
   <!-- Global Styles -->
@@ -66,5 +62,14 @@
   <style name="def:inline-code"         background="#364135"/>
   <style name="def:keyword"             foreground="#CC7832"/>
   <style name="def:net-address"         foreground="#6A8759" underline="single"/>
+  <style name="def:note"                foreground="#A8C023" bold="true" italic="true" scale="1"/>
+  <style name="def:number"              foreground="#6897BB"/>
+  <style name="def:preprocessor"        foreground="#CC7832"/>
+  <style name="def:shebang"             foreground="#A8C023" bold="true"/>
+  <style name="def:special-char"        foreground="#CC7832"/>
+  <style name="def:special-constant"    foreground="#CC7832"/>
+  <style name="def:string"              foreground="#6A8759"/>
+  <style name="def:type"                foreground="#CC7832"/>
+  <style name="def:warning"             background="#52503A"/>
 
 </style-scheme>
