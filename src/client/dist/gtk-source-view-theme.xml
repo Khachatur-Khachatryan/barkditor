@@ -58,7 +58,7 @@
   <style name="def:heading4"            foreground="#E5A74E"/>
   <style name="def:heading5"            foreground="#E5A74E"/>
   <style name="def:heading6"            foreground="#E5A74E"/>
-  <style name="def:identifier"          foreground="#9876AA" italic="true"/>
+  <style name="def:identifier"          foreground="#9876AA"/>
   <style name="def:inline-code"         background="#364135"/>
   <style name="def:keyword"             foreground="#CC7832"/>
   <style name="def:net-address"         foreground="#6A8759" underline="single"/>

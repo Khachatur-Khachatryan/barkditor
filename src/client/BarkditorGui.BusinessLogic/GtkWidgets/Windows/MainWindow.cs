@@ -29,7 +29,7 @@ public class MainWindow : Window
     private readonly SourceView _codeSourceView;
     private readonly FileViewer _fileViewer;
     private readonly Files.FilesClient _filesClient;
-
+    
     public FileSystemViewer FileSystemViewer { get; }
     
 #endregion
@@ -46,17 +46,27 @@ public class MainWindow : Window
         var projectFilesClient = new ProjectFiles.ProjectFilesClient(channel);
         _filesClient = new Files.FilesClient(channel);
 
+        // TODO: add language server support
         _codeSourceView = new SourceView();
         _codeSourceView.AutoIndent = true;
         _codeSourceView.TabWidth = 4;
         _codeSourceView.InsertSpacesInsteadOfTabs = true;
         _codeSourceView.Buffer = new GtkSource.Buffer();
+        _codeSourceView.Buffer.HighlightSyntax = true;
+        _codeSourceView.Buffer.HighlightMatchingBrackets = true;
+        _codeSourceView.Buffer.MaxUndoLevels = -1;
         _codeSourceView.Editable = true;
-        _codeSourceView.StyleContext.AddClass("editor");
         _codeSourceView.ShowLineNumbers = true;
+        _codeSourceView.LeftMargin = 5;
+        _codeSourceView.SmartBackspace = true;
+        _codeSourceView.InsertSpacesInsteadOfTabs = true;
+        _codeSourceView.ShowLineMarks = true;
         _codeSourceView.ShowRightMargin = true;
-        var a = new StyleSchemeManager();
-        _codeSourceView.Buffer.StyleScheme = a.GetScheme("darcula");
+        _codeSourceView.IndentWidth = 0;
+        _codeSourceView.StyleContext.AddClass("editor");
+        var styleSchemeManager = new StyleSchemeManager();
+        styleSchemeManager.AppendSearchPath("../../../../dist/");
+        _codeSourceView.Buffer.StyleScheme = styleSchemeManager.GetScheme("darcula");
         _codeSourceView.ShowAll();
         var scrolledWindow = new ScrolledWindow();
         scrolledWindow.Add(_codeSourceView);
