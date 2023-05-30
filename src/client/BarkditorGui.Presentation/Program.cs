@@ -1,21 +1,16 @@
 using System;
-using System.IO;
-using System.IO.Compression;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BarkditorGui.BusinessLogic.GtkWidgets.Windows;
 using Gdk;
 using GLib;
 using Gtk;
 using Application = Gtk.Application;
-using Settings = Gtk.Settings;
-using Task = System.Threading.Tasks.Task;
 
 namespace BarkditorGui.Presentation;
 
 public static class Program
 {
-    private const string GtkThemePath = "../../../../themes/inspired/gtk-3.0/gtk.css";
+    private const string GtkThemePath = "../../../../dist/inspired/gtk-3.0/gtk.css";
     private const string GtkApplicationId = "org.barkditor.gtk";
     
     [STAThread]

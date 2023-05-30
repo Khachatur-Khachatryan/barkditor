@@ -4,6 +4,7 @@ using BarkditorGui.Utilities.Services;
 using Gdk;
 using Google.Protobuf.WellKnownTypes;
 using Gtk;
+using GtkSource;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 
@@ -14,13 +15,14 @@ public class FileViewer : Box
     private readonly FileContextMenu _fileContextMenu;
     private readonly TreeStore _fileTreeStore = new(typeof(string), typeof(Pixbuf), typeof(string), typeof(bool));
     private readonly TreeView _fileTreeView = new();
-    private readonly TextView _codeTextView;
+    private readonly LanguageManager _languageManager = new();
+    private readonly SourceView _codeTextView;
 
     public FileSystemViewer FileSystemViewer { get; }
 
     public FileViewer(Files.FilesClient filesClient, 
                       ProjectFiles.ProjectFilesClient projectFilesClient,
-                      TextView codeTextView) 
+                      SourceView codeTextView) 
         : base(Orientation.Vertical, 0)
     {
         _filesClient = filesClient;
@@ -98,7 +100,15 @@ public class FileViewer : Box
         };
 
         var response = _filesClient.GetFileContent(request);
-
+        _codeTextView.Buffer.Language = response.ContentType switch
+        {
+            FileContentTypes.Csharp => _languageManager.GetLanguage("c-sharp"),
+            FileContentTypes.Html => _languageManager.GetLanguage("html"),
+            FileContentTypes.Json => _languageManager.GetLanguage("json"),
+            FileContentTypes.PlainText => null,
+            _ => _codeTextView.Buffer.Language
+        };
+        
         _codeTextView.Buffer.Text = response.Content;
     }
 
