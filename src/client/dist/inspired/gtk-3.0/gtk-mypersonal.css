@@ -1,0 +1,762 @@
+@define-color bg_main #3c3836;
+@define-color font_color #f9f5d7;
+@define-color font_disable #eeeeee;
+@define-color shadow #000000;
+
+* { 
+  padding: 0;
+ -GtkToolButton-icon-spacing: 4;
+ -GtkTextView-error-underline-color: #cc241d;
+ -GtkScrolledWindow-scrollbar-spacing: 0;
+ -GtkToolItemGroup-expander-size: 11;
+ -GtkWidget-text-handle-width: 20;
+ -GtkWidget-text-handle-height: 24;
+ -GtkDialog-button-spacing: 4;
+ -GtkDialog-action-area-border: 0;
+   outline-color: alpha(currentColor,0.3);
+   outline-style: dashed;
+   outline-offset: -3px;
+   outline-width: 0;
+ -gtk-outline-radius: 3px;
+ /* -gtk-secondary-caret-color: @color_600;  */
+}
+/*(((((((((( SPINNER ANNIMATION ))))))))))*/
+
+@keyframes spin { to { -gtk-icon-transform: rotate(1turn); } }
+
+spinner {
+  background: none;
+  opacity: 0;
+  -gtk-icon-source: -gtk-icontheme("process-working-symbolic");
+}
+
+spinner:checked {
+  opacity: 1;
+  animation: spin 1s linear infinite;
+}
+
+spinner:checked:disabled {  opacity: 0.5;}
+.background { 
+  color: @font_color;
+  text-shadow:   -0.2px 0px alpha(@font_color, 0.20);
+  background-color: @bg_main; 
+}
+
+
+
+.content-view .tile {
+  margin: 2px;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+.content-view .tile:disabled,
+.content-view .tile:active,
+.content-view .tile:selected { background-color: transparent;}
+.popup.background {
+  background-color: #504945;
+  background-image: none;
+}
+
+
+headerbar button.titlebutton.restore,
+headerbar button.titlebutton.close,
+headerbar button.titlebutton.maximize,
+headerbar button.titlebutton.minimize,
+.titlebar button.titlebutton.restore,
+.titlebar button.titlebutton.close,
+.titlebar button.titlebutton.maximize,
+.titlebar button.titlebutton.minimize {
+  color: transparent;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-width: 0; 
+}
+headerbar button.titlebutton.close,
+.titlebar button.titlebutton.close { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-close.svg"), url("graphics/title-buttons-dark/titlebutton-close@2.svg"));}
+
+headerbar button.titlebutton.close:backdrop,
+.titlebar button.titlebutton.close:backdrop { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-close-backdrop.svg"), url("graphics/title-buttons-dark/titlebutton-close-backdrop@2.svg")); }
+
+headerbar button.titlebutton.close:hover,
+.titlebar button.titlebutton.close:hover { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-close-hover.svg"), url("graphics/title-buttons-dark/titlebutton-close-hover@2.svg")); }
+
+headerbar button.titlebutton.close:active,
+.titlebar button.titlebutton.close:active { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-close-active.svg"), url("graphics/title-buttons-dark/titlebutton-close-active@2.svg")); }
+
+headerbar button.titlebutton.maximize,
+.titlebar button.titlebutton.maximize { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-maximize.svg"), url("graphics/title-buttons-dark/titlebutton-maximize@2.svg")); }
+
+headerbar button.titlebutton.maximize:backdrop,
+.titlebar button.titlebutton.maximize:backdrop { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-maximize-backdrop.svg"), url("graphics/title-buttons-dark/titlebutton-maximize-backdrop@2.svg")); }
+
+headerbar button.titlebutton.maximize:hover,
+.titlebar button.titlebutton.maximize:hover { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-maximize-hover.svg"), url("graphics/title-buttons-dark/titlebutton-maximize-hover@2.svg")); }
+
+headerbar button.titlebutton.maximize:active,
+.titlebar button.titlebutton.maximize:active { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-maximize-active.svg"), url("graphics/title-buttons-dark/titlebutton-maximize-active@2.svg")); }
+
+headerbar button.titlebutton.minimize,
+.titlebar button.titlebutton.minimize { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-minimize.svg"), url("graphics/title-buttons-dark/titlebutton-minimize@2.svg")); }
+
+headerbar button.titlebutton.minimize:backdrop,
+.titlebar button.titlebutton.minimize:backdrop { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-minimize-backdrop.svg"), url("graphics/title-buttons-dark/titlebutton-minimize-backdrop@2.svg")); }
+
+headerbar button.titlebutton.minimize:hover,
+.titlebar button.titlebutton.minimize:hover { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-minimize-hover.svg"), url("graphics/title-buttons-dark/titlebutton-minimize-hover@2.svg")); }
+
+headerbar button.titlebutton.minimize:active,
+.titlebar button.titlebutton.minimize:active { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-minimize-active.svg"), url("graphics/title-buttons-dark/titlebutton-minimize-active@2.svg")); }
+
+headerbar button.titlebutton.restore,
+.titlebar button.titlebutton.restore { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-restore.svg"), url("graphics/title-buttons-dark/titlebutton-restore@2.svg")); }
+
+headerbar button.titlebutton.restore:backdrop,
+.titlebar button.titlebutton.restore:backdrop { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-restore-backdrop.svg"), url("graphics/title-buttons-dark/titlebutton-restore-backdrop@2.svg")); }
+
+headerbar button.titlebutton.restore:hover,
+.titlebar button.titlebutton.restore:hover { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-restore-hover.svg"), url("graphics/title-buttons-dark/titlebutton-restore-hover@2.svg")); }
+
+headerbar button.titlebutton.restore:active,
+.titlebar button.titlebutton.restore:active { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-restore-active.svg"), url("graphics/title-buttons-dark/titlebutton-restore-active@2.svg")); }
+
+.fullscreen headerbar button.titlebutton.maximize,
+.maximized headerbar button.titlebutton.maximize,
+.fullscreen.titlebar button.titlebutton.maximize,
+.maximized.titlebar button.titlebutton.maximize { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-maximize.svg"), url("graphics/title-buttons-dark/titlebutton-maximize@2.svg"));}
+
+.fullscreen headerbar button.titlebutton.maximize:backdrop,
+.maximized headerbar button.titlebutton.maximize:backdrop,
+.fullscreen.titlebar button.titlebutton.maximize:backdrop,
+.maximized.titlebar button.titlebutton.maximize:backdrop {background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-maximize-backdrop.svg"), url("graphics/title-buttons-dark/titlebutton-maximize-backdrop@2.svg"));}
+
+.fullscreen headerbar button.titlebutton.maximize:hover,
+.maximized headerbar button.titlebutton.maximize:hover,
+.fullscreen.titlebar button.titlebutton.maximize:hover,
+.maximized.titlebar button.titlebutton.maximize:hover { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-restore-hover.svg"), url("graphics/title-buttons-dark/titlebutton-restore-hover@2.svg")); }
+
+.fullscreen headerbar button.titlebutton.maximize:active,
+.maximized headerbar button.titlebutton.maximize:active,
+.fullscreen.titlebar button.titlebutton.maximize:active,
+.maximized.titlebar button.titlebutton.maximize:active { background-image: -gtk-scaled(url("graphics/title-buttons-dark/titlebutton-restore-active.svg"), url("graphics/title-buttons-dark/titlebutton-restore-active@2.svg"));}
+
+/* HeaderBar */
+headerbar, .titlebar {
+  padding: 0 6px;
+  min-height:30px;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-radius: 0px;
+  background-color: @bg_main;
+  box-shadow: inset 0 1px alpha(shade(@shadow),0.76);
+}
+
+headerbar.default-decoration,
+.csd headerbar.default-decoration,
+ headerbar.default-decoration:backdrop,
+.csd headerbar.default-decoration:backdrop,
+.default-decoration.titlebar:not(headerbar),
+.csd .default-decoration.titlebar:not(headerbar),
+.default-decoration.titlebar:backdrop:not(headerbar),
+.csd .default-decoration.titlebar:backdrop:not(headerbar) {
+  padding-left: 6px;
+  padding-right: 6px;
+  min-height: 30px;
+  border-width: 0 0 0;
+  background-color: @bg_main;
+  box-shadow: inset 0 1px alpha(shade(@shadow,1.4),0.4);
+}
+
+.selection-mode .titlebar:not(headerbar) .selection-menu .arrow,
+.selection-mode.titlebar:not(headerbar) .selection-menu .arrow,
+.selection-mode headerbar .selection-menu .arrow,
+headerbar.selection-mode .selection-menu .arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); color: rgba(255, 255, 255, 0.5); -gtk-icon-shadow: none; }
+headerbar button:active.popup.flat.toggle label, /*---bijgevoegd voor Gedit-filebrowser!!*/
+headerbar button:checked.popup.flat.toggle label{ color: @font_color;}
+
+headerbar button.toggle,
+headerbar button.text-button,
+headerbar button.image-button,
+headerbar entry,
+headerbar spinbutton,
+headerbar separator:not(.sidebar),
+headerbar button {
+  margin-top: 0.34375rem;
+  margin-bottom: 0.275rem;
+}
+headerbar entry{
+  border-radius: 0.34375rem;
+}
+
+headerbar .linked:not(.vertical).path-bar > button,
+headerbar .linked:not(.vertical):not(.path-bar) > button{
+  margin-top:0.34375rem;
+  margin-bottom:0.275rem;
+}
+
+headerbar.titlebar headerbar:not(.titlebar) { background: none; box-shadow: none; }
+
+headerbar.titlebar .subtitle{
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+headerbar button{
+  background: #504945;
+  padding: 4px 6px;
+  margin: 0 5px;
+  border-radius: 4px;
+}headerbar button:hover{
+  opacity: 0.8; 
+  -gtk-icon-effect: highlight;
+}headerbar button:checked{
+  opacity: 0.8;
+}headerbar button:disabled{
+  opacity: 0.2;
+}
+
+/*((((((((( Touch Copy & Paste ))))))))))*/
+
+cursor-handle {
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  border-style: none; 
+}
+  
+cursor-handle.top {-gtk-icon-source: -gtk-icontheme("selection-start-symbolic"); }
+cursor-handle.bottom { -gtk-icon-source: -gtk-icontheme("selection-end-symbolic"); }
+
+.context-menu { font: initial; }
+
+.keycap { 
+  min-width: 20px; 
+  min-height: 25px; 
+  margin-top: 2px; 
+  padding-bottom: 3px; 
+  padding-left: 6px; 
+  padding-right: 6px; 
+  color: @font_color; 
+  background-color: @shadow; 
+  border: 1px solid; 
+  border-color: shade(@shadow,0.8); 
+  border-radius: 0.34375rem; 
+  box-shadow: inset 0 -3px shade(@shadow,0.9); 
+  font-size: smaller; 
+}
+
+/* :not(decoration):not(window):drop(active):focus, 
+:not(decoration):not(window):drop(active) { 
+
+  border-color: @drop_color; 
+  box-shadow: inset 0 0 0 1px @drop_color; 
+  caret-color: @drop_color; } */
+
+stackswitcher button.text-button { 
+
+  min-width: 5.5rem;}
+
+stackswitcher button.circular, 
+stackswitcher button.text-button.circular { 
+
+  min-width: 32px; min-height: 32px; padding: 0; }
+/*(((((((((( Scrollbars ))))))))))*/
+
+scrollbar { 
+
+  background-color: transparent; 
+  transition: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+* { -GtkScrollbar-has-backward-stepper: false; -GtkScrollbar-has-forward-stepper: false; }
+
+scrollbar.top { border-bottom: 1px solid #504945; }
+
+scrollbar.bottom { border-top: 1px solid #504945; }
+
+scrollbar.left { border-right: 1px solid #504945; }
+
+scrollbar.right { border-left: 1px solid #504945; }
+
+scrollbar slider { 
+
+  min-width: 0.4125rem;
+  min-height: 0.4125rem;
+  margin: -1px; 
+  border: 3px solid transparent; 
+  border-radius: 0.55rem;
+  background-clip: padding-box; 
+
+  background-color:#9ca0a1;}
+scrollbar slider:hover { 
+
+  background-color:#7e8182;
+  border-color:transparent; }
+
+scrollbar slider:hover:active { 
+
+  background-color:alpha(shade(#458588, 0.9),1);
+  border-color:transparent; }
+
+scrollbar slider:disabled { background-color: transparent; }
+
+scrollbar.fine-tune slider { 
+  
+  margin:-3px;
+  min-width: 0.4125rem;
+  min-height: 0.4125rem;
+ /* min-width: 0.275rem;
+  min-height:0.275rem;*/}
+
+scrollbar.fine-tune.horizontal slider { border-width: 0.3475rem 0.275rem; }
+
+scrollbar.fine-tune.vertical slider { border-width: 0.275rem 0.3475rem; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) { 
+
+  border-color: transparent; 
+  opacity: 0.4; 
+  background-color: transparent; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) slider { 
+
+  margin: 0; 
+  min-width: 0.20625rem;
+  min-height: 0.20625rem;
+  background-color: #363636; 
+  border: 1px solid #665c54; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering) button { 
+
+  min-width: 0.34375rem;
+  min-height: 0.34375rem;
+  background-color: #363636; 
+  background-clip: padding-box; 
+  border-radius: 100%; 
+  border: 1px solid #665c54; 
+  -gtk-icon-source: none; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal slider { 
+
+  margin: 0 2px; 
+  min-width: 2.75rem; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal button { 
+
+  margin: 1px 2px; 
+  min-width: 0.34375rem; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical slider { 
+
+  margin: 2px 0; 
+  min-height: 2.75rem; }
+
+scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical button { margin: 2px 1px; min-height: 0.34375rem;}
+
+scrollbar.overlay-indicator.dragging, 
+scrollbar.overlay-indicator.hovering { opacity: 0.8; }
+
+scrollbar.horizontal slider { min-width: 2.75rem;}
+
+scrollbar.vertical slider { min-height: 2.75rem;}
+
+scrollbar button { 
+
+  padding: 0; 
+  min-width: 0.825rem;
+  min-height: 0.825rem;
+  border-style: none; 
+  border-radius: 0; 
+  transition-property: min-height, min-width, color; 
+  border-color: transparent; 
+  background-color: transparent; 
+  background-image: none; 
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0); 
+  text-shadow: none; 
+  -gtk-icon-shadow: none; color: #7e8182; }
+  scrollbar button:hover { 
+
+    border-color: transparent; 
+    background-color: transparent; 
+    background-image: none; 
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); 
+    text-shadow: none; 
+    -gtk-icon-shadow: none; 
+    background-color: #565b5c;}
+  
+  scrollbar button:active, 
+  scrollbar button:checked { 
+  
+    border-color: transparent; 
+    background-color: transparent; 
+    background-image: none; 
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); 
+    text-shadow: none; 
+    -gtk-icon-shadow: none; 
+    color: #458588; }
+  
+  scrollbar button:disabled { 
+  
+    border-color: transparent; 
+    background-color: transparent; 
+    background-image: none; 
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0); 
+    text-shadow: none; 
+    -gtk-icon-shadow: none; 
+    color: rgba(126, 129, 130, 0.2); }
+  
+  scrollbar.vertical button.down { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+  
+  scrollbar.vertical button.up { -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
+  
+  scrollbar.horizontal button.down { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+  
+  scrollbar.horizontal button.up { -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
+  
+  treeview ~ scrollbar.vertical { border-top: 1px solid #504945; margin-top: -1px; }
+  
+  /*((((((((( Switch ))))))))))*/
+switch {
+
+  transition: all 100ms cubic-bezier(0, 0, 0.2, 1);
+  margin: 4px 0.275rem;
+  padding: 1px 2px;
+  border-radius: 100px;
+  background-color: #504945;
+  background-clip: padding-box;
+  font-size: 0;
+  color: transparent;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(0, 0, 0, 0.3);}
+
+switch:disabled {
+
+  opacity: 0.5;}
+
+switch:checked {
+
+  background-image: linear-gradient(shade(@bg_main ,0.65),shade(@bg_main ,0.58));}
+
+switch image {
+
+  margin: -8px;}
+
+switch slider {
+
+  transition: all 300ms cubic-bezier(0, 0, 0.2, 1);
+  min-width: 20px;
+  min-height: 20px;
+  margin: -2px -5px;
+  border-radius: 9999px;
+  border: 1px solid;
+  border-color: shade(@bg_main,0.8);/*#ababab;*/
+  box-shadow: 0 0 0 10px transparent, 0 1px 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.2);
+  background-color: #504945;/*#f7f7f7;*/
+  color: transparent;}
+
+switch:checked slider {
+
+  background-color: #504945;
+  color: transparent;
+  border: 1px solid;
+  border-color: shade(@bg_main,0.68);}
+
+headerbar switch { 
+  
+  margin-top: 0.55rem; 
+  margin-bottom:0.55rem; }
+  
+headerbar switch:checked{
+
+  background-color: #a5a5a5;}
+
+headerbar switch:checked slider {
+
+  background-color: @bg_main;
+  color: transparent;
+  border: 1px solid;
+  border-color: shade(@bg_main,0.6);
+  box-shadow: none;}
+
+/* (((((((((( Check and ratio )))))))))) */
+.view.content-view.check:not(list), 
+iconview.content-view.check:not(list), 
+.content-view .tile check:not(list) { 
+
+  border: 1px solid;
+  color: #458588;
+  border-color: #417e81; 
+  border-radius: 8px;
+  /* background-image: linear-gradient(@color_600, @color_700); */
+  text-shadow: none;
+  /* -gtk-icon-shadow: 0 -1px alpha(@shadows_dark, 0.559216); */
+  background-color: transparent; 
+  /* box-shadow: 0 1px 2px alpha(@shadows_dark, 0.1); */
+  min-width: 2.75rem; 
+  min-height: 2.75rem;}
+
+.view.content-view.check:hover:not(list), iconview.content-view.check:hover:not(list), 
+.content-view .tile check:hover:not(list) {
+
+  border: 1px solid;
+  color: #458588;
+  border-color: #417e81; 
+  border-radius: 8px;
+  /* background-image: linear-gradient( @color_500, @color_600); */
+  text-shadow: none;
+  /* -gtk-icon-shadow: 0 -1px alpha(@shadows_dark, 0.559216); */
+  background-color: transparent; 
+  /* box-shadow: 0 1px 2px alpha(@shadows_dark, 0.1);  */
+  min-width: 2.75rem;
+  min-height: 2.75rem;}
+
+.view.content-view.check:active:not(list), 
+iconview.content-view.check:active:not(list), 
+.content-view .tile check:active:not(list) {
+
+  border: 1px solid;
+  color: #458588;
+  border-color: #417e81; 
+  border-radius: 8px;
+  /* background-image: linear-gradient(@color_800, @color_800); */
+  text-shadow: none;
+  /* -gtk-icon-shadow: 0 -1px alpha(@shadows_dark, 0.559216); */
+  background-color: transparent; 
+  /* box-shadow: 0 1px 2px alpha(@shadows_dark, 0.1);  */
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  -gtk-icon-source: image(-gtk-recolor(url("graphics/object-select-symbolic@2.svg"))); }
+
+/* .view.content-view.check:checked:not(list), 
+iconview.content-view.check:checked:not(list), 
+.content-view .tile check:checked:not(list) { 
+
+  border: 1px solid;
+  color: @selected_text_color;
+  border-color: @color_900; 
+  background-image: linear-gradient(@color_800, @color_800);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px alpha(@shadows_dark, 0.1);
+  text-shadow: none;
+  -gtk-icon-shadow: 0 -1px alpha(@shadows_dark, 0.559216);
+  background-color: transparent; 
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  -gtk-icon-source: image(-gtk-recolor(url("graphics/object-select-symbolic@2.svg"))); }
+
+.view.content-view.check:checked:hover:not(list), 
+iconview.content-view.check:checked:hover:not(list), 
+.content-view .tile check:checked:hover:not(list) { 
+
+  border: 1px solid;
+  color: @selected_text_color;
+  border-color: @color_900; 
+  background-image: linear-gradient(@color_800, @color_800);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px alpha(@shadows_dark, 0.1);
+  text-shadow: none;
+  -gtk-icon-shadow: 0 -1px alpha(@shadows_dark, 0.559216);
+  background-color: transparent; 
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  -gtk-icon-source: image(-gtk-recolor(url("graphics/object-select-symbolic@2.svg"))); }
+  
+.view.content-view.check:checked:active:not(list), 
+iconview.content-view.check:checked:active:not(list), 
+.content-view .tile check:checked:active:not(list) { 
+
+  border: 1px solid;
+  color: @selected_text_color;
+  border-color: @color_900; 
+  background-image: linear-gradient(@color_800, @color_800);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px alpha(@shadows_dark, 0.1);
+  text-shadow: none;
+  -gtk-icon-shadow: 0 -1px alpha(@shadows_dark, 0.559216);
+  background-color: transparent; 
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  -gtk-icon-source: image(-gtk-recolor(url("graphics/object-select-symbolic@2.svg"))); } */
+
+checkbutton.text-button, 
+radiobutton.text-button { 
+
+  padding: 4px 0; 
+  outline-offset: 0;}
+
+checkbutton.text-button label:not(:only-child):first-child, 
+radiobutton.text-button label:not(:only-child):first-child { 
+
+  margin-left: 0.275rem;}
+
+checkbutton.text-button label:not(:only-child):last-child, 
+radiobutton.text-button label:not(:only-child):last-child { 
+
+  margin-right: 0.275rem;}
+
+/*((((((  RADIO  )))))))))))*/  
+
+radio,
+radio:hover{ 
+
+  border: 1px solid;
+  border-radius: 100%;
+  border-color: shade(@shadow,0.9); 
+  text-shadow: 0 1px alpha(#dadada, 0.769231); 
+  -gtk-icon-shadow: 0 1px alpha(#dadada, 0.769231); 
+  background-image:linear-gradient(to top,#458588 ,shade(#458588,0.97));
+  background-color: transparent;
+  color: alpha(@font_color ,0.9);
+  margin: 0 0.4125rem;
+  min-height:14px;
+  min-width: 14px;
+  -gtk-icon-source: none;}
+  
+/* radio:checked,
+radio:checked:hover{ 
+
+  color: @selected_text_color;
+  -gtk-icon-source: image(-gtk-recolor(url("graphics/bullet-symbolic.svg"))); */
+  /*-gtk-icon-transform: scale(1.0);*/
+  /* -gtk-icon-shadow:
+				  0px -1px alpha(@shadow_dark, 0.08),
+				  0px  1px alpha(@shadow_dark, 0.08),
+				  1px  0px alpha(@shadow_dark, 0.08),
+				 -1px  0px alpha(@shadow_dark, 0.08); 
+  border-color: @color_700;
+  background-color: @color_600;
+  background-image:linear-gradient(to top,@color_600,@color_700);}
+
+radio:checked:disabled{
+
+  color: @disabled_text_color;
+  -gtk-icon-source: none; 
+  border-color: shade(@borders,0.9); 
+  background-image: none;
+  background-color: transparent;}
+
+radio:only-child { 
+
+  margin: 0; }
+ 
+ 
+popover radio.left:dir(rtl) { 
+
+  margin-left: 0; 
+  margin-right: 12px;}
+
+popover radio.right:dir(ltr) { 
+
+  margin-left: 12px; 
+  margin-right: 0; }
+
+radio:indeterminate,
+radio:indeterminate:hover{ 
+
+  color: @selected_text_color;
+  border-color: @color_700;
+  -gtk-icon-shadow:
+				  0px -1px alpha(@shadow_dark, 0.08),
+				  0px  1px alpha(@shadow_dark, 0.08),
+				  1px  0px alpha(@shadow_dark, 0.08),
+				 -1px  0px alpha(@shadow_dark, 0.08);
+  background-color: transparent;
+  background-image:linear-gradient(to top,@color_600,@color_600);
+  box-shadow: none;
+  text-shadow: none; }
+
+radio:disabled { 
+
+  border-color: @borders; 
+  background-image: image(@insensitive_bg_color); 
+  text-shadow: none; -gtk-icon-shadow: none; 
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+
+radio:disabled label, 
+radio:disabled { 
+
+  color: @disabled_text_color;}
+
+row:selected radio { 
+
+  border-color: @color_600; } */
+ 
+.osd radio { 
+
+  color:@font_color;
+  background-color: transparent; 
+  /* background-image:linear-gradient(shade(@osd_button_color,1.02),shade(@osd_button_color,0.88)); */
+  background-clip: padding-box; 
+  box-shadow: none; 
+  /* -gtk-icon-shadow: 0 1px @shadows_dark; */
+}
+ 
+.osd radio:hover { 
+ color:#458588;
+  background-color: transparent; 
+  background-image:linear-gradient(shade(#458588,1),shade(#458588,1));
+  background-clip: padding-box; 
+  box-shadow: none; 
+  -gtk-icon-shadow: 0 1px @shadow;}
+ 
+.osd radio:active { 
+
+ color: #458588; 
+  border-color: alpha(@shadow,0.7); 
+  background-color: transparent; 
+  background-image: image(shade(#458588,0.9));  
+  background-clip: padding-box; 
+  box-shadow: none; 
+  -gtk-icon-shadow: none; 
+  box-shadow: none;  }
+
+ 
+.osd radio:disabled { 
+  color: #eeeeee;
+  border-color: alpha(@shadow,0.7);  
+  background-color: transparent; 
+  background-image: image(alpha(#458588 ,0.7)); 
+  background-clip: padding-box; 
+  box-shadow: none; 
+  -gtk-icon-shadow: none;
+}
+
+/* Panel */
+.xfce4-panel .background {
+  background-color: #000000cc; }
+.xfce4-panel .tasklist .toggle {
+  background-color: transparent;
+  color: @font_color;
+}.xfce4-panel .tasklist:backdrop{
+  background-color: @bg_main;
+  color: @font_color;
+  border-radius: 3px; 
+}
+notebook.frame header tabs{
+  padding: 3px 4px;
+}
+
+viewport.frame, .inline-toolbar{
+  background-color: @bg_main;
+  border: 1px solid #282828;
+}
+.view box{
+  width: 100%;
+  border-bottom: 1px solid #282828;
+}
+
+menubar{
+  background: #504945;
+  padding: 5px 8px;
+}menubar menuitem{
+  margin-right: 9px;
+  cursor: pointer;
+}
+buttonbox, .inline-toolbar, .viewport.frame{
+  padding: 5px;
+}buttonbox button, notebook.frame header tabs tab{
+  background: #665c54;
+  padding: 4px 6px;
+  margin: 0 5px;
+  border-radius: 4px;
+}

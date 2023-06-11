@@ -1,0 +1,52 @@
+syntax = "proto3";
+option csharp_namespace = "Barkditor.Protobuf";
+package ProjectFiles;
+
+import "google/protobuf/empty.proto";
+import "Protos/google/api/annotations.proto";
+
+// Service for project file tree output
+service ProjectFiles {
+  // Returns file tree by directory path and save this path
+  rpc OpenFolder (OpenFolderRequest) returns (FileTreeResponse) {
+    option (google.api.http) = {
+      get: "/CreateFileOrDirectory"
+    };
+  }
+  // Returns file tree by saved directory path
+  rpc GetSavedProject (google.protobuf.Empty) returns (FileTreeResponse){
+    option (google.api.http) = {
+      get: "/GetSavedProject"
+    };
+  }
+  // Returns saved directory path
+  rpc GetProjectPath (google.protobuf.Empty) returns (GetProjectPathResponse){
+    option (google.api.http) = {
+      get: "/GetProjectPath"
+    };
+  }
+}
+
+// open folder
+message OpenFolderRequest {
+  string path = 1;
+}
+
+// get project files path
+message GetProjectPathResponse {
+  string path = 1;
+}
+
+// responses
+message FileTreeResponse {
+  FileTree files = 1;
+  string path = 2;
+}
+
+// types
+message FileTree {
+  string name = 1;
+  string path = 2;
+  repeated FileTree files = 3;
+  bool isDirectory = 4;
+}

@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{87F36130-2910-4BBB-80B4-591B9CD2E6CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "client", "client", "{25D416EA-F584-4747-B367-FFB70D8AEBE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorGui.Utilities", "src\client\BarkditorGui.Utilities\BarkditorGui.Utilities.csproj", "{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorGui.Presentation", "src\client\BarkditorGui.Presentation\BarkditorGui.Presentation.csproj", "{7C34AC91-F414-4517-A0CA-D0A58026521C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorGui.BusinessLogic", "src\client\BarkditorGui.BusinessLogic\BarkditorGui.BusinessLogic.csproj", "{B0DDE50A-AFEB-4582-BA95-11AAE5D52401}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{56D94D2D-8384-4AF4-BBCB-7E005214C1CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorServer.BusinessLogic", "src\server\BarkditorServer.BusinessLogic\BarkditorServer.BusinessLogic.csproj", "{226E6729-0B57-4090-A315-F1590BE56E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorServer.Domain", "src\server\BarkditorServer.Domain\BarkditorServer.Domain.csproj", "{792BF072-3663-4DA5-9C44-2A4F8E7F61AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorServer.UnitTests", "src\server\BarkditorServer.UnitTests\BarkditorServer.UnitTests.csproj", "{C3652678-6FAB-4918-AC74-1F3B58F03834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarkditorServer.Presentation", "src\server\BarkditorServer.Presentation\BarkditorServer.Presentation.csproj", "{3F5537BB-9276-4A62-8A85-6D4EDD567225}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{D88FB704-6846-41A9-AACC-AB1BDF4F89DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barkditor.Protobuf", "src\shared\Barkditor.Protobuf\Barkditor.Protobuf.csproj", "{A3317F87-BCA9-4DCB-9888-50144788A5C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C23CDE82-5395-48F5-A6C5-C96F3B0637B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C34AC91-F414-4517-A0CA-D0A58026521C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C34AC91-F414-4517-A0CA-D0A58026521C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C34AC91-F414-4517-A0CA-D0A58026521C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C34AC91-F414-4517-A0CA-D0A58026521C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0DDE50A-AFEB-4582-BA95-11AAE5D52401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0DDE50A-AFEB-4582-BA95-11AAE5D52401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0DDE50A-AFEB-4582-BA95-11AAE5D52401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0DDE50A-AFEB-4582-BA95-11AAE5D52401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{226E6729-0B57-4090-A315-F1590BE56E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{226E6729-0B57-4090-A315-F1590BE56E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{226E6729-0B57-4090-A315-F1590BE56E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{226E6729-0B57-4090-A315-F1590BE56E41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{792BF072-3663-4DA5-9C44-2A4F8E7F61AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{792BF072-3663-4DA5-9C44-2A4F8E7F61AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{792BF072-3663-4DA5-9C44-2A4F8E7F61AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{792BF072-3663-4DA5-9C44-2A4F8E7F61AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3652678-6FAB-4918-AC74-1F3B58F03834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3652678-6FAB-4918-AC74-1F3B58F03834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3652678-6FAB-4918-AC74-1F3B58F03834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3652678-6FAB-4918-AC74-1F3B58F03834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F5537BB-9276-4A62-8A85-6D4EDD567225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F5537BB-9276-4A62-8A85-6D4EDD567225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F5537BB-9276-4A62-8A85-6D4EDD567225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5537BB-9276-4A62-8A85-6D4EDD567225}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3317F87-BCA9-4DCB-9888-50144788A5C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3317F87-BCA9-4DCB-9888-50144788A5C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3317F87-BCA9-4DCB-9888-50144788A5C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3317F87-BCA9-4DCB-9888-50144788A5C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{25D416EA-F584-4747-B367-FFB70D8AEBE7} = {87F36130-2910-4BBB-80B4-591B9CD2E6CB}
+		{C23CDE82-5395-48F5-A6C5-C96F3B0637B4} = {25D416EA-F584-4747-B367-FFB70D8AEBE7}
+		{7C34AC91-F414-4517-A0CA-D0A58026521C} = {25D416EA-F584-4747-B367-FFB70D8AEBE7}
+		{B0DDE50A-AFEB-4582-BA95-11AAE5D52401} = {25D416EA-F584-4747-B367-FFB70D8AEBE7}
+		{56D94D2D-8384-4AF4-BBCB-7E005214C1CB} = {87F36130-2910-4BBB-80B4-591B9CD2E6CB}
+		{226E6729-0B57-4090-A315-F1590BE56E41} = {56D94D2D-8384-4AF4-BBCB-7E005214C1CB}
+		{792BF072-3663-4DA5-9C44-2A4F8E7F61AF} = {56D94D2D-8384-4AF4-BBCB-7E005214C1CB}
+		{C3652678-6FAB-4918-AC74-1F3B58F03834} = {56D94D2D-8384-4AF4-BBCB-7E005214C1CB}
+		{3F5537BB-9276-4A62-8A85-6D4EDD567225} = {56D94D2D-8384-4AF4-BBCB-7E005214C1CB}
+		{D88FB704-6846-41A9-AACC-AB1BDF4F89DA} = {87F36130-2910-4BBB-80B4-591B9CD2E6CB}
+		{A3317F87-BCA9-4DCB-9888-50144788A5C1} = {D88FB704-6846-41A9-AACC-AB1BDF4F89DA}
+	EndGlobalSection
+EndGlobal

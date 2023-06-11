@@ -1,0 +1,137 @@
+syntax = "proto3";
+option csharp_namespace = "Barkditor.Protobuf";
+package Files;
+
+import "google/protobuf/empty.proto";
+import "Protos/google/api/annotations.proto";
+
+// Service for work with files and directories
+service Files {
+  // Creates file or directory
+  rpc Create (CreateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/Create"
+    };
+  }
+  // Moves/renames file or directory
+  rpc Move (MoveRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/Move"
+    };
+  }
+  // Removes file or directory
+  rpc Remove (RemoveRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/Remove"
+    };
+  }
+  // Opens file/directory in file manager (in Windows: explorer.exe, Linux-based: xdg-open, OSX: open)
+  rpc OpenInFileManager (OpenInFileManagerRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/OpenInFileManager"
+    };
+  }
+  /* 
+    Copies file/directory path to clipboard. For Linux-based must to be installed: 
+    xsel(for X11 session), wl-clipboard(for Wayland session)
+  */
+  rpc CopyPath (CopyPathRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/CopyPath"
+    };
+  }
+  // Checks for the existence of a file/directory
+  rpc Exists (ExistsRequest) returns (ExistsResponse) {
+    option (google.api.http) = {
+      get: "/Exists"
+    };
+  }
+  // Copies file/directory to temp directory (<temp-folder-path>/Barkditor/Copied)
+  rpc Copy (CopyRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/Copy"
+    };
+  }
+  // Pastes file/directory from <temp-folder-path>/Barkditor/Copied to specified path
+  rpc Paste (PasteRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/Paste"
+    };
+  }
+  // Returns file content and content type by particular path
+  rpc GetFileContent (GetFileContentRequest) returns (GetFileContentResponse) {
+    option (google.api.http) = {
+      get: "/GetFileContent"
+    };
+  }
+}
+
+// enums
+
+enum FileContentTypes {
+  PlainText = 0;
+  Csharp = 1;
+  Json = 2;
+  Html = 3;
+}
+
+// create file
+message CreateRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// rename file or directory
+message MoveRequest {
+  string oldPath = 1;
+  string newPath = 2;
+  bool isDirectory = 3;
+}
+
+// open in file manager
+message OpenInFileManagerRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// remove file or directory
+message RemoveRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// copy file/directory path
+message CopyPathRequest {
+  string path = 1;
+}
+
+// exists
+message ExistsRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+message ExistsResponse {
+  bool exists = 1;
+}
+
+// copy file/directory
+message CopyRequest {
+  string path = 1;
+  bool isDirectory = 2;
+}
+
+// paste file/directory
+message PasteRequest {
+  string path = 1;
+}
+
+// open file
+message GetFileContentRequest {
+  string path = 1;
+}
+
+message GetFileContentResponse {
+  string content = 1;
+  FileContentTypes contentType = 2;
+}

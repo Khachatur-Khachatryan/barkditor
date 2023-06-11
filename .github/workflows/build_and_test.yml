@@ -1,0 +1,36 @@
+name: .NET build and test
+
+on:
+  push:
+    branches: [ "develop", "master" ]
+  pull_request:
+    branches: [ "develop", "master" ]
+
+jobs:
+  build_and_test:
+    strategy:
+      matrix:
+        operation_system:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+
+    runs-on: ${{matrix.operation_system}}
+
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Run tests
+        run: dotnet test --no-build src/server/BarkditorServer.UnitTests/BarkditorServer.UnitTests.csproj

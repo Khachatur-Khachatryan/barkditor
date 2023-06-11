@@ -1,0 +1,8 @@
+{
+  "property1": "value",
+  "property2": 123,
+  "property3": true,
+  "property4": {
+    "property1": 456
+  }
+}
