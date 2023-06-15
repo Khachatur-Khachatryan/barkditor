@@ -1,10 +1,12 @@
 using Barkditor.Protobuf;
+using BarkditorGui.BusinessLogic.GtkWidgets.Windows;
 using BarkditorGui.Utilities.FileSystem;
 using BarkditorGui.Utilities.Services;
 using Gdk;
 using Google.Protobuf.WellKnownTypes;
 using Gtk;
 using GtkSource;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace BarkditorGui.BusinessLogic.GtkWidgets.Custom;
 
@@ -110,6 +112,16 @@ public class FileViewer : Box
         };
         
         _codeTextView.Buffer.Text = response.Content;
+        var syntaxTokens = SyntaxFactory.ParseTokens(response.Content)
+            .ToList();
+
+        var x = _codeTextView.Buffer.GetGtkSourceToken(syntaxTokens[42].Span.Start, syntaxTokens[42].Span.End);
+        var b = new TextTag("fucking slave")
+        {
+            Background = "#FF0000"
+        };
+        _codeTextView.Buffer.TagTable.Add(b);
+        _codeTextView.Buffer.ApplyTag(b, x.StartIter, x.EndIter);
     }
 
     private void PopupFileContextMenu(object? sender, ButtonReleaseEventArgs a)

@@ -17,6 +17,7 @@
   <ItemGroup>
     <PackageReference Include="GtkSharp" Version="3.24.24.95" />
     <PackageReference Include="GtkSourceSharp" Version="3.24.24.95" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0-1.final" />
   </ItemGroup>
 
   <ItemGroup>

@@ -35,6 +35,7 @@ public class MainWindow : Window
 #endregion
 
     public MainWindow() : this(new Builder("MainWindow.glade")) { }
+    
     private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
     {
         GtkWidgetInitService.Initialize(this, builder);
@@ -163,3 +164,40 @@ public class MainWindow : Window
 
 #endregion
 }
+
+public static class GtkSourceBufferExtension
+{
+    public static GtkSourceToken GetGtkSourceToken(this GtkSource.Buffer sourceBuffer, int startPosition, int endPosition)
+    {
+        var content = sourceBuffer.Text;
+        var lines = content.Split('\n');
+        var lineLengths = lines.Select(line => line.Length).ToArray();
+        
+        int line;
+        for (line = 0; line < lineLengths.Length; line++)
+        {
+            if (startPosition <= lineLengths[line])
+            {
+                break;
+            }
+        
+            startPosition -= lineLengths[line] + 1;
+        }
+        var a = sourceBuffer.GetIterAtLineIndex(line, startPosition);
+        
+        for (line = 0; line < lineLengths.Length; line++)
+        {
+            if (endPosition <= lineLengths[line])
+            {
+                break;
+            }
+        
+            endPosition -= lineLengths[line] + 1;
+        }
+        var b = sourceBuffer.GetIterAtLineIndex(line, endPosition);
+        
+        return new GtkSourceToken(a, b);
+    }
+}
+
+public record GtkSourceToken(TextIter StartIter, TextIter EndIter);
