@@ -1,16 +1,22 @@
-# This is a sample Python script.
+import sys
+import gi
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from main_window import MainWindow
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+8 to toggle the breakpoint.
+gi.require_version("Gtk", "4.0")
+from gi.repository import GLib, Gtk
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+class BarkditorApplication(Gtk.Application):
+    def __init__(self):
+        super().__init__(application_id="org.barkditor.gtk4")
+        GLib.set_application_name("Barkditor")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    def do_activate(self):
+        window = MainWindow(application=self)
+        window.present()
+
+
+app = BarkditorApplication()
+exit_status = app.run(sys.argv)
+sys.exit(exit_status)
