@@ -1,66 +1,45 @@
-import gi
-
-gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk, Gio
+from PyQt6.QtWidgets import QMainWindow, QTreeView, QWidget, \
+    QHBoxLayout, QPlainTextEdit, QSplitter
 
 
-# https://docs.gtk.org/gtk3/class.ApplicationWindow.html
-class MainWindow(Gtk.ApplicationWindow):
-    def __init__(self, application):
-        super().__init__(application=application, title="Barkditor")
-        self.set_size_request(900, 700)
-        self.set_show_menubar(True)
-        self.set_menubar()
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Barkditor")
+        self.setMinimumSize(600, 600)
 
-        main_box = Gtk.Box()
-        main_box.set_orientation(Gtk.Orientation(1))
-        main_box.set_visible(True)
-        self.set_child(main_box)
+        menu_bar = self.menuBar()
 
-    def set_menubar(self):
-        # https://docs.gtk.org/gio/class.Menu.html
-        # https://docs.gtk.org/gio/class.MenuItem.html
-        # https://docs.gtk.org/gtk3/class.Application.html
+        file_menu = menu_bar.addMenu("Files")
+        open_file_action = file_menu.addAction("Open File")
+        # open_file_action.triggered.connect(self.test_triggered)
 
-        menubar = Gio.Menu()
+        open_folder_action = file_menu.addAction("Open Folder")
 
-        # Files Menu
-        file_submenu_item = Gio.MenuItem()
-        file_submenu_item.set_label("_Files")
-        file_submenu = Gio.Menu()
-        file_submenu_item.set_submenu(file_submenu)
+        save_action = file_menu.addAction("Save")
+        save_as_action = file_menu.addAction("Save as")
+        file_menu.addSeparator()
+        exit_action = file_menu.addAction("Exit")
 
-        open_file_menu_item = Gio.MenuItem()
-        open_file_menu_item.set_label("_Open File")
-        file_submenu.append_item(open_file_menu_item)
+        help_menu = menu_bar.addMenu("Help")
+        about_action = help_menu.addAction("About Barkditor")
 
-        open_folder_menu_item = Gio.MenuItem()
-        open_folder_menu_item.set_label("_Open Folder")
-        file_submenu.append_item(open_folder_menu_item)
+        self.init_main_box()
 
-        save_menu_item = Gio.MenuItem()
-        save_menu_item.set_label("_Save")
-        file_submenu.append_item(save_menu_item)
+    def init_main_box(self):
+        main_vbox = QHBoxLayout()
+        splitter = QSplitter()
+        tree_view = QTreeView()
+        code_view = QPlainTextEdit()
+        code_view.setMinimumWidth(200)
 
-        save_as_menu_item = Gio.MenuItem()
-        save_as_menu_item.set_label("_Save As")
-        file_submenu.append_item(save_as_menu_item)
+        splitter.addWidget(tree_view)
+        splitter.addWidget(code_view)
+        splitter.setCollapsible(1, False)
 
-        exit_menu_item = Gio.MenuItem()
-        exit_menu_item.set_label("_Exit")
-        file_submenu.append_item(exit_menu_item)
+        main_vbox.addWidget(splitter)
+        window = QWidget()
 
-        # Help Menu
-        help_submenu_item = Gio.MenuItem()
-        help_submenu_item.set_label("_Help")
-        help_submenu = Gio.Menu()
-        help_submenu_item.set_submenu(help_submenu)
-
-        about_menu_item = Gio.MenuItem()
-        about_menu_item.set_label("_About Barkditor")
-        help_submenu.append_item(about_menu_item)
-
-        menubar.append_item(file_submenu_item)
-        menubar.append_item(help_submenu_item)
-
-        self.get_application().set_menubar(menubar=menubar)
+        window.setLayout(main_vbox)
+        window.show()
+        self.setCentralWidget(window)
