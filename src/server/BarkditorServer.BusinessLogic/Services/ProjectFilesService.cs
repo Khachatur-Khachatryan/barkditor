@@ -9,112 +9,22 @@ namespace BarkditorServer.BusinessLogic.Services;
 
 public class ProjectFilesService : ProjectFiles.ProjectFilesBase
 {
-    public override async Task<FileTreeResponse> OpenFolder(OpenFolderRequest request, ServerCallContext ctx)
+    public override async Task<Empty> SetProjectPath(SetProjectPathRequest request, ServerCallContext ctx)
     {
-        var rootProjectDirectoryInfo = new DirectoryInfo(request.Path);
-        var fileTree = GetFileTree(rootProjectDirectoryInfo);
-        
-        await File.WriteAllTextAsync(FilePaths.ProjectFilesPathTxtPath, 
-            rootProjectDirectoryInfo.FullName);
+        await File.WriteAllTextAsync(FilePaths.ProjectPathTxtPath, 
+            request.Path);
 
-        var response = new FileTreeResponse
-        {
-            Files = fileTree, 
-            Path = request.Path
-        };
-
-        return response;
-    }
-
-    public override async Task<FileTreeResponse> GetSavedProject(Empty empty, ServerCallContext ctx)
-    {
-        string path;
-        try
-        {
-            path = await File.ReadAllTextAsync(FilePaths.ProjectFilesPathTxtPath);
-        }
-        catch
-        {
-            return new FileTreeResponse();
-        }
-
-        var directoryInfo = new DirectoryInfo(path);
-        var fileTree = GetFileTree(directoryInfo);
-        var response = new FileTreeResponse
-        {
-            Path = path,
-            Files = fileTree
-        };
-
-        return response;
+        return new Empty();
     }
 
     public override async Task<GetProjectPathResponse> GetProjectPath(Empty empty, ServerCallContext ctx)
     {
-        var path = await File.ReadAllTextAsync(FilePaths.ProjectFilesPathTxtPath);
+        var path = await File.ReadAllTextAsync(FilePaths.ProjectPathTxtPath);
         var response = new GetProjectPathResponse
         {
             Path = path
         };
 
         return response;
-    }
-
-    private void GetFileTree(FileTree fileTree, DirectoryInfo directoryInfo) 
-    {
-        foreach(var projectFolder in directoryInfo.GetDirectories().OrderBy(x => x.Name)) 
-        {
-            if(DirectoriesToIgnore.IgnoreArray.Contains(projectFolder.Name))
-            {
-                continue;
-            }
-
-            var projectFolderTree = new FileTree
-            {
-                Name = projectFolder.Name,
-                Path = projectFolder.FullName,
-                IsDirectory = true
-            };
-            
-            fileTree.Files.Add(projectFolderTree);
-
-            foreach(var projectFile in projectFolder.GetFiles().OrderBy(x => x.Name))
-            {
-                var projectFileTree = new FileTree
-                {
-                    Name = projectFile.Name,
-                    Path = projectFile.FullName,
-                    IsDirectory = false
-                };
-                projectFolderTree.Files.Add(projectFileTree);
-            }
-            
-            GetFileTree(projectFolderTree, projectFolder);
-        }
-    }
-
-    private FileTree GetFileTree(DirectoryInfo directoryInfo)
-    {
-        var fileTree = new FileTree
-        {
-            Path = directoryInfo.FullName,
-            Name = directoryInfo.Name,
-            IsDirectory = true
-        };
-
-        GetFileTree(fileTree, directoryInfo);
-        
-        foreach(var projectFile in directoryInfo.GetFiles().OrderBy(x => x.Name))
-        {
-            var projectFileTree = new FileTree
-            {
-                Name = projectFile.Name,
-                Path = projectFile.FullName,
-                IsDirectory = false
-            };
-            fileTree.Files.Add(projectFileTree);
-        }
-
-        return fileTree;
     }
 }

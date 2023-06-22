@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using Barkditor.Protobuf;
 using BarkditorServer.BusinessLogic.Services;
@@ -18,15 +19,16 @@ public class OpenFolderTests
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new ProjectFilesService();
-        var request = new OpenFolderRequest
+        var expectedPath = FilePaths.TestFolderPath; 
+        var request = new SetProjectPathRequest
         {
-            Path = FilePaths.TestFolderPath
+            Path = expectedPath
         };
-        var expectedFileTree = FileTreeHelper.GetTestFileTree();
         var contextMoq = new Mock<ServerCallContext>();
+        
+        await service.SetProjectPath(request, contextMoq.Object);
 
-        var response = await service.OpenFolder(request, contextMoq.Object);
-
-        response.Files.Should().Be(expectedFileTree);
+        var projectPath = await File.ReadAllTextAsync(FilePaths.ProjectPathTxtPath);
+        projectPath.Should().Be(expectedPath);
     }
 }

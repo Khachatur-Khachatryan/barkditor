@@ -19,17 +19,17 @@ public class GetProjectPathTests
     {
         CurrentDirectoryHelper.SetCurrentDirectory();
         var service = new ProjectFilesService();
-        var openFolderRequest = new OpenFolderRequest
+        var expectedPath = FilePaths.TestFolderPath;
+        var openFolderRequest = new SetProjectPathRequest
         {
             Path = FilePaths.TestFolderPath
         };
         var contextMoq = new Mock<ServerCallContext>();
-        await service.OpenFolder(openFolderRequest, contextMoq.Object);
-        var expected = FilePaths.TestFolderPath;
+        await service.SetProjectPath(openFolderRequest, contextMoq.Object);
         var empty = new Empty();
 
         var response = await service.GetProjectPath(empty, contextMoq.Object);
 
-        response.Path.Should().Be(expected);
+        response.Path.Should().Be(expectedPath);
     }
 }
