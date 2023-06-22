@@ -7,7 +7,7 @@
 [![.NET build and test](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/Khachatur-Khachatryan/barkditor/actions/workflows/build_and_test.yml)
 
 ## Description
-Barkditor is a open source code editor that implemented using GTK Sharp lib and .NET framework.
+Barkditor is a open source code editor that implemented using PyQt6 framework and .NET 7 platform.
 In general, this project created for educational purposes.
 The project is currently in very alpha.
 
@@ -17,9 +17,10 @@ The project is currently in very alpha.
 
 Obligatory required software:
 
-- **For Linux-based systems:** install xsel utility
+- **For GNU/Linux-based systems:** install xsel utility (Xorg) / wl-clipboard (Wayland)
 - **.NET SDK 7.0.200 or later:** https://dotnet.microsoft.com/en-us/download
-- **Code Editor or IDE:** Visual studio, Visual studio code, Rider
+- **Code Editor or IDE:** Visual Studio, Visual Studio Code, JetBrains Rider
+- **PyQt6 framework:** https://pypi.org/project/PyQt6/
 
 ### Run
 
@@ -46,7 +47,7 @@ Obligatory required software:
 ## Versions
 
 - **.NET:** `7.0.200 or later`
-- **GTK:** `3.24`
+- **PyQt:** `6.5.1 or later`
 
 ## Tasks management
 
@@ -89,7 +90,3 @@ Version control to be organized as follows:
 ## Logo
 
 The logo was created in Inkscape.
-
-## GTK theme
-
-**Inspired:** https://github.com/Cervexa/inspired

@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cee18ee7-f98a-4acd-8842-6ba9e9e200ee" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/BarkditorServer.BusinessLogic/Services/ProjectFilesService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/BarkditorServer.BusinessLogic/Services/ProjectFilesService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/BarkditorServer.Domain/Constants/FilePaths.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/BarkditorServer.Domain/Constants/FilePaths.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/BarkditorServer.UnitTests/Helpers/FileTreeHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/BarkditorServer.UnitTests/Tests/ProjectFilesServiceTests/GetProjectPathTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/BarkditorServer.UnitTests/Tests/ProjectFilesServiceTests/GetProjectPathTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/BarkditorServer.UnitTests/Tests/ProjectFilesServiceTests/GetSavedProjectTests.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/BarkditorServer.UnitTests/Tests/ProjectFilesServiceTests/OpenFolderTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../server/BarkditorServer.UnitTests/Tests/ProjectFilesServiceTests/OpenFolderTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../shared/Barkditor.Protobuf/Protos/projectFiles.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../shared/Barkditor.Protobuf/Protos/projectFiles.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +69,7 @@
       <updated>1687366760291</updated>
       <workItem from="1687366761821" duration="6238000" />
       <workItem from="1687427900802" duration="2228000" />
+      <workItem from="1687451298602" duration="505000" />
     </task>
     <task id="LOCAL-00001" summary="feature: rewritten on PyQt6">
       <created>1687366983640</created>

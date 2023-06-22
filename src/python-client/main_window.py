@@ -1,6 +1,6 @@
 from PyQt6.QtGui import QFileSystemModel
 from PyQt6.QtWidgets import QMainWindow, QTreeView, QWidget, \
-    QHBoxLayout, QVBoxLayout, QPlainTextEdit, QSplitter, QSizePolicy
+    QHBoxLayout, QVBoxLayout, QPlainTextEdit, QSplitter
 
 
 class MainWindow(QMainWindow):
