@@ -20,6 +20,7 @@ Obligatory required software:
 - **For GNU/Linux-based systems:** install xsel utility (Xorg) / wl-clipboard (Wayland)
 - **.NET SDK 7.0.200 or later:** https://dotnet.microsoft.com/en-us/download
 - **Code Editor or IDE:** Visual Studio, Visual Studio Code, JetBrains Rider
+- **Python3:** https://www.python.org/downloads/
 - **PyQt6 framework:** https://pypi.org/project/PyQt6/
 
 ### Run
@@ -28,7 +29,9 @@ Obligatory required software:
 - **Go to server directory**: `cd ./src/server`
 - **Run server**: `dotnet run --project BarkditorServer.Presentation`
 - **Open new terminal and go to client directory**: `cd ./src/client`
-- **Run client**: `dotnet run --project BarlditorGui.Presentation`
+- **Install required packages**: `pip install -r requirements.txt`
+- **Generate gRPC services**: `python -m grpc.tools.protoc -I=../shared/Barkditor.Protobuf/ --grpc_python_out=./ Protos/files.proto Protos/projectFiles.proto`
+- **Run client**: `python __main__.py`
 
 ### Run unit tests
 
